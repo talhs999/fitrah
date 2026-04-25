@@ -74,7 +74,7 @@ export default function Navbar() {
             <img
               src={
                 isLight
-                  ? "/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Clogos%20new%5CBlack.png"
+                  ? "/assets/Black.png"
                   : "/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Clogos%20new%5Cwhite.png"
               }
               alt="Fitrah"

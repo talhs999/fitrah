@@ -39,7 +39,7 @@ export default function LoginPage() {
       <div className="hidden lg:flex flex-col justify-end w-[45%] relative overflow-hidden px-16 py-20">
         {/* Background image */}
         <Image
-          src="/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5CGemini_Generated_Image_fculq8fculq8fcul.png"
+          src="/assets/Gemini_Generated_Image_fculq8fculq8fcul.png"
           alt="Fitrah lifestyle"
           fill
           unoptimized
@@ -52,7 +52,7 @@ export default function LoginPage() {
         {/* Content over image */}
         <div className="relative z-10 space-y-6">
           <img
-            src="/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Clogos%20new%5Cwhite.png"
+            src="/assets/white.png"
             alt="Fitrah"
             className="h-28 w-auto object-contain mb-4 -ml-2"
           />
@@ -75,7 +75,7 @@ export default function LoginPage() {
           {/* Mobile logo */}
           <Link href="/" className="lg:hidden flex flex-col items-center mb-10">
             <img
-              src="/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Clogos%20new%5CBlack.png"
+              src="/assets/Black.png"
               alt="Fitrah"
               className="h-20 w-auto object-contain"
             />

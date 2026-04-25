@@ -31,7 +31,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="h-20 flex items-center px-8 border-b border-black/10">
           <Link href="/" className="flex items-center w-full">
             <img
-              src="/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Clogos%20new%5CBlack.png"
+              src="/assets/Black.png"
               alt="Fitrah Admin"
               className="h-20 w-auto object-contain"
             />
@@ -80,7 +80,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="flex items-center gap-4 md:hidden">
              <Link href="/">
               <img
-                src="/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Clogos%20new%5CBlack.png"
+                src="/assets/Black.png"
                 alt="Fitrah"
                 className="h-14 w-auto object-contain"
               />

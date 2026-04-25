@@ -57,7 +57,7 @@ export default function Footer() {
         <div className="space-y-7">
           <div>
             <img
-              src="/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Clogos%20new%5Cwhite.png"
+              src="/assets/white.png"
               alt="Fitrah"
               className="h-28 w-auto object-contain -ml-2"
             />

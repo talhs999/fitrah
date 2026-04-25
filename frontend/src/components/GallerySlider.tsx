@@ -5,9 +5,9 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const GALLERY_IMAGES = [
-  "/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5CGemini_Generated_Image_fculq8fculq8fcul.png",
+  "/assets/Gemini_Generated_Image_fculq8fculq8fcul.png",
   "/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5CGemini_Generated_Image_jkg1ffjkg1ffjkg1.png",
-  "/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5CGemini_Generated_Image_p072udp072udp072.png",
+  "/assets/Gemini_Generated_Image_p072udp072udp072.png",
   "/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5CGemini_Generated_Image_pcsrkppcsrkppcsr.png",
 ];
 

@@ -96,7 +96,7 @@ export default function CheckoutPage() {
           <div className="text-center mb-12">
             <Link href="/">
               <img
-                src="/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Clogos%20new%5CBlack.png"
+                src="/assets/Black.png"
                 alt="Fitrah" className="h-20 w-auto object-contain mx-auto"
               />
             </Link>
@@ -252,7 +252,7 @@ export default function CheckoutPage() {
           <div className="mb-10">
             <Link href="/">
               <img
-                src="/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Clogos%20new%5CBlack.png"
+                src="/assets/Black.png"
                 alt="Fitrah" className="h-20 w-auto object-contain mb-6 -ml-2"
               />
             </Link>

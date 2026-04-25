@@ -38,7 +38,7 @@ export default function StoryPage() {
              <div className="relative aspect-[4/5] bg-[#1a1a1a] rounded-sm overflow-hidden flex items-center justify-center p-8 border border-white/10 translate-y-6 md:translate-y-10 group">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
                 <img
-                  src="/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Clogos%20new%5Cwhite.png"
+                  src="/assets/white.png"
                   alt="Fitrah Logo"
                   className="w-full h-auto object-contain opacity-90 transition-transform duration-700 group-hover:scale-110 relative z-10"
                 />
