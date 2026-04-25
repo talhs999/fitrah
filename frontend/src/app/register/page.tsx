@@ -50,7 +50,7 @@ export default function RegisterPage() {
       <div className="hidden lg:flex flex-col justify-end w-[45%] relative overflow-hidden px-16 py-20">
         {/* Background image */}
         <Image
-          src="/assets/hero-2.jpg"
+          src="/assets/Gemini_Generated_Image_jkg1ffjkg1ffjkg1.png"
           alt="Fitrah craftsmanship"
           fill
           priority
