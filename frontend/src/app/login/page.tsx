@@ -46,7 +46,11 @@ export default function LoginPage() {
 
         {/* Content over image */}
         <div className="relative z-10 space-y-6">
-          <span className="font-serif text-4xl text-white">FITRAH</span>
+          <img
+            src="/assets/white.png"
+            alt="Fitrah"
+            className="h-28 w-auto object-contain mb-4 -ml-2"
+          />
           <p className="font-serif text-4xl text-white leading-snug">
             Welcome<br />
             <em className="font-light text-white/50 not-italic">back.</em>
@@ -65,7 +69,11 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <Link href="/" className="lg:hidden flex flex-col items-center mb-10">
-            <span className="font-serif text-3xl tracking-widest text-brand-black uppercase">FITRAH</span>
+            <img
+              src="/assets/Black.png"
+              alt="Fitrah"
+              className="h-20 w-auto object-contain"
+            />
           </Link>
           <div className="mb-10">
             <h1 className="font-serif text-4xl text-brand-black mb-3">Welcome Back</h1>

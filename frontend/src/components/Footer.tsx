@@ -56,7 +56,11 @@ export default function Footer() {
         {/* Brand */}
         <div className="space-y-7">
           <div>
-            <span className="font-serif text-3xl tracking-widest text-white block mb-6">FITRAH</span>
+            <img
+              src="/assets/white.png"
+              alt="Fitrah"
+              className="h-28 w-auto object-contain -ml-2 mb-6"
+            />
           </div>
           <p className="text-white/50 font-sans text-sm leading-relaxed font-light">
             Premium beard oils inspired by 1,400 years of prophetic tradition. Formulated for the modern man in Perth, Australia.

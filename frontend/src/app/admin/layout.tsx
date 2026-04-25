@@ -29,9 +29,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-black/10 flex flex-col hidden md:flex fixed h-full z-10">
         <div className="h-20 flex items-center px-8 border-b border-black/10">
-          <div className="p-6">
-            <span className="font-serif text-2xl tracking-widest text-brand-black uppercase">FITRAH</span>
-          </div>
+          <Link href="/" className="flex items-center w-full">
+            <img
+              src="/assets/Black.png"
+              alt="Fitrah Admin"
+              className="h-20 w-auto object-contain"
+            />
+          </Link>
         </div>
 
         <nav className="flex-1 px-4 py-8 space-y-2">
@@ -75,7 +79,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           
           <div className="flex items-center gap-4 md:hidden">
              <Link href="/">
-              <span className="font-serif text-xl tracking-widest text-brand-black uppercase">FITRAH</span>
+              <img
+                src="/assets/Black.png"
+                alt="Fitrah"
+                className="h-14 w-auto object-contain"
+              />
             </Link>
           </div>
 

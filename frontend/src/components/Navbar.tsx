@@ -70,9 +70,17 @@ export default function Navbar() {
 
           {/* Logo (always perfectly centered) */}
           <Link href="/" className="flex-shrink-0 flex items-center justify-center">
-            <span className={`font-serif text-2xl tracking-widest uppercase ${
-              isLight ? "text-brand-black" : "text-white"
-            }`}>FITRAH</span>
+            <img
+              src={
+                isLight
+                  ? "/assets/Black.png"
+                  : "/assets/white.png"
+              }
+              alt="Fitrah"
+              className={`h-20 md:h-24 w-auto object-contain transition-all duration-300 ${
+                isLight ? "scale-100" : "scale-[1.25]"
+              }`}
+            />
           </Link>
 
           {/* Right Side (Nav + Icons) */}

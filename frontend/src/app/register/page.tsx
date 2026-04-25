@@ -50,19 +50,22 @@ export default function RegisterPage() {
       <div className="hidden lg:flex flex-col justify-end w-[45%] relative overflow-hidden px-16 py-20">
         {/* Background image */}
         <Image
-          src="/assets/Gemini_Generated_Image_jkg1ffjkg1ffjkg1.png"
-          alt="Fitrah lifestyle"
+          src="/assets/hero-2.jpg"
+          alt="Fitrah craftsmanship"
           fill
-          unoptimized
-          className="object-cover object-center"
           priority
+          className="object-cover opacity-60"
         />
         {/* Heavy dark overlay */}
         <div className="absolute inset-0 bg-black/75" />
 
         {/* Content over image */}
         <div className="relative z-10 space-y-6">
-          <span className="font-serif text-2xl tracking-widest text-white uppercase">FITRAH</span>
+          <img
+            src="/assets/white.png"
+            alt="Fitrah"
+            className="h-28 w-auto object-contain mb-4 -ml-2"
+          />
           <p className="font-serif text-4xl text-white leading-snug">
             Join the<br />
             <em className="font-light text-white/50 not-italic">brotherhood.</em>

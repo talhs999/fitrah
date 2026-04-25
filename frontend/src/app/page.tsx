@@ -11,7 +11,7 @@ import GallerySlider from "@/components/GallerySlider";
 /* ── HERO SLIDES: Custom Generated Cinematic Images ── */
 const SLIDES = [
   {
-    image: "/assets/Gemini_Generated_Image_fculq8fculq8fcul.png",
+    image: "/assets/hero-1.jpg",
     eyebrow: "The Ritual",
     headline: ["Master Your", "Craft."],
     sub: "Premium beard oils crafted from prophetic wisdom and the finest organic ingredients. A ritual that transforms.",
@@ -19,7 +19,7 @@ const SLIDES = [
     ctaHref: "/shop",
   },
   {
-    image: "/assets/Gemini_Generated_Image_jkg1ffjkg1ffjkg1.png",
+    image: "/assets/hero-2.jpg",
     eyebrow: "The Reflection",
     headline: ["Stand Tall.", "Guard Your Legacy."],
     sub: "Five carefully engineered oils. Five powerful purposes. One unbreakable standard of quality.",
@@ -27,7 +27,7 @@ const SLIDES = [
     ctaHref: "/shop",
   },
   {
-    image: "/assets/hero_slide_1_beard_oil_1776964963587.png",
+    image: "/assets/hero-3.jpg",
     eyebrow: "The Ascent",
     headline: ["Every Drop", "Has a Purpose."],
     sub: "Where heritage meets luxury. Beard care for the man who knows his worth and honours his Sunnah.",
@@ -307,7 +307,7 @@ export default function Home() {
             {/* Top: barber applying beard oil (user image) */}
             <div className="relative overflow-hidden">
               <Image
-                src="/assets/Gemini_Generated_Image_p072udp072udp072.png"
+                src="/assets/about-bg.png"
                 alt="Fitrah beard oil application"
                 fill
                 sizes="(max-width:768px) 100vw, 50vw"
@@ -319,7 +319,7 @@ export default function Home() {
             {/* Bottom: Fitrah product (user image) */}
             <div className="relative overflow-hidden">
               <Image
-                src="/assets/Gemini_Generated_Image_pcsrkppcsrkppcsr.png"
+                src="/assets/brand-story.png"
                 alt="Fitrah premium beard oil"
                 fill
                 sizes="(max-width:768px) 100vw, 50vw"
