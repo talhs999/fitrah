@@ -273,7 +273,7 @@ export default function CheckoutPage() {
             const shippingCost = shipping;
             
             try {
-              await createOrder({
+              const result = await createOrder({
                 customer_name: guestName,
                 customer_email: guestEmail,
                 shipping_address: address, // City and postcode are handled separately
@@ -285,6 +285,11 @@ export default function CheckoutPage() {
                   return { id: item.id, qty: item.qty, price: p.price };
                 })
               });
+
+              if (result && result.success === false) {
+                alert("Failed to place order: " + result.error);
+                return;
+              }
 
               // Create legacy object for the success page
               const orderData = {

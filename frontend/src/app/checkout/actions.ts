@@ -43,7 +43,7 @@ export async function createOrder(orderData: {
     .single();
 
   if (orderError || !order) {
-    throw new Error(orderError?.message || "Failed to create order");
+    return { success: false, error: orderError?.message || "Failed to create order" };
   }
 
   // Insert Order Items
@@ -57,8 +57,7 @@ export async function createOrder(orderData: {
   const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
 
   if (itemsError) {
-    // Ideally we should rollback the order here in a real scenario
-    throw new Error(itemsError.message);
+    return { success: false, error: itemsError.message };
   }
 
   return { success: true, orderId: order.id };
