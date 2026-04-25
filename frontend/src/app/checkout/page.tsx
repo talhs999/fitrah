@@ -276,7 +276,9 @@ export default function CheckoutPage() {
               await createOrder({
                 customer_name: guestName,
                 customer_email: guestEmail,
-                shipping_address: `${address}, ${city}, ${postcode}`,
+                shipping_address: address, // City and postcode are handled separately
+                city: city,
+                postal_code: postcode,
                 total_amount: orderTotal,
                 items: items.map(item => {
                   const p = PRODUCTS.find(x => x.id === item.id)!;
@@ -305,8 +307,9 @@ export default function CheckoutPage() {
               localStorage.setItem("fitrah_last_order", JSON.stringify(orderData));
               clearCart();
               router.push("/checkout/success");
-            } catch (err) {
-              alert("Failed to create order. Please try again.");
+            } catch (err: any) {
+              console.error(err);
+              alert("Failed to place order: " + (err.message || "Unknown error"));
             }
           }}>
             <div className="grid grid-cols-2 gap-5">
