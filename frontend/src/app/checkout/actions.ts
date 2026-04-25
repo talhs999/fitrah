@@ -25,12 +25,6 @@ export async function createOrder(orderData: {
     status: "Processing"
   };
 
-  // Add these if they exist in schema-complete.sql to prevent NOT NULL errors
-  orderPayload.customer_phone = orderData.customer_phone || "0000000000";
-  orderPayload.city = orderData.city || "Unknown";
-  orderPayload.country = orderData.country || "Australia";
-  orderPayload.postal_code = orderData.postal_code || "0000";
-
   // Optional user_id (ignore if table doesn't have it)
   if (user) {
     orderPayload.user_id = user.id;

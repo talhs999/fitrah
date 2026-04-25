@@ -276,9 +276,7 @@ export default function CheckoutPage() {
               const result = await createOrder({
                 customer_name: guestName,
                 customer_email: guestEmail,
-                shipping_address: address, // City and postcode are handled separately
-                city: city,
-                postal_code: postcode,
+                shipping_address: `${address}, ${city}, ${postcode}`,
                 total_amount: orderTotal,
                 items: items.map(item => {
                   const p = PRODUCTS.find(x => x.id === item.id)!;
