@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/utils/supabase/server";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 export async function createOrder(orderData: {
   customer_name: string;
@@ -13,7 +13,13 @@ export async function createOrder(orderData: {
   total_amount: number;
   items: { id: string; qty: number; price: number }[];
 }) {
-  const supabase = await createClient();
+  // Use service role key to bypass RLS in server actions
+  const supabase = createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+  
+  // Get the current user session (optional, for linking order to account)
   const { data: { user } } = await supabase.auth.getUser();
 
   // Try to insert with all possible columns based on schema
