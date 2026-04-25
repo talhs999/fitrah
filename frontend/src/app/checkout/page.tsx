@@ -394,18 +394,18 @@ export default function CheckoutPage() {
             <div className="border-t border-black/8 pt-6 pb-6">
               {!appliedCoupon ? (
                 <form onSubmit={handleApplyCoupon} className="flex flex-col gap-2">
-                  <div className="flex gap-3">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                     <input 
                       type="text" 
                       placeholder="Discount code" 
                       value={couponInput}
                       onChange={(e) => setCouponInput(e.target.value)}
-                      className="flex-1 bg-white border border-black/10 px-4 py-3 font-sans text-sm text-brand-black placeholder:text-brand-muted/40 focus:outline-none focus:border-brand-black transition-colors uppercase"
+                      className="w-full sm:flex-1 bg-white border border-black/10 px-4 py-3 font-sans text-sm text-brand-black placeholder:text-brand-muted/40 focus:outline-none focus:border-brand-black transition-colors uppercase min-w-0"
                     />
                     <button 
                       type="submit" 
                       disabled={!couponInput.trim()}
-                      className="bg-brand-black text-white px-6 font-sans text-xs uppercase tracking-widest font-bold hover:bg-black transition-colors disabled:opacity-50"
+                      className="w-full sm:w-auto shrink-0 bg-brand-black text-white px-6 py-3 font-sans text-xs uppercase tracking-widest font-bold hover:bg-black transition-colors disabled:opacity-50"
                     >
                       Apply
                     </button>
