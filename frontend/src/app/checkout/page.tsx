@@ -95,10 +95,7 @@ export default function CheckoutPage() {
         <div className="w-full max-w-lg">
           <div className="text-center mb-12">
             <Link href="/">
-              <img
-                src="/assets/Black.png"
-                alt="Fitrah" className="h-20 w-auto object-contain mx-auto"
-              />
+              <span className="font-serif text-2xl tracking-widest text-brand-black uppercase block text-center mb-6 lg:mb-10">FITRAH</span>
             </Link>
             <h1 className="font-serif text-4xl text-brand-black mb-3">How would you like to continue?</h1>
             <p className="font-sans text-sm text-brand-muted">Sign in for a faster experience, or continue as a guest.</p>
@@ -251,10 +248,7 @@ export default function CheckoutPage() {
         <div>
           <div className="mb-10">
             <Link href="/">
-              <img
-                src="/assets/Black.png"
-                alt="Fitrah" className="h-20 w-auto object-contain mb-6 -ml-2"
-              />
+              <span className="font-serif text-2xl tracking-widest text-brand-black uppercase block mb-6">FITRAH</span>
             </Link>
             <div className="flex items-center gap-3 text-[10px] font-sans uppercase tracking-widest text-brand-muted">
               <Link href="/cart" className="hover:text-brand-black transition-colors">Cart</Link>

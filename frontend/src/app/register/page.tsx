@@ -62,11 +62,7 @@ export default function RegisterPage() {
 
         {/* Content over image */}
         <div className="relative z-10 space-y-6">
-          <img
-            src="/assets/white.png"
-            alt="Fitrah"
-            className="h-28 w-auto object-contain mb-4 -ml-2"
-          />
+          <span className="font-serif text-2xl tracking-widest text-white uppercase">FITRAH</span>
           <p className="font-serif text-4xl text-white leading-snug">
             Join the<br />
             <em className="font-light text-white/50 not-italic">brotherhood.</em>

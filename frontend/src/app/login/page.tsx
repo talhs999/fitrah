@@ -36,26 +36,17 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen flex bg-[#faf9f6]">
       {/* Left — cinematic image panel */}
-      <div className="hidden lg:flex flex-col justify-end w-[45%] relative overflow-hidden px-16 py-20">
+      <div className="hidden lg:flex flex-col justify-end w-[45%] relative overflow-hidden px-16 py-20 bg-brand-black">
         {/* Background image */}
-        <Image
-          src="/assets/Gemini_Generated_Image_fculq8fculq8fcul.png"
-          alt="Fitrah lifestyle"
-          fill
-          unoptimized
-          className="object-cover object-center"
-          priority
-        />
+        <div className="absolute inset-0 flex items-center justify-center">
+            <span className="font-serif text-6xl tracking-widest text-white/10 uppercase">FITRAH</span>
+        </div>
         {/* Heavy dark overlay */}
         <div className="absolute inset-0 bg-black/75" />
 
         {/* Content over image */}
         <div className="relative z-10 space-y-6">
-          <img
-            src="/assets/white.png"
-            alt="Fitrah"
-            className="h-28 w-auto object-contain mb-4 -ml-2"
-          />
+          <span className="font-serif text-4xl text-white">FITRAH</span>
           <p className="font-serif text-4xl text-white leading-snug">
             Welcome<br />
             <em className="font-light text-white/50 not-italic">back.</em>
@@ -74,11 +65,7 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <Link href="/" className="lg:hidden flex flex-col items-center mb-10">
-            <img
-              src="/assets/Black.png"
-              alt="Fitrah"
-              className="h-20 w-auto object-contain"
-            />
+            <span className="font-serif text-3xl tracking-widest text-brand-black uppercase">FITRAH</span>
           </Link>
           <div className="mb-10">
             <h1 className="font-serif text-4xl text-brand-black mb-3">Welcome Back</h1>

@@ -530,14 +530,14 @@ export default function Home() {
           {/* 4-video mosaic grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 h-[520px] md:h-[620px]">
             {[
-              "C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Cvideos%5C6446060-hd_1080_1920_25fps.mp4",
-              "C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Cvideos%5CCinematic_Beard_Oil_Bottle_Scene.mp4",
-              "C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Cvideos%5CProduct_Commercial_Generation.mp4",
-              "C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Cvideos%5Cvideo3%20(1).mp4",
+              "/videos/video-1.mp4",
+              "/videos/video-2.mp4",
+              "/videos/video-3.mp4",
+              "/videos/video-4.mp4",
             ].map((path, i) => (
               <div key={i} className="relative overflow-hidden group">
                 <video
-                  src={`/api/media?path=${path}`}
+                  src={path}
                   autoPlay
                   muted
                   loop

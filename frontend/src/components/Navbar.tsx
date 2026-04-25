@@ -70,18 +70,9 @@ export default function Navbar() {
 
           {/* Logo (always perfectly centered) */}
           <Link href="/" className="flex-shrink-0 flex items-center justify-center">
-            {/* Show black logo on light bg, white logo on dark hero bg */}
-            <img
-              src={
-                isLight
-                  ? "/assets/Black.png"
-                  : "/api/media?path=C%3A%5CUsers%5CIQRA%20TRADERS%5CDesktop%5CFitrah%20Website%5Clogos%20new%5Cwhite.png"
-              }
-              alt="Fitrah"
-              className={`h-20 md:h-24 w-auto object-contain transition-all duration-300 ${
-                isLight ? "scale-100" : "scale-[1.25]"
-              }`}
-            />
+            <span className={`font-serif text-2xl tracking-widest uppercase ${
+              isLight ? "text-brand-black" : "text-white"
+            }`}>FITRAH</span>
           </Link>
 
           {/* Right Side (Nav + Icons) */}

@@ -25,13 +25,8 @@ export default function StoryPage() {
           {/* Right Cards */}
           <div className="lg:col-span-5 grid grid-cols-2 gap-4 md:gap-6 relative z-10">
              {/* Card 1: Product Image */}
-             <div className="relative aspect-[4/5] bg-white/5 rounded-sm overflow-hidden flex flex-col justify-end p-6 border border-white/10 group">
-                <Image
-                  src="/assets/product-1.jpeg"
-                  alt="Fitrah Product"
-                  fill
-                  className="object-cover object-center opacity-70 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105"
-                />
+             <div className="relative aspect-[4/5] bg-white/5 rounded-sm overflow-hidden flex flex-col justify-center items-center p-6 border border-white/10 group">
+                <span className="font-serif text-4xl tracking-widest text-white uppercase">FITRAH</span>
              </div>
              
              {/* Card 2: Logo */}
