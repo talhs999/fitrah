@@ -11,7 +11,7 @@ import GallerySlider from "@/components/GallerySlider";
 /* ── HERO SLIDES: Custom Generated Cinematic Images ── */
 const SLIDES = [
   {
-    image: "/assets/Gemini_Generated_Image_fculq8fculq8fcul.png",
+    image: "/assets/hero_slide_1_beard_oil_1776964963587.png",
     eyebrow: "The Heritage",
     headline: ["Master Your", "Craft."],
     sub: "Premium beard oils crafted from prophetic wisdom and the finest organic ingredients. A legacy of purity.",
@@ -27,7 +27,7 @@ const SLIDES = [
     ctaHref: "/shop",
   },
   {
-    image: "/assets/hero_slide_1_beard_oil_1776964963587.png",
+    image: "/assets/Gemini_Generated_Image_fculq8fculq8fcul.png",
     eyebrow: "The Ascent",
     headline: ["Every Drop", "Has a Purpose."],
     sub: "Where heritage meets luxury. Beard care for the man who knows his worth and honours his Sunnah.",
