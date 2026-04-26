@@ -3,18 +3,25 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Star, Trash2, Search, MessageSquare } from "lucide-react";
-import { createClient } from "@/utils/supabase/client";
+import { deleteReview } from "./actions";
 
 export default function ReviewsClient({ initialReviews }: { initialReviews: any[] }) {
   const [reviews, setReviews] = useState(initialReviews);
   const [search, setSearch] = useState("");
-  const supabase = createClient();
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this review?")) return;
     
+    // Optimistic update
+    const previousReviews = [...reviews];
     setReviews(reviews.filter(r => r.id !== id));
-    await supabase.from("reviews").delete().eq("id", id);
+    
+    const result = await deleteReview(id);
+    
+    if (!result.success) {
+      alert("Failed to delete review: " + result.error);
+      setReviews(previousReviews);
+    }
   };
 
   const filteredReviews = reviews.filter(r => 
