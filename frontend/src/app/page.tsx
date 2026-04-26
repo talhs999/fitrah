@@ -12,9 +12,9 @@ import GallerySlider from "@/components/GallerySlider";
 const SLIDES = [
   {
     image: "/assets/Gemini_Generated_Image_fculq8fculq8fcul.png",
-    eyebrow: "The Ritual",
+    eyebrow: "The Heritage",
     headline: ["Master Your", "Craft."],
-    sub: "Premium beard oils crafted from prophetic wisdom and the finest organic ingredients. A ritual that transforms.",
+    sub: "Premium beard oils crafted from prophetic wisdom and the finest organic ingredients. A legacy of purity.",
     cta: "Shop the Collection",
     ctaHref: "/shop",
   },
@@ -439,7 +439,7 @@ export default function Home() {
                 The Benefits
               </span>
               <h2 className="font-serif text-4xl md:text-5xl leading-[1.2] text-white">
-                A ritual that <br />
+                A legacy that <br />
                 <em className="not-italic font-light text-white/50">transforms.</em>
               </h2>
               <div className="mt-14">
