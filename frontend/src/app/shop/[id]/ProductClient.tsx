@@ -8,6 +8,7 @@ import { Star, Minus, Plus, ShoppingBag, Shield, Truck, RotateCcw, ChevronDown, 
 import { useCart } from "@/context/CartContext";
 import CartToast from "@/components/CartToast";
 import { createClient } from "@/utils/supabase/client";
+import { submitReview } from "./actions";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -79,27 +80,25 @@ export default function ProductClient({ product, related, initialReviews }: { pr
     ? (reviews.reduce((acc: number, r: any) => acc + r.rating, 0) / reviews.length).toFixed(1)
     : "5.0";
 
+
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!reviewName || !reviewText) return;
     
     setIsSubmittingReview(true);
     setReviewMessage("");
-    const supabase = createClient();
 
-    const newReview = {
+    const result = await submitReview({
       product_id: product.id,
       customer_name: reviewName,
       rating: reviewRating,
       review_text: reviewText
-    };
-
-    const { data, error } = await supabase.from("reviews").insert(newReview).select().single();
+    });
     
-    if (error) {
-      setReviewMessage("Failed to submit review. Please try again.");
+    if (result.success === false) {
+      setReviewMessage("Failed to submit review: " + result.error);
     } else {
-      setReviews([data, ...reviews]);
+      setReviews([result.data, ...reviews]);
       setReviewName("");
       setReviewText("");
       setReviewRating(5);

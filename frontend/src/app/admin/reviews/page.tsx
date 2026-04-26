@@ -1,10 +1,13 @@
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import ReviewsClient from "./ReviewsClient";
-import { createClient } from "@/utils/supabase/server";
 
 export const metadata = { title: "Reviews — Fitrah Admin" };
 
 export default async function AdminReviewsPage() {
-  const supabase = await createClient();
+  const supabase = createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
   
   // Fetch reviews and join with products
   const { data: reviews } = await supabase
