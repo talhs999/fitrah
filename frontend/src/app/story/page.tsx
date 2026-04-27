@@ -1,8 +1,34 @@
+"use client";
+
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { ArrowRight, Droplets, Shield, Leaf } from "lucide-react";
 
-export const metadata = { title: "Our Story — Fitrah Beard Oil" };
+export const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  show: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, delay: i * 0.12, ease: "easeOut" as const },
+  }),
+};
+
+function Section({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  return (
+    <motion.section
+      ref={ref}
+      initial="hidden"
+      animate={inView ? "show" : "hidden"}
+      className={className}
+    >
+      {children}
+    </motion.section>
+  );
+}
 
 export default function StoryPage() {
   return (
@@ -41,6 +67,35 @@ export default function StoryPage() {
           </div>
         </div>
       </div>
+
+      {/* ═══════════════════════════════════════════
+          VALUES SECTION — MOVED FROM HOME
+      ═══════════════════════════════════════════ */}
+      <Section className="py-24 px-6 md:px-10 max-w-7xl mx-auto border-b border-black/5">
+        <motion.div variants={fadeUp} custom={0} className="mb-20 max-w-2xl">
+          <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-brand-muted font-semibold block mb-5">
+            The Fitrah Standard
+          </span>
+          <h2 className="font-serif text-4xl md:text-5xl leading-[1.15] text-brand-black">
+            Every drop has a <em className="not-italic font-light text-brand-muted">purpose.</em>
+          </h2>
+        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pt-4">
+          {[
+            { icon: Droplets, title: "Cold-Pressed Purity", desc: "We extract oils at low temperatures to preserve 100% of their natural nutrients, vitamins, and therapeutic properties. No heat. No compromise." },
+            { icon: Shield, title: "Scientifically Formulated", desc: "Each blend is engineered for a specific beard need — hydration, growth, healing, strength, or protection — not generic one-size-fits-all." },
+            { icon: Leaf, title: "Certified Natural", desc: "No parabens. No silicones. No artificial fragrances. No mineral oil. Just pure, organic, raw ingredients as nature and the Sunnah intended." },
+          ].map((item, i) => (
+            <motion.div key={item.title} variants={fadeUp} custom={i + 1} className="space-y-5">
+              <div className="w-10 h-10 flex items-center justify-center">
+                <item.icon className="w-6 h-6 text-brand-black" strokeWidth={1} />
+              </div>
+              <h3 className="font-serif text-2xl text-brand-black">{item.title}</h3>
+              <p className="font-sans text-[15px] text-brand-muted font-light leading-relaxed">{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </Section>
 
       {/* Story Body */}
       <div className="max-w-4xl mx-auto px-6 md:px-10 py-24 space-y-20">
@@ -100,3 +155,4 @@ export default function StoryPage() {
     </main>
   );
 }
+

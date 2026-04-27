@@ -64,19 +64,9 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  // Prevent logged-in users from accessing login and register pages
-  if (user && (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/register')) {
-    const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'admin@fitrah.com'
-    const url = request.nextUrl.clone()
-    
-    if (user.email === adminEmail) {
-      url.pathname = '/admin'
-    } else {
-      url.pathname = '/account'
-    }
-    
-    return NextResponse.redirect(url)
-  }
+  // We removed the automatic redirect for logged-in users on login/register pages
+  // to allow the user to see those pages if they click on them from the footer.
+  // Redirection will now only happen for protected routes like /admin and /account.
 
   return supabaseResponse
 }
