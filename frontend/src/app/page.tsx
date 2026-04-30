@@ -269,7 +269,7 @@ export default function Home() {
             {/* Top: barber applying beard oil (user image) */}
             <div className="relative overflow-hidden">
               <Image
-                src="/assets/new-hero-black-bottle.jpg"
+                src="/assets/6c6b8b4f-0302-4c17-babe-bf4c7ed5826a.png"
                 alt="Fitrah beard oil application"
                 fill
                 sizes="(max-width:768px) 100vw, 50vw"
