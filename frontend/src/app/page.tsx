@@ -27,6 +27,14 @@ const SLIDES = [
     ctaHref: "/shop",
   },
   {
+    image: "/assets/banner-img 1.png",
+    eyebrow: "The Essence",
+    headline: ["Purely", "Natural."],
+    sub: "Elevate your grooming routine with ingredients chosen for their purity and effectiveness.",
+    cta: "Explore Now",
+    ctaHref: "/shop",
+  },
+  {
     image: "/assets/Gemini_Generated_Image_fculq8fculq8fcul.png",
     video: "/assets/3rd video for abnner .mp4",
     eyebrow: "The Ascent",
