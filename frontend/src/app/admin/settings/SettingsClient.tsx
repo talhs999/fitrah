@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Store, CreditCard, Truck, Bell, Shield, Save, Tag, Plus, Trash2 } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 
@@ -59,6 +59,31 @@ export default function SettingsClient() {
   const [twoFactorAuth, setTwoFactorAuth] = useState(false);
   const [sessionTimeout, setSessionTimeout] = useState("24");
 
+  // Payment Settings State (Database)
+  const [stripeEnabled, setStripeEnabled] = useState(false);
+  const [stripePublicKey, setStripePublicKey] = useState("");
+  const [stripeSecretKey, setStripeSecretKey] = useState("");
+  const [stripeWebhookSecret, setStripeWebhookSecret] = useState("");
+  const [codEnabled, setCodEnabled] = useState(true);
+  const [paymentSettingsId, setPaymentSettingsId] = useState<string | null>(null);
+
+  // Load Payment Settings
+  useEffect(() => {
+    const loadSettings = async () => {
+      const supabase = createClient();
+      const { data, error } = await supabase.from("payment_settings").select("*").single();
+      if (data) {
+        setStripeEnabled(data.stripe_enabled);
+        setStripePublicKey(data.stripe_public_key || "");
+        setStripeSecretKey(data.stripe_secret_key || "");
+        setStripeWebhookSecret(data.stripe_webhook_secret || "");
+        setCodEnabled(data.cod_enabled);
+        setPaymentSettingsId(data.id);
+      }
+    };
+    loadSettings();
+  }, []);
+
   // Coupons State
   const [coupons, setCoupons] = useState([
     { id: 1, code: "WELCOME10", type: "percentage", value: 10, active: true },
@@ -68,16 +93,36 @@ export default function SettingsClient() {
   const [newCouponType, setNewCouponType] = useState("percentage");
   const [newCouponValue, setNewCouponValue] = useState("");
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSaving(false);
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 3000);
-    }, 1000);
+    // Save payment settings if we are on the payments tab
+    if (activeTab === "payments") {
+      const supabase = createClient();
+      if (paymentSettingsId) {
+        await supabase.from("payment_settings").update({
+          stripe_enabled: stripeEnabled,
+          stripe_public_key: stripePublicKey,
+          stripe_secret_key: stripeSecretKey,
+          stripe_webhook_secret: stripeWebhookSecret,
+          cod_enabled: codEnabled
+        }).eq("id", paymentSettingsId);
+      } else {
+        const { data } = await supabase.from("payment_settings").insert({
+          stripe_enabled: stripeEnabled,
+          stripe_public_key: stripePublicKey,
+          stripe_secret_key: stripeSecretKey,
+          stripe_webhook_secret: stripeWebhookSecret,
+          cod_enabled: codEnabled
+        }).select().single();
+        if (data) setPaymentSettingsId(data.id);
+      }
+    }
+    
+    setIsSaving(false);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
   };
 
   const addCoupon = () => {
@@ -296,20 +341,57 @@ export default function SettingsClient() {
                 <div className="space-y-6 animate-fade-in">
                   <h2 className="font-serif text-xl text-brand-black mb-4">Payment Providers</h2>
                   
+                  {/* Stripe Section */}
+                  <div className={`border rounded-sm transition-colors ${stripeEnabled ? 'border-brand-black/20 bg-black/[0.02]' : 'border-black/10'}`}>
+                    <div className="p-5 flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-8 bg-[#635BFF] rounded flex items-center justify-center text-white font-bold text-xs">Stripe</div>
+                        <div>
+                          <h3 className="font-sans text-sm font-bold text-brand-black">Stripe Checkout</h3>
+                          <p className="font-sans text-[11px] text-brand-muted mt-0.5">Accept all major credit cards and Apple Pay</p>
+                        </div>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked={stripeEnabled} onChange={() => setStripeEnabled(!stripeEnabled)} className="sr-only peer" />
+                        <div className="w-11 h-6 bg-black/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#635BFF]"></div>
+                      </label>
+                    </div>
+                    
+                    {stripeEnabled && (
+                      <div className="px-5 pb-5 pt-2 border-t border-black/5 space-y-4">
+                        <div>
+                          <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Publishable Key</label>
+                          <input type="text" value={stripePublicKey} onChange={e => setStripePublicKey(e.target.value)} placeholder="pk_test_..." className="w-full p-3 bg-white border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-[#635BFF]" />
+                        </div>
+                        <div>
+                          <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Secret Key</label>
+                          <input type="password" value={stripeSecretKey} onChange={e => setStripeSecretKey(e.target.value)} placeholder="sk_test_..." className="w-full p-3 bg-white border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-[#635BFF]" />
+                        </div>
+                        <div>
+                          <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Webhook Secret</label>
+                          <input type="password" value={stripeWebhookSecret} onChange={e => setStripeWebhookSecret(e.target.value)} placeholder="whsec_..." className="w-full p-3 bg-white border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-[#635BFF]" />
+                          <p className="mt-1 font-sans text-[10px] text-brand-muted">Used to securely verify payment success from Stripe.</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Cash on Delivery Section */}
                   <div className="border border-black/10 rounded-sm p-5 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-8 bg-[#635BFF] rounded flex items-center justify-center text-white font-bold text-xs">Stripe</div>
+                      <div className="w-12 h-8 bg-brand-black rounded flex items-center justify-center text-white font-bold text-xs">COD</div>
                       <div>
-                        <h3 className="font-sans text-sm font-bold text-brand-black">Stripe Checkout</h3>
-                        <p className="font-sans text-[11px] text-brand-muted mt-0.5">Accept all major credit cards and Apple Pay</p>
+                        <h3 className="font-sans text-sm font-bold text-brand-black">Cash on Delivery</h3>
+                        <p className="font-sans text-[11px] text-brand-muted mt-0.5">Allow customers to pay when they receive their order</p>
                       </div>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" checked={stripeEnabled} onChange={() => setStripeEnabled(!stripeEnabled)} className="sr-only peer" />
-                      <div className="w-11 h-6 bg-black/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
+                      <input type="checkbox" checked={codEnabled} onChange={() => setCodEnabled(!codEnabled)} className="sr-only peer" />
+                      <div className="w-11 h-6 bg-black/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-black"></div>
                     </label>
                   </div>
 
+                  {/* PayPal (Coming Soon) */}
                   <div className="border border-black/10 rounded-sm p-5 flex items-center justify-between opacity-50">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-8 bg-[#00457C] rounded flex items-center justify-center text-white font-bold text-xs italic">PayPal</div>
