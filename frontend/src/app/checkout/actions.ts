@@ -115,7 +115,7 @@ export async function createStripeCheckout(orderData: {
     }
 
     // Determine the base URL for redirection
-    const headersList = headers();
+    const headersList = await headers();
     let origin = headersList.get("origin") || process.env.NEXT_PUBLIC_SITE_URL;
     
     if (!origin) {
