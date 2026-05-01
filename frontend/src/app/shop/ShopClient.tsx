@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowRight, SlidersHorizontal, ChevronDown } from "lucide-react";
 
@@ -15,7 +16,10 @@ const fadeUp = {
   }),
 };
 
-export default function ShopClient({ products, categories }: { products: any[], categories: any[] }) {
+function ShopContent({ products, categories }: { products: any[], categories: any[] }) {
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get("q")?.toLowerCase() || "";
+
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [sortOrder, setSortOrder] = useState<string>("featured");
 
@@ -23,6 +27,16 @@ export default function ShopClient({ products, categories }: { products: any[], 
   let filtered = activeCategory === "All" 
     ? products 
     : products.filter(p => p.category_id === activeCategory);
+
+  // Search Filtering
+  if (searchQuery) {
+    filtered = filtered.filter(p => 
+      p.name?.toLowerCase().includes(searchQuery) ||
+      p.subtitle?.toLowerCase().includes(searchQuery) ||
+      p.description?.toLowerCase().includes(searchQuery) ||
+      p.purpose?.toLowerCase().includes(searchQuery)
+    );
+  }
 
   // Sorting
   filtered = [...filtered].sort((a, b) => {
@@ -43,10 +57,12 @@ export default function ShopClient({ products, categories }: { products: any[], 
             Fitrah Beard Oil
           </span>
           <h1 className="font-serif text-5xl md:text-6xl text-brand-black mb-4">
-            Shop the Collection
+            {searchQuery ? `Search Results for "${searchQuery}"` : "Shop the Collection"}
           </h1>
           <p className="font-sans text-[15px] text-brand-muted font-light max-w-xl">
-            Premium grooming engineered for specific purposes. Find yours below.
+            {searchQuery 
+              ? `Found ${filtered.length} product${filtered.length === 1 ? "" : "s"} matching your search.`
+              : "Premium grooming engineered for specific purposes. Find yours below."}
           </p>
         </div>
       </div>
@@ -169,5 +185,13 @@ export default function ShopClient({ products, categories }: { products: any[], 
         )}
       </div>
     </main>
+  );
+}
+
+export default function ShopClient(props: { products: any[], categories: any[] }) {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#faf9f6] flex items-center justify-center"><div className="w-8 h-8 border-2 border-brand-black border-t-transparent rounded-full animate-spin"></div></div>}>
+      <ShopContent {...props} />
+    </Suspense>
   );
 }

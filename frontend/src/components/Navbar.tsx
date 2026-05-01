@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ShoppingBag, Menu, X, User } from "lucide-react";
 import { useCart } from "@/context/CartContext";
@@ -19,6 +19,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const { totalCount } = useCart();
 
   // Only homepage has a full-screen dark hero — all other pages have light backgrounds
@@ -163,18 +164,30 @@ export default function Navbar() {
               transition={{ duration: 0.3 }}
               className="border-t border-white/10 bg-[#111]/90 backdrop-blur-lg overflow-hidden"
             >
-              <div className="max-w-7xl mx-auto px-6 md:px-10 py-4 flex items-center gap-4">
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  const q = formData.get("q");
+                  if (q) {
+                    setSearchOpen(false);
+                    router.push(`/shop?q=${encodeURIComponent(q.toString())}`);
+                  }
+                }}
+                className="max-w-7xl mx-auto px-6 md:px-10 py-4 flex items-center gap-4"
+              >
                 <Search className="w-4 h-4 text-white/50" strokeWidth={1.5} />
                 <input
                   autoFocus
+                  name="q"
                   type="search"
                   placeholder="Search products…"
                   className="flex-1 bg-transparent font-sans text-sm text-white placeholder:text-white/40 focus:outline-none py-2"
                 />
-                <button onClick={() => setSearchOpen(false)} className="text-white/50 hover:text-white">
+                <button type="button" onClick={() => setSearchOpen(false)} className="text-white/50 hover:text-white">
                   <X className="w-4 h-4" strokeWidth={1.5} />
                 </button>
-              </div>
+              </form>
             </motion.div>
           )}
         </AnimatePresence>
