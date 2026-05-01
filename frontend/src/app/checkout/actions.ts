@@ -62,3 +62,76 @@ export async function createOrder(orderData: {
 
   return { success: true, orderId: order.id };
 }
+
+export async function createStripeCheckout(orderData: {
+  customer_name: string;
+  customer_email: string;
+  shipping_address: string;
+  total_amount: number;
+  items: { id: string; name: string; qty: number; price: number; image?: string }[];
+}) {
+  try {
+    const supabase = createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    const { data: settings } = await supabase.from("payment_settings").select("stripe_secret_key").single();
+    if (!settings || !settings.stripe_secret_key) {
+      throw new Error("Stripe is not fully configured.");
+    }
+
+    const Stripe = (await import("stripe")).default;
+    const stripe = new Stripe(settings.stripe_secret_key, { apiVersion: "2023-10-16" as any });
+
+    // Map cart items to Stripe line items
+    const lineItems = orderData.items.map(item => ({
+      price_data: {
+        currency: "aud",
+        product_data: {
+          name: item.name,
+          images: item.image ? [`https://fitrah-ecommerce.vercel.app${item.image}`] : [],
+        },
+        unit_amount: Math.round(item.price * 100), // Stripe expects cents
+      },
+      quantity: item.qty,
+    }));
+
+    // Add shipping cost if total amount implies it
+    // Calculating shipping based on difference
+    const itemsTotal = orderData.items.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    const shipping = orderData.total_amount - itemsTotal;
+    
+    if (shipping > 0) {
+      lineItems.push({
+        price_data: {
+          currency: "aud",
+          product_data: { name: "Shipping" },
+          unit_amount: Math.round(shipping * 100),
+        },
+        quantity: 1,
+      });
+    }
+
+    // Determine the base URL for redirection
+    const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment",
+      customer_email: orderData.customer_email,
+      success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/checkout`,
+      line_items: lineItems,
+      metadata: {
+        customer_name: orderData.customer_name,
+        shipping_address: orderData.shipping_address,
+      }
+    });
+
+    return { success: true, url: session.url };
+  } catch (error: any) {
+    console.error("Stripe Checkout Error:", error);
+    return { success: false, error: error.message };
+  }
+}

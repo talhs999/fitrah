@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -8,6 +8,7 @@ import { useCart } from "@/context/CartContext";
 import { PRODUCTS } from "@/lib/products";
 import { ArrowRight, User, UserCheck, ShoppingBag } from "lucide-react";
 import { createOrder } from "./actions";
+import { createClient } from "@/utils/supabase/client";
 
 type GateChoice = "none" | "login" | "register" | "guest";
 
@@ -15,6 +16,31 @@ export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const [gate, setGate] = useState<GateChoice>("none");
   const router = useRouter();
+
+  // ─── Payment Settings State ───────────────────────────────
+  const [stripeEnabled, setStripeEnabled] = useState(false);
+  const [codEnabled, setCodEnabled] = useState(true);
+  const [selectedPayment, setSelectedPayment] = useState<"stripe" | "cod">("cod");
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  useEffect(() => {
+    const fetchPaymentSettings = async () => {
+      const supabase = createClient();
+      const { data } = await supabase.from("payment_settings").select("stripe_enabled, cod_enabled").single();
+      if (data) {
+        setStripeEnabled(data.stripe_enabled);
+        setCodEnabled(data.cod_enabled);
+        if (data.stripe_enabled && !data.cod_enabled) {
+          setSelectedPayment("stripe");
+        } else if (!data.stripe_enabled && data.cod_enabled) {
+          setSelectedPayment("cod");
+        } else if (data.stripe_enabled && data.cod_enabled) {
+          setSelectedPayment("stripe"); // Default to stripe if both available
+        }
+      }
+    };
+    fetchPaymentSettings();
+  }, []);
 
   // ─── Login form state ──────────────────────────────────────
   const [loginEmail, setLoginEmail] = useState("");
@@ -273,6 +299,31 @@ export default function CheckoutPage() {
             const shippingCost = shipping;
             
             try {
+              if (selectedPayment === "stripe") {
+                setIsProcessing(true);
+                // Call Stripe Checkout Server Action
+                const { createStripeCheckout } = await import('./actions');
+                const result = await createStripeCheckout({
+                  customer_name: guestName,
+                  customer_email: guestEmail,
+                  shipping_address: `${address}, ${city}, ${postcode}`,
+                  total_amount: orderTotal,
+                  items: items.map(item => {
+                    const p = PRODUCTS.find(x => x.id === item.id)!;
+                    return { id: item.id, name: p.name, qty: item.qty, price: p.price, image: p.image };
+                  })
+                });
+
+                if (result.url) {
+                  window.location.href = result.url;
+                } else {
+                  alert("Failed to initialize Stripe checkout: " + result.error);
+                  setIsProcessing(false);
+                }
+                return;
+              }
+
+              // Normal COD Flow
               const result = await createOrder({
                 customer_name: guestName,
                 customer_email: guestEmail,
@@ -305,6 +356,7 @@ export default function CheckoutPage() {
                 subtotal: totalPrice,
                 shipping: shippingCost,
                 total: orderTotal,
+                paymentMethod: "Cash on Delivery"
               };
 
               localStorage.setItem("fitrah_last_order", JSON.stringify(orderData));
@@ -313,6 +365,7 @@ export default function CheckoutPage() {
             } catch (err: any) {
               console.error(err);
               alert("Failed to place order: " + (err.message || "Unknown error"));
+              setIsProcessing(false);
             }
           }}>
             <div className="grid grid-cols-2 gap-5">
@@ -349,20 +402,54 @@ export default function CheckoutPage() {
             </div>
 
             <div className="pt-4 border-t border-black/8">
-              <h2 className="font-serif text-2xl text-brand-black mb-6">Payment</h2>
-              <div className="bg-white border border-black/10 px-5 py-4 flex items-center gap-3 mb-4">
-                <div className="w-2 h-2 rounded-full bg-brand-black" />
-                <span className="font-sans text-sm text-brand-black">Credit / Debit Card (Stripe)</span>
-                <span className="ml-auto font-sans text-[10px] uppercase tracking-widest text-brand-muted">Secure</span>
-              </div>
-              <div className="bg-[#f5f3ef] border border-black/5 px-5 py-4">
-                <p className="font-sans text-xs text-brand-muted">Card payment integration via Stripe coming soon. No card info is stored.</p>
+              <h2 className="font-serif text-2xl text-brand-black mb-6">Payment Method</h2>
+              
+              <div className="space-y-3 mb-6">
+                {stripeEnabled && (
+                  <label 
+                    onClick={() => setSelectedPayment('stripe')}
+                    className={`block border rounded-sm p-4 cursor-pointer transition-colors ${selectedPayment === 'stripe' ? 'border-brand-black bg-black/[0.02]' : 'border-black/10 hover:border-black/30'}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${selectedPayment === 'stripe' ? 'border-brand-black' : 'border-black/30'}`}>
+                        {selectedPayment === 'stripe' && <div className="w-2 h-2 rounded-full bg-brand-black" />}
+                      </div>
+                      <span className="font-sans text-sm font-bold text-brand-black">Credit / Debit Card (Stripe)</span>
+                      <span className="ml-auto font-sans text-[10px] uppercase tracking-widest text-brand-muted border border-black/10 px-2 py-0.5 rounded-sm">Secure</span>
+                    </div>
+                  </label>
+                )}
+
+                {codEnabled && (
+                  <label 
+                    onClick={() => setSelectedPayment('cod')}
+                    className={`block border rounded-sm p-4 cursor-pointer transition-colors ${selectedPayment === 'cod' ? 'border-brand-black bg-black/[0.02]' : 'border-black/10 hover:border-black/30'}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${selectedPayment === 'cod' ? 'border-brand-black' : 'border-black/30'}`}>
+                        {selectedPayment === 'cod' && <div className="w-2 h-2 rounded-full bg-brand-black" />}
+                      </div>
+                      <span className="font-sans text-sm font-bold text-brand-black">Cash on Delivery (COD)</span>
+                      <span className="ml-auto font-sans text-[10px] uppercase tracking-widest text-brand-muted">Pay at Door</span>
+                    </div>
+                  </label>
+                )}
+                
+                {!stripeEnabled && !codEnabled && (
+                  <div className="p-4 bg-red-50 text-red-600 font-sans text-sm border border-red-100 rounded-sm">
+                    No payment methods are currently available. Please contact support.
+                  </div>
+                )}
               </div>
             </div>
 
-            <button type="submit" className="w-full group inline-flex items-center justify-center gap-3 bg-brand-black text-white px-8 py-5 font-sans text-xs uppercase tracking-widest font-bold hover:bg-black transition-colors">
-              Place Order — ${total.toFixed(2)} AUD
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <button 
+              type="submit" 
+              disabled={isProcessing || (!stripeEnabled && !codEnabled)}
+              className="w-full group inline-flex items-center justify-center gap-3 bg-brand-black text-white px-8 py-5 font-sans text-xs uppercase tracking-widest font-bold hover:bg-black transition-colors disabled:opacity-50"
+            >
+              {isProcessing ? "Processing..." : `Place Order — $${total.toFixed(2)} AUD`}
+              {!isProcessing && <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
             </button>
           </form>
         </div>
