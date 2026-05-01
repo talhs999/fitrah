@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { PRODUCTS } from "@/lib/products";
 import { ArrowRight, User, UserCheck, ShoppingBag } from "lucide-react";
-import { createOrder } from "./actions";
+import { createOrder, createStripeCheckout } from "./actions";
 import { createClient } from "@/utils/supabase/client";
 
 type GateChoice = "none" | "login" | "register" | "guest";
@@ -302,7 +302,6 @@ export default function CheckoutPage() {
               if (selectedPayment === "stripe") {
                 setIsProcessing(true);
                 // Call Stripe Checkout Server Action
-                const { createStripeCheckout } = await import('./actions');
                 const result = await createStripeCheckout({
                   customer_name: guestName,
                   customer_email: guestEmail,

@@ -1,6 +1,8 @@
 "use server";
 
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+import { headers } from "next/headers";
+import Stripe from "stripe";
 
 export async function createOrder(orderData: {
   customer_name: string;
@@ -81,7 +83,6 @@ export async function createStripeCheckout(orderData: {
       throw new Error("Stripe is not fully configured.");
     }
 
-    const Stripe = (await import("stripe")).default;
     const stripe = new Stripe(settings.stripe_secret_key, { apiVersion: "2023-10-16" as any });
 
     // Map cart items to Stripe line items
@@ -114,7 +115,6 @@ export async function createStripeCheckout(orderData: {
     }
 
     // Determine the base URL for redirection
-    const { headers } = await import("next/headers");
     const headersList = headers();
     let origin = headersList.get("origin") || process.env.NEXT_PUBLIC_SITE_URL;
     
