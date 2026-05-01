@@ -114,7 +114,16 @@ export async function createStripeCheckout(orderData: {
     }
 
     // Determine the base URL for redirection
-    const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+    const { headers } = await import("next/headers");
+    const headersList = headers();
+    let origin = headersList.get("origin") || process.env.NEXT_PUBLIC_SITE_URL;
+    
+    if (!origin) {
+      // Fallback if origin header is missing (e.g., in some server action contexts)
+      const host = headersList.get("host");
+      const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
+      origin = host ? `${protocol}://${host}` : "http://localhost:3000";
+    }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
