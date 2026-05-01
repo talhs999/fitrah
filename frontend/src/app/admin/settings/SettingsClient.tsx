@@ -45,9 +45,6 @@ export default function SettingsClient() {
   // Shipping State
   const [shippingRate, setShippingRate] = useState("9.95");
   const [freeShippingThreshold, setFreeShippingThreshold] = useState("80");
-  
-  // Payment State
-  const [stripeEnabled, setStripeEnabled] = useState(true);
 
   // Notification State
   const [notifyOrderPlaced, setNotifyOrderPlaced] = useState(true);
