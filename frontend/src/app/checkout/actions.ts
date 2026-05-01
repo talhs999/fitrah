@@ -107,7 +107,7 @@ export async function createStripeCheckout(orderData: {
       lineItems.push({
         price_data: {
           currency: "aud",
-          product_data: { name: "Shipping" },
+          product_data: { name: "Shipping", images: [] },
           unit_amount: Math.round(shipping * 100),
         },
         quantity: 1,
