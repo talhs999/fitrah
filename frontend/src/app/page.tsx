@@ -36,7 +36,7 @@ const SLIDES = [
   },
   {
     image: "/assets/Gemini_Generated_Image_fculq8fculq8fcul.png",
-    video: "/assets/3rd video for abnner .mp4",
+    video: "/Video Project 1.mp4",
     eyebrow: "The Ascent",
     headline: ["Every Drop", "Has a Purpose."],
     sub: "Where heritage meets luxury. Beard care for the man who knows his worth and honours his Sunnah.",
