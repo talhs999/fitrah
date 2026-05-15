@@ -26,6 +26,8 @@ export const metadata: Metadata = {
 
 import WhatsAppButton from "@/components/WhatsAppButton";
 
+import { CurrencyProvider } from "@/context/CurrencyContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -37,12 +39,14 @@ export default function RootLayout({
       className={`${playfair.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#faf9f6] text-[#111111] font-sans">
-        <CartProvider>
-          <Navbar />
-          <div className="flex-1">{children}</div>
-          <Footer />
-          <WhatsAppButton />
-        </CartProvider>
+        <CurrencyProvider>
+          <CartProvider>
+            <Navbar />
+            <div className="flex-1">{children}</div>
+            <Footer />
+            <WhatsAppButton />
+          </CartProvider>
+        </CurrencyProvider>
       </body>
     </html>
   );

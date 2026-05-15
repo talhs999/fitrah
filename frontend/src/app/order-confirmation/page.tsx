@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { CheckCircle, Download, ArrowRight, Package } from "lucide-react";
+import { useCurrency } from "@/context/CurrencyContext";
 
 interface OrderItem {
   id: string;
@@ -32,6 +33,7 @@ interface OrderData {
 export default function OrderConfirmationPage() {
   const [order, setOrder] = useState<OrderData | null>(null);
   const invoiceRef = useRef<HTMLDivElement>(null);
+  const { currency } = useCurrency();
 
   useEffect(() => {
     try {
@@ -174,7 +176,7 @@ export default function OrderConfirmationPage() {
       <div class="totals-row"><span>Subtotal</span><span>$${order.subtotal.toFixed(2)}</span></div>
       <div class="totals-row"><span>Shipping</span><span class="${order.shipping === 0 ? "free" : ""}">${order.shipping === 0 ? "FREE" : "$" + order.shipping.toFixed(2)}</span></div>
       <div class="totals-row"><span>GST (included)</span><span>$${(order.total / 11).toFixed(2)}</span></div>
-      <div class="totals-final"><span>Total (AUD)</span><span>$${order.total.toFixed(2)}</span></div>
+      <div class="totals-final"><span>Total (${currency})</span><span>$${order.total.toFixed(2)}</span></div>
     </div>
   </div>
 
@@ -319,7 +321,7 @@ export default function OrderConfirmationPage() {
                   <span>${(order.total / 11).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between font-serif text-xl text-brand-black border-t border-black/8 pt-3">
-                  <span>Total (AUD)</span>
+                  <span>Total ({currency})</span>
                   <span>${order.total.toFixed(2)}</span>
                 </div>
               </div>

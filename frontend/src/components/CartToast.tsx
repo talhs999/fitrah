@@ -5,6 +5,7 @@ import { ShoppingBag, X, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCurrency } from "@/context/CurrencyContext";
 
 interface CartToastProps {
   show: boolean;
@@ -15,6 +16,7 @@ interface CartToastProps {
 }
 
 export default function CartToast({ show, productName, productImage, productPrice, onClose }: CartToastProps) {
+  const { currency } = useCurrency();
   useEffect(() => {
     if (show) {
       const timer = setTimeout(onClose, 4000);
@@ -56,7 +58,7 @@ export default function CartToast({ show, productName, productImage, productPric
             </div>
             <div className="flex-1">
               <p className="font-serif text-lg text-brand-black leading-tight">{productName}</p>
-              <p className="font-sans text-sm text-brand-muted mt-1">${productPrice.toFixed(2)} AUD</p>
+              <p className="font-sans text-sm text-brand-muted mt-1">${productPrice.toFixed(2)} {currency}</p>
             </div>
           </div>
 

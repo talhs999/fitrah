@@ -9,6 +9,7 @@ import { PRODUCTS } from "@/lib/products";
 import { ArrowRight, User, UserCheck, ShoppingBag } from "lucide-react";
 import { createOrder, createStripeCheckout } from "./actions";
 import { createClient } from "@/utils/supabase/client";
+import { useCurrency } from "@/context/CurrencyContext";
 
 type GateChoice = "none" | "login" | "register" | "guest";
 
@@ -22,6 +23,7 @@ export default function CheckoutPage() {
   const [codEnabled, setCodEnabled] = useState(true);
   const [selectedPayment, setSelectedPayment] = useState<"stripe" | "cod">("cod");
   const [isProcessing, setIsProcessing] = useState(false);
+  const { currency } = useCurrency();
 
   useEffect(() => {
     const fetchPaymentSettings = async () => {
@@ -447,7 +449,7 @@ export default function CheckoutPage() {
               disabled={isProcessing || (!stripeEnabled && !codEnabled)}
               className="w-full group inline-flex items-center justify-center gap-3 bg-brand-black text-white px-8 py-5 font-sans text-xs uppercase tracking-widest font-bold hover:bg-black transition-colors disabled:opacity-50"
             >
-              {isProcessing ? "Processing..." : `Place Order — $${total.toFixed(2)} AUD`}
+              {isProcessing ? "Processing..." : `Place Order — $${total.toFixed(2)} ${currency}`}
               {!isProcessing && <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
             </button>
           </form>
@@ -542,7 +544,7 @@ export default function CheckoutPage() {
               )}
               <div className="flex justify-between font-serif text-xl text-brand-black border-t border-black/8 pt-4 mt-2">
                 <span>Total</span>
-                <span>${total.toFixed(2)} AUD</span>
+                <span>${total.toFixed(2)} {currency}</span>
               </div>
             </div>
           </div>

@@ -24,7 +24,7 @@ export default function TermsPage() {
           <p>By accessing and using the Fitrah Beard Oil website (fitrahbeardoil.com.au), you agree to be bound by these Terms and Conditions. If you do not agree, please do not use our website.</p>
         </Section>
         <Section title="2. Products & Pricing">
-          <p>All prices are listed in Australian Dollars (AUD) and include GST where applicable. We reserve the right to change prices at any time without notice. Prices displayed at the time of your order will be honoured.</p>
+          <p>All prices are listed in your selected currency and include GST where applicable. We reserve the right to change prices at any time without notice. Prices displayed at the time of your order will be honoured.</p>
           <p>We do our best to ensure product descriptions are accurate, but do not warrant that all descriptions, images, or other content are error-free.</p>
         </Section>
         <Section title="3. Orders & Payment">
@@ -32,7 +32,7 @@ export default function TermsPage() {
           <p>We reserve the right to cancel or refuse any order for any reason, including suspected fraud or pricing errors.</p>
         </Section>
         <Section title="4. Shipping & Delivery">
-          <p>We ship Australia-wide. Standard delivery takes 3–7 business days. Express delivery takes 1–2 business days. Shipping fees are calculated at checkout. Free shipping applies to orders over $80 AUD.</p>
+          <p>We ship Australia-wide. Standard delivery takes 3–7 business days. Express delivery takes 1–2 business days. Shipping fees are calculated at checkout. Free shipping applies to orders over 80 in your selected currency.</p>
           <p>We are not responsible for delays caused by Australia Post or other courier services beyond our control.</p>
         </Section>
         <Section title="5. Returns & Refunds">

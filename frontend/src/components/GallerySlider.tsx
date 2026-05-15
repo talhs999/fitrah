@@ -5,10 +5,12 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const GALLERY_IMAGES = [
-  "/assets/Gemini_Generated_Image_fculq8fculq8fcul.png",
-  "/assets/Gemini_Generated_Image_jkg1ffjkg1ffjkg1.png",
-  "/assets/Gemini_Generated_Image_p072udp072udp072.png",
-  "/assets/Gemini_Generated_Image_pcsrkppcsrkppcsr.png",
+  "/gallery/1.jpg",
+  "/gallery/2.jpg",
+  "/gallery/3.jpg",
+  "/gallery/4.jpg",
+  "/gallery/5.jpg",
+  "/gallery/6.jpg",
 ];
 
 // Duplicate images for seamless infinite loop

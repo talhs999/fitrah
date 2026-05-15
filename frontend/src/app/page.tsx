@@ -7,6 +7,7 @@ import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ArrowRight, Star, Check, Droplets, Shield, Leaf } from "lucide-react";
 import { PRODUCTS } from "@/lib/products";
 import GallerySlider from "@/components/GallerySlider";
+import { useCurrency } from "@/context/CurrencyContext";
 
 /* ── HERO SLIDES: Custom Generated Cinematic Images ── */
 const SLIDES = [
@@ -97,6 +98,7 @@ function Section({ children, className = "" }: { children: React.ReactNode; clas
 
 export default function Home() {
   const { idx, setIdx } = useCarousel(SLIDES.length, 7000);
+  const { currency } = useCurrency();
 
   return (
     <main className="bg-[#faf9f6]">
@@ -233,7 +235,7 @@ export default function Home() {
                     </div>
                     <p className="font-sans text-sm text-brand-muted/70 font-light leading-relaxed line-clamp-2">{p.description.substring(0, 100)}...</p>
                     <div className="flex items-center justify-between mt-auto pt-4 border-t border-black/8">
-                      <span className="font-sans text-xl font-bold text-brand-black">${p.price}<span className="text-xs font-normal text-brand-muted ml-1">AUD</span></span>
+                      <span className="font-sans text-xl font-bold text-brand-black">${p.price}<span className="text-xs font-normal text-brand-muted ml-1">{currency}</span></span>
                       <span className="font-sans text-[10px] uppercase tracking-widest text-brand-muted group-hover:text-brand-black transition-colors font-bold flex items-center gap-1.5">
                         Shop Now <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                       </span>

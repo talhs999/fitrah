@@ -41,6 +41,7 @@ export default function SettingsClient() {
   // General State
   const [storeName, setStoreName] = useState("Fitrah");
   const [contactEmail, setContactEmail] = useState("support@fitrah.com");
+  const [currency, setCurrency] = useState("AUD");
   
   // Shipping State
   const [shippingRate, setShippingRate] = useState("9.95");
@@ -76,6 +77,7 @@ export default function SettingsClient() {
         setStripeWebhookSecret(data.stripe_webhook_secret || "");
         setCodEnabled(data.cod_enabled);
         setPaymentSettingsId(data.id);
+        if (data.currency) setCurrency(data.currency);
       }
     };
     loadSettings();
@@ -112,6 +114,19 @@ export default function SettingsClient() {
           stripe_secret_key: stripeSecretKey,
           stripe_webhook_secret: stripeWebhookSecret,
           cod_enabled: codEnabled
+        }).select().single();
+        if (data) setPaymentSettingsId(data.id);
+      }
+    } else if (activeTab === "general") {
+      const supabase = createClient();
+      if (paymentSettingsId) {
+        // Safe update for currency, ignores if column doesn't exist yet but user should run sql
+        await supabase.from("payment_settings").update({
+          currency: currency
+        }).eq("id", paymentSettingsId);
+      } else {
+        const { data } = await supabase.from("payment_settings").insert({
+          currency: currency
         }).select().single();
         if (data) setPaymentSettingsId(data.id);
       }
@@ -230,10 +245,11 @@ export default function SettingsClient() {
                     <h2 className="font-serif text-xl text-brand-black mb-4">Store Currency</h2>
                     <div>
                       <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Currency</label>
-                      <select className="w-full max-w-md p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black">
+                      <select value={currency} onChange={e => setCurrency(e.target.value)} className="w-full max-w-md p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black">
                         <option value="AUD">AUD ($) - Australian Dollar</option>
                         <option value="USD">USD ($) - US Dollar</option>
                         <option value="GBP">GBP (£) - British Pound</option>
+                        <option value="PKR">PKR (Rs) - Pakistani Rupee</option>
                       </select>
                     </div>
                   </div>

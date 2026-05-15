@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Star, Minus, Plus, ShoppingBag, Shield, Truck, RotateCcw, ChevronDown, ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useCurrency } from "@/context/CurrencyContext";
 import CartToast from "@/components/CartToast";
 import { createClient } from "@/utils/supabase/client";
 import { submitReview } from "./actions";
@@ -49,6 +50,7 @@ export default function ProductClient({ product, related, initialReviews }: { pr
   const [showToast, setShowToast] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { addToCart, setQty: updateCartQty } = useCart();
+  const { currency } = useCurrency();
 
   const allImages = [product.image, ...(product.gallery_images || [])];
 
@@ -210,7 +212,7 @@ export default function ProductClient({ product, related, initialReviews }: { pr
           {/* Price */}
           <div className="flex items-baseline gap-3 border-y border-black/8 py-6">
             <span className="font-serif text-4xl text-brand-black">${product.price}</span>
-            <span className="font-sans text-sm text-brand-muted uppercase tracking-widest">AUD</span>
+            <span className="font-sans text-sm text-brand-muted uppercase tracking-widest">{currency}</span>
           </div>
 
           {/* Description */}
@@ -378,7 +380,7 @@ export default function ProductClient({ product, related, initialReviews }: { pr
                       {item.purpose || item.category || "Product"}
                     </span>
                     <h3 className="font-serif text-2xl text-brand-black mb-1">{item.name}</h3>
-                    <p className="font-sans text-sm text-brand-muted">${item.price} AUD</p>
+                    <p className="font-sans text-sm text-brand-muted">${item.price} {currency}</p>
                   </div>
                 </Link>
               ))}
