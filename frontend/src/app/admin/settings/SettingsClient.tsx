@@ -65,6 +65,12 @@ export default function SettingsClient() {
   const [stripeSecretKey, setStripeSecretKey] = useState("");
   const [stripeWebhookSecret, setStripeWebhookSecret] = useState("");
   const [codEnabled, setCodEnabled] = useState(true);
+  const [bankTransferEnabled, setBankTransferEnabled] = useState(false);
+  const [bankName, setBankName] = useState("");
+  const [bankAccountName, setBankAccountName] = useState("");
+  const [bankAccountNumber, setBankAccountNumber] = useState("");
+  const [bankIban, setBankIban] = useState("");
+  const [bankInstructions, setBankInstructions] = useState("");
   const [paymentSettingsId, setPaymentSettingsId] = useState<string | null>(null);
 
   // Load Payment Settings
@@ -80,6 +86,12 @@ export default function SettingsClient() {
         setCodEnabled(data.cod_enabled);
         setPaymentSettingsId(data.id);
         if (data.currency) setCurrency(data.currency);
+        if ((data as any).bank_transfer_enabled !== undefined) setBankTransferEnabled((data as any).bank_transfer_enabled);
+        if ((data as any).bank_name) setBankName((data as any).bank_name);
+        if ((data as any).bank_account_name) setBankAccountName((data as any).bank_account_name);
+        if ((data as any).bank_account_number) setBankAccountNumber((data as any).bank_account_number);
+        if ((data as any).bank_iban) setBankIban((data as any).bank_iban);
+        if ((data as any).bank_instructions) setBankInstructions((data as any).bank_instructions);
         if ((data as any).local_shipping_city !== undefined) setLocalShippingCity((data as any).local_shipping_city);
         if ((data as any).local_shipping_rate !== undefined) setLocalShippingRate((data as any).local_shipping_rate.toString());
         if ((data as any).standard_shipping_rate !== undefined) setStandardShippingRate((data as any).standard_shipping_rate.toString());
@@ -111,7 +123,13 @@ export default function SettingsClient() {
           stripe_public_key: stripePublicKey,
           stripe_secret_key: stripeSecretKey,
           stripe_webhook_secret: stripeWebhookSecret,
-          cod_enabled: codEnabled
+          cod_enabled: codEnabled,
+          bank_transfer_enabled: bankTransferEnabled,
+          bank_name: bankName,
+          bank_account_name: bankAccountName,
+          bank_account_number: bankAccountNumber,
+          bank_iban: bankIban,
+          bank_instructions: bankInstructions,
         }).eq("id", paymentSettingsId);
       } else {
         const { data } = await supabase.from("payment_settings").insert({
@@ -119,7 +137,13 @@ export default function SettingsClient() {
           stripe_public_key: stripePublicKey,
           stripe_secret_key: stripeSecretKey,
           stripe_webhook_secret: stripeWebhookSecret,
-          cod_enabled: codEnabled
+          cod_enabled: codEnabled,
+          bank_transfer_enabled: bankTransferEnabled,
+          bank_name: bankName,
+          bank_account_name: bankAccountName,
+          bank_account_number: bankAccountNumber,
+          bank_iban: bankIban,
+          bank_instructions: bankInstructions,
         }).select().single();
         if (data) setPaymentSettingsId(data.id);
       }
@@ -441,6 +465,49 @@ export default function SettingsClient() {
                       <input type="checkbox" checked={codEnabled} onChange={() => setCodEnabled(!codEnabled)} className="sr-only peer" />
                       <div className="w-11 h-6 bg-black/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-black"></div>
                     </label>
+                  </div>
+
+                  {/* Bank Transfer Section */}
+                  <div className={`border rounded-sm transition-colors ${bankTransferEnabled ? 'border-brand-black/20 bg-black/[0.02]' : 'border-black/10'}`}>
+                    <div className="p-5 flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-8 bg-emerald-700 rounded flex items-center justify-center text-white font-bold text-[10px]">BANK</div>
+                        <div>
+                          <h3 className="font-sans text-sm font-bold text-brand-black">Bank Transfer</h3>
+                          <p className="font-sans text-[11px] text-brand-muted mt-0.5">Customer transfers amount directly to your bank account</p>
+                        </div>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked={bankTransferEnabled} onChange={() => setBankTransferEnabled(!bankTransferEnabled)} className="sr-only peer" />
+                        <div className="w-11 h-6 bg-black/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-700"></div>
+                      </label>
+                    </div>
+                    {bankTransferEnabled && (
+                      <div className="px-5 pb-5 pt-2 border-t border-black/5 space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Bank Name</label>
+                            <input type="text" value={bankName} onChange={e => setBankName(e.target.value)} placeholder="e.g. HBL, Meezan, UBL" className="w-full p-3 bg-white border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                          </div>
+                          <div>
+                            <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Account Name</label>
+                            <input type="text" value={bankAccountName} onChange={e => setBankAccountName(e.target.value)} placeholder="e.g. Fitrah Beard Oil" className="w-full p-3 bg-white border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                          </div>
+                          <div>
+                            <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Account Number</label>
+                            <input type="text" value={bankAccountNumber} onChange={e => setBankAccountNumber(e.target.value)} placeholder="e.g. 1234-5678-9012" className="w-full p-3 bg-white border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                          </div>
+                          <div>
+                            <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">IBAN (Optional)</label>
+                            <input type="text" value={bankIban} onChange={e => setBankIban(e.target.value)} placeholder="e.g. PK36SCBL0000001123456702" className="w-full p-3 bg-white border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Additional Instructions (Optional)</label>
+                          <textarea value={bankInstructions} onChange={e => setBankInstructions(e.target.value)} rows={2} placeholder="e.g. After transfer, send screenshot to our WhatsApp..." className="w-full p-3 bg-white border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black resize-none" />
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* PayPal (Coming Soon) */}

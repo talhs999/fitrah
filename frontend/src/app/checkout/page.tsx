@@ -21,7 +21,9 @@ export default function CheckoutPage() {
   // ─── Payment Settings State ───────────────────────────────
   const [stripeEnabled, setStripeEnabled] = useState(false);
   const [codEnabled, setCodEnabled] = useState(true);
-  const [selectedPayment, setSelectedPayment] = useState<"stripe" | "cod">("cod");
+  const [bankTransferEnabled, setBankTransferEnabled] = useState(false);
+  const [bankDetails, setBankDetails] = useState({ name: "", accountName: "", accountNumber: "", iban: "", instructions: "" });
+  const [selectedPayment, setSelectedPayment] = useState<"stripe" | "cod" | "bank">("cod");
   const [isProcessing, setIsProcessing] = useState(false);
   const { currency, currencySymbol } = useCurrency();
 
@@ -39,12 +41,22 @@ export default function CheckoutPage() {
       if (data) {
         setStripeEnabled(data.stripe_enabled);
         setCodEnabled(data.cod_enabled);
+        setBankTransferEnabled(!!(data as any).bank_transfer_enabled);
+        if ((data as any).bank_transfer_enabled) {
+          setBankDetails({
+            name: (data as any).bank_name || "",
+            accountName: (data as any).bank_account_name || "",
+            accountNumber: (data as any).bank_account_number || "",
+            iban: (data as any).bank_iban || "",
+            instructions: (data as any).bank_instructions || "",
+          });
+        }
         if (data.stripe_enabled && !data.cod_enabled) {
           setSelectedPayment("stripe");
         } else if (!data.stripe_enabled && data.cod_enabled) {
           setSelectedPayment("cod");
         } else if (data.stripe_enabled && data.cod_enabled) {
-          setSelectedPayment("stripe"); // Default to stripe if both available
+          setSelectedPayment("stripe");
         }
         
         setShippingSettings({
@@ -339,7 +351,8 @@ export default function CheckoutPage() {
                 return;
               }
 
-              // Normal COD Flow
+              // Normal COD / Bank Transfer Flow
+              const paymentLabel = selectedPayment === 'bank' ? 'Bank Transfer' : 'Cash on Delivery';
               const result = await createOrder({
                 customer_name: guestName,
                 customer_email: guestEmail,
@@ -372,7 +385,7 @@ export default function CheckoutPage() {
                 subtotal: totalPrice,
                 shipping: shippingCost,
                 total: orderTotal,
-                paymentMethod: "Cash on Delivery"
+                paymentMethod: paymentLabel
               };
 
               localStorage.setItem("fitrah_last_order", JSON.stringify(orderData));
@@ -450,8 +463,35 @@ export default function CheckoutPage() {
                     </div>
                   </label>
                 )}
+
+                {bankTransferEnabled && (
+                  <div>
+                    <label 
+                      onClick={() => setSelectedPayment('bank')}
+                      className={`block border rounded-sm p-4 cursor-pointer transition-colors ${selectedPayment === 'bank' ? 'border-emerald-700 bg-emerald-50/30' : 'border-black/10 hover:border-black/30'}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${selectedPayment === 'bank' ? 'border-emerald-700' : 'border-black/30'}`}>
+                          {selectedPayment === 'bank' && <div className="w-2 h-2 rounded-full bg-emerald-700" />}
+                        </div>
+                        <span className="font-sans text-sm font-bold text-brand-black">Bank Transfer</span>
+                        <span className="ml-auto font-sans text-[10px] uppercase tracking-widest text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-sm">Secure</span>
+                      </div>
+                    </label>
+                    {selectedPayment === 'bank' && (
+                      <div className="mt-2 border border-emerald-200 bg-emerald-50/40 rounded-sm p-4 space-y-2">
+                        <p className="font-sans text-[10px] uppercase tracking-widest text-emerald-800 font-bold mb-3">Bank Details</p>
+                        {bankDetails.name && <div className="flex justify-between font-sans text-sm"><span className="text-brand-muted">Bank</span><span className="font-semibold text-brand-black">{bankDetails.name}</span></div>}
+                        {bankDetails.accountName && <div className="flex justify-between font-sans text-sm"><span className="text-brand-muted">Account Name</span><span className="font-semibold text-brand-black">{bankDetails.accountName}</span></div>}
+                        {bankDetails.accountNumber && <div className="flex justify-between font-sans text-sm"><span className="text-brand-muted">Account No.</span><span className="font-semibold text-brand-black">{bankDetails.accountNumber}</span></div>}
+                        {bankDetails.iban && <div className="flex justify-between font-sans text-sm"><span className="text-brand-muted">IBAN</span><span className="font-semibold text-brand-black text-xs break-all">{bankDetails.iban}</span></div>}
+                        {bankDetails.instructions && <p className="font-sans text-[11px] text-emerald-700 border-t border-emerald-200 pt-2 mt-2">{bankDetails.instructions}</p>}
+                      </div>
+                    )}
+                  </div>
+                )}
                 
-                {!stripeEnabled && !codEnabled && (
+                {!stripeEnabled && !codEnabled && !bankTransferEnabled && (
                   <div className="p-4 bg-red-50 text-red-600 font-sans text-sm border border-red-100 rounded-sm">
                     No payment methods are currently available. Please contact support.
                   </div>
@@ -461,7 +501,7 @@ export default function CheckoutPage() {
 
             <button 
               type="submit" 
-              disabled={isProcessing || (!stripeEnabled && !codEnabled)}
+              disabled={isProcessing || (!stripeEnabled && !codEnabled && !bankTransferEnabled)}
               className="w-full group inline-flex items-center justify-center gap-3 bg-brand-black text-white px-8 py-5 font-sans text-xs uppercase tracking-widest font-bold hover:bg-black transition-colors disabled:opacity-50"
             >
               {isProcessing ? "Processing..." : `Place Order — ${currencySymbol}${total.toFixed(2)} ${currency}`}
