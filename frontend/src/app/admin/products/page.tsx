@@ -9,6 +9,12 @@ export const metadata = { title: "Manage Products — Fitrah Admin" };
 export default async function AdminProductsPage() {
   const supabase = await createClient();
   const { data: products } = await supabase.from("products").select("*").order("name");
+  const { data: paymentSettings } = await supabase.from("payment_settings").select("currency").single();
+
+  let currencySymbol = "$";
+  if (paymentSettings?.currency === "PKR") currencySymbol = "Rs ";
+  else if (paymentSettings?.currency === "GBP") currencySymbol = "£";
+  else if (paymentSettings?.currency === "EUR") currencySymbol = "€";
 
   return (
     <div className="space-y-8">
@@ -48,7 +54,7 @@ export default async function AdminProductsPage() {
                     <div className="text-brand-muted text-xs mt-0.5">{product.subtitle}</div>
                   </td>
                   <td className="px-6 py-4 text-brand-muted">{product.purpose}</td>
-                  <td className="px-6 py-4 text-right font-medium text-brand-black">${product.price}</td>
+                  <td className="px-6 py-4 text-right font-medium text-brand-black">{currencySymbol}{product.price}</td>
                   <td className="px-6 py-4 text-center">
                     <span className={`inline-flex px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-bold ${
                       product.stock ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"

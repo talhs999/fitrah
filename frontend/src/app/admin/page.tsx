@@ -13,6 +13,12 @@ export default async function AdminDashboard() {
   // Fetch real data
   const { data: orders } = await supabase.from("orders").select("*").order("created_at", { ascending: false });
   const { data: products } = await supabase.from("products").select("id");
+  const { data: paymentSettings } = await supabase.from("payment_settings").select("currency").single();
+
+  let currencySymbol = "$";
+  if (paymentSettings?.currency === "PKR") currencySymbol = "Rs ";
+  else if (paymentSettings?.currency === "GBP") currencySymbol = "£";
+  else if (paymentSettings?.currency === "EUR") currencySymbol = "€";
 
   const totalRevenue = orders?.reduce((acc, o) => acc + Number(o.total_amount), 0) || 0;
   const activeOrders = orders?.filter(o => o.status === "Processing" || o.status === "Pending").length || 0;
@@ -24,7 +30,7 @@ export default async function AdminDashboard() {
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: "Total Revenue", value: `$${totalRevenue.toFixed(2)}`, icon: DollarSign, trend: "+0%" },
+          { label: "Total Revenue", value: `${currencySymbol}${totalRevenue.toFixed(2)}`, icon: DollarSign, trend: "+0%" },
           { label: "Active Orders", value: activeOrders.toString(), icon: ShoppingBag, trend: "+0%" },
           { label: "Products", value: productCount.toString(), icon: Package, trend: "0%" },
           { label: "Total Customers", value: customerCount.toString(), icon: Users, trend: "+0%" },
@@ -82,7 +88,7 @@ export default async function AdminDashboard() {
                         {order.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right font-medium text-brand-black">${order.total_amount}</td>
+                    <td className="px-6 py-4 text-right font-medium text-brand-black">{currencySymbol}{order.total_amount}</td>
                   </tr>
                 ))}
               </tbody>

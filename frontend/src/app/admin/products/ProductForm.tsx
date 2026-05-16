@@ -5,9 +5,11 @@ import { saveProduct } from "../actions";
 import { ArrowLeft, Save, Upload } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useCurrency } from "@/context/CurrencyContext";
 
 export default function ProductForm({ product, categories }: { product?: any, categories: any[] }) {
   const router = useRouter();
+  const { currencySymbol } = useCurrency();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState(product?.image || null);
@@ -242,11 +244,11 @@ export default function ProductForm({ product, categories }: { product?: any, ca
             
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Price ($)</label>
+                <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Price ({currencySymbol.trim()})</label>
                 <input type="number" step="0.01" name="price" defaultValue={product?.price} required className="w-full bg-[#faf9f6] border border-black/10 p-3 font-sans text-sm text-brand-black focus:outline-none focus:border-brand-black transition-colors" />
               </div>
               <div>
-                <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Sale Price ($)</label>
+                <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Sale Price ({currencySymbol.trim()})</label>
                 <input type="number" step="0.01" name="sale_price" defaultValue={product?.sale_price} className="w-full bg-[#faf9f6] border border-black/10 p-3 font-sans text-sm text-brand-black focus:outline-none focus:border-brand-black transition-colors" />
               </div>
             </div>

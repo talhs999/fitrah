@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { Download, Filter, Search, X } from "lucide-react";
+import { useCurrency } from "@/context/CurrencyContext";
 
 export default function OrdersClient({ orders }: { orders: any[] }) {
+  const { currencySymbol } = useCurrency();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
 
@@ -154,7 +156,7 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
                           {order.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-right font-medium text-brand-black">${order.total_amount}</td>
+                      <td className="px-6 py-4 text-right font-medium text-brand-black">{currencySymbol}{order.total_amount}</td>
                     </tr>
                   );
                 })
@@ -237,8 +239,8 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
                             </div>
                           </td>
                           <td className="px-4 py-4 text-center text-brand-muted">{item.quantity}</td>
-                          <td className="px-4 py-4 text-right text-brand-muted">${item.price_at_time}</td>
-                          <td className="px-4 py-4 text-right font-medium text-brand-black">${(item.quantity * item.price_at_time).toFixed(2)}</td>
+                          <td className="px-4 py-4 text-right text-brand-muted">{currencySymbol}{item.price_at_time}</td>
+                          <td className="px-4 py-4 text-right font-medium text-brand-black">{currencySymbol}{(item.quantity * item.price_at_time).toFixed(2)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -287,7 +289,7 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
                 <div className="w-full md:w-auto text-right space-y-2 font-sans">
                   <div className="flex justify-between md:justify-end gap-8 text-sm text-brand-muted">
                     <span>Subtotal:</span>
-                    <span>${selectedOrder.total_amount}</span>
+                    <span>{currencySymbol}{selectedOrder.total_amount}</span>
                   </div>
                   <div className="flex justify-between md:justify-end gap-8 text-sm text-brand-muted">
                     <span>Shipping:</span>
@@ -295,7 +297,7 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
                   </div>
                   <div className="flex justify-between md:justify-end gap-8 text-lg font-serif text-brand-black pt-2 border-t border-black/10">
                     <span>Total:</span>
-                    <span>${selectedOrder.total_amount}</span>
+                    <span>{currencySymbol}{selectedOrder.total_amount}</span>
                   </div>
                 </div>
               </div>
