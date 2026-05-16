@@ -165,11 +165,14 @@ export default function Footer() {
       {/* Bottom Bar */}
       <div className="border-t border-white/8">
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-6 flex flex-col md:flex-row items-center justify-between gap-3">
-          <p className="font-sans text-[11px] text-white/30">
-            &copy; {new Date().getFullYear()} Fitrah Beard Oil Pty Ltd. ABN 00 000 000 000.
+          <p className="font-sans text-[11px] text-white/40">
+            &copy; {new Date().getFullYear()} Fitrah Beard Oil &nbsp;|&nbsp; Made By{" "}
+            <a href="https://www.lumasofts.com" target="_blank" rel="noopener noreferrer" className="text-white hover:underline font-medium">
+              Luma Softs
+            </a>
           </p>
           <p className="font-sans text-[11px] text-white/20 tracking-[0.2em] uppercase">
-            Reviving the Sunnah — Lahore, Pakistan
+            Reviving the Sunnah
           </p>
         </div>
       </div>
