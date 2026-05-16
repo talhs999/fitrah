@@ -36,7 +36,7 @@ export default function TermsPage() {
           <p>We are not responsible for delays caused by TCS or Pakistan Post or other courier services beyond our control.</p>
         </Section>
         <Section title="5. Returns & Refunds">
-          <p>We accept returns within 30 days of purchase if the product is unused and in its original condition. To initiate a return, contact us at fitrahpk@gmail.com.</p>
+          <p>We accept returns within 7 days of purchase if the product is unused and in its original condition. To initiate a return, contact us on WhatsApp (+92 319 2801199) or email fitrahpk@gmail.com.</p>
           <p>Refunds are processed within 5–10 business days once we receive the returned product. Shipping costs are non-refundable unless the return is due to our error.</p>
         </Section>
         <Section title="6. Intellectual Property">
