@@ -79,9 +79,9 @@ export default function SettingsClient() {
         setCodEnabled(data.cod_enabled);
         setPaymentSettingsId(data.id);
         if (data.currency) setCurrency(data.currency);
-        if (data.local_shipping_rate !== undefined) setLocalShippingRate(data.local_shipping_rate.toString());
-        if (data.standard_shipping_rate !== undefined) setStandardShippingRate(data.standard_shipping_rate.toString());
-        if (data.free_shipping_threshold !== undefined) setFreeShippingThreshold(data.free_shipping_threshold.toString());
+        if ((data as any).local_shipping_rate !== undefined) setLocalShippingRate((data as any).local_shipping_rate.toString());
+        if ((data as any).standard_shipping_rate !== undefined) setStandardShippingRate((data as any).standard_shipping_rate.toString());
+        if ((data as any).free_shipping_threshold !== undefined) setFreeShippingThreshold((data as any).free_shipping_threshold.toString());
       }
     };
     loadSettings();

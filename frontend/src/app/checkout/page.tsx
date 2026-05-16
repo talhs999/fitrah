@@ -34,7 +34,7 @@ export default function CheckoutPage() {
   useEffect(() => {
     const fetchPaymentSettings = async () => {
       const supabase = createClient();
-      const { data } = await supabase.from("payment_settings").select("stripe_enabled, cod_enabled").single();
+      const { data } = await supabase.from("payment_settings").select("*").single();
       if (data) {
         setStripeEnabled(data.stripe_enabled);
         setCodEnabled(data.cod_enabled);
@@ -47,9 +47,9 @@ export default function CheckoutPage() {
         }
         
         setShippingSettings({
-          local_shipping_rate: data.local_shipping_rate ?? 0,
-          standard_shipping_rate: data.standard_shipping_rate ?? 9.95,
-          free_shipping_threshold: data.free_shipping_threshold ?? 80
+          local_shipping_rate: (data as any).local_shipping_rate ?? 0,
+          standard_shipping_rate: (data as any).standard_shipping_rate ?? 9.95,
+          free_shipping_threshold: (data as any).free_shipping_threshold ?? 80
         });
       }
     };
