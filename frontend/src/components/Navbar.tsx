@@ -253,7 +253,7 @@ export default function Navbar() {
                     Sign Up
                   </Link>
                 </div>
-                <p className="font-sans text-xs text-white/30 tracking-widest uppercase">Perth, WA, Australia</p>
+                <p className="font-sans text-xs text-white/30 tracking-widest uppercase">Lahore, Pakistan</p>
                 <p className="font-sans text-xs text-white/20 tracking-widest uppercase">info@fitrahbeardoil.com.au</p>
               </div>
             </motion.aside>

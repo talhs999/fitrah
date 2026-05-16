@@ -19,11 +19,11 @@ export default function ContactPage() {
         {/* Contact Info */}
         <div className="space-y-12">
           <p className="font-sans text-[15px] text-brand-muted font-light leading-relaxed max-w-md">
-            Have a question about your order, our products, or want to wholesale Fitrah? We'd love to hear from you. Our team in Perth typically responds within 24 hours.
+            Have a question about your order, our products, or want to wholesale Fitrah? We'd love to hear from you. Our team in Lahore typically responds within 24 hours.
           </p>
           <div className="space-y-8">
             {[
-              { icon: MapPin, label: "Location", value: "Perth, WA 6000, Australia" },
+              { icon: MapPin, label: "Location", value: "Lahore, 54000, Pakistan" },
               { icon: Phone, label: "Phone", value: "+61 400 123 456" },
               { icon: Mail, label: "Email", value: "info@fitrahbeardoil.com.au" },
               { icon: Clock, label: "Hours", value: "Mon–Fri: 9am–5pm AWST" },

@@ -44,6 +44,7 @@ export default function SettingsClient() {
   const [currency, setCurrency] = useState("AUD");
   
   // Shipping State
+  const [localShippingCity, setLocalShippingCity] = useState("Lahore");
   const [localShippingRate, setLocalShippingRate] = useState("0");
   const [standardShippingRate, setStandardShippingRate] = useState("9.95");
   const [freeShippingThreshold, setFreeShippingThreshold] = useState("80");
@@ -79,6 +80,7 @@ export default function SettingsClient() {
         setCodEnabled(data.cod_enabled);
         setPaymentSettingsId(data.id);
         if (data.currency) setCurrency(data.currency);
+        if ((data as any).local_shipping_city !== undefined) setLocalShippingCity((data as any).local_shipping_city);
         if ((data as any).local_shipping_rate !== undefined) setLocalShippingRate((data as any).local_shipping_rate.toString());
         if ((data as any).standard_shipping_rate !== undefined) setStandardShippingRate((data as any).standard_shipping_rate.toString());
         if ((data as any).free_shipping_threshold !== undefined) setFreeShippingThreshold((data as any).free_shipping_threshold.toString());
@@ -138,12 +140,14 @@ export default function SettingsClient() {
       const supabase = createClient();
       if (paymentSettingsId) {
         await supabase.from("payment_settings").update({
+          local_shipping_city: localShippingCity,
           local_shipping_rate: Number(localShippingRate),
           standard_shipping_rate: Number(standardShippingRate),
           free_shipping_threshold: Number(freeShippingThreshold)
         }).eq("id", paymentSettingsId);
       } else {
         const { data } = await supabase.from("payment_settings").insert({
+          local_shipping_city: localShippingCity,
           local_shipping_rate: Number(localShippingRate),
           standard_shipping_rate: Number(standardShippingRate),
           free_shipping_threshold: Number(freeShippingThreshold)
@@ -282,9 +286,14 @@ export default function SettingsClient() {
                   <h2 className="font-serif text-xl text-brand-black mb-4">Shipping Rates</h2>
                   <div className="space-y-5">
                     <div>
-                      <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Local Shipping Rate (Lahore)</label>
+                      <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Local Shipping City</label>
+                      <input type="text" value={localShippingCity} onChange={e => setLocalShippingCity(e.target.value)} className="w-full max-w-md p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                      <p className="mt-2 font-sans text-[11px] text-brand-muted">The city that receives the local shipping rate.</p>
+                    </div>
+                    <div>
+                      <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Local Shipping Rate ({localShippingCity})</label>
                       <input type="number" step="0.01" value={localShippingRate} onChange={e => setLocalShippingRate(e.target.value)} className="w-full max-w-md p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
-                      <p className="mt-2 font-sans text-[11px] text-brand-muted">Applied when city is entered as "Lahore".</p>
+                      <p className="mt-2 font-sans text-[11px] text-brand-muted">Applied when city is entered as "{localShippingCity}".</p>
                     </div>
                     <div>
                       <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Standard Shipping Rate (Other Cities)</label>

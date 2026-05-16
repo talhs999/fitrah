@@ -17,10 +17,10 @@ const FAQS = [
   {
     category: "Shipping & Orders",
     items: [
-      { q: "Where do you ship?", a: "We currently ship Australia-wide, with standard and express options available at checkout. We are working on international shipping and will announce when it becomes available." },
-      { q: "How long does delivery take?", a: "Standard delivery within Perth: 1–3 business days. Standard delivery to other Australian cities: 3–7 business days. Express delivery is available and typically arrives within 1–2 business days." },
+      { q: "Where do you ship?", a: "We currently ship Pakistan-wide, with standard and express options available at checkout. We are working on international shipping and will announce when it becomes available." },
+      { q: "How long does delivery take?", a: "Standard delivery within Lahore: 1–3 business days. Standard delivery to other Pakistani cities: 3–7 business days. Express delivery is available and typically arrives within 1–2 business days." },
       { q: "Do you offer free shipping?", a: "Yes. We offer free standard shipping on all orders over 80 in your selected currency. Orders under 80 incur a flat 8 shipping fee." },
-      { q: "How do I track my order?", a: "Once your order is dispatched, you will receive an email with a tracking number. You can use this to track your parcel directly on the Australia Post or courier website." },
+      { q: "How do I track my order?", a: "Once your order is dispatched, you will receive an email with a tracking number. You can use this to track your parcel directly on the TCS or courier website." },
     ],
   },
   {

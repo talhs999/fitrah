@@ -53,7 +53,7 @@ const MARQUEE_ITEMS = [
   "No Parabens",
   "No Silicones",
   "Free Shipping Over $80",
-  "Made in Perth, AU",
+  "Made in Lahore, PK",
   "Islamic Heritage Formula",
   "No Artificial Fragrances",
 ];
@@ -318,7 +318,7 @@ export default function Home() {
               </h2>
             </div>
             <p className="font-sans text-[15px] text-brand-muted font-light leading-relaxed">
-              The beard is not simply facial hair. For 1,400 years, it has been a symbol of dignity, a mark of identity, and a sign of devotion. Fitrah was born in Perth, Australia, from the belief that this tradition deserved an equally dignified product.
+              The beard is not simply facial hair. For 1,400 years, it has been a symbol of dignity, a mark of identity, and a sign of devotion. Fitrah was born in Lahore, Pakistan, from the belief that this tradition deserved an equally dignified product.
             </p>
             <p className="font-sans text-[15px] text-brand-muted font-light leading-relaxed">
               We source only the purest cold-pressed oils. We handpick organic botanicals. We craft every blend to serve a specific purpose. Not because it is easy — but because your beard and your heritage deserve nothing less than perfection.
@@ -496,7 +496,7 @@ export default function Home() {
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {[
-              { name: "Ahmed K.", location: "Perth, WA", product: "Shaghaf", rating: 5, text: "This is genuinely the best beard oil I've ever used. The hydration lasts all day without any greasy residue. The scent is incredible — subtle, warm, and masculine." },
+              { name: "Ahmed K.", location: "Lahore, PK", product: "Shaghaf", rating: 5, text: "This is genuinely the best beard oil I've ever used. The hydration lasts all day without any greasy residue. The scent is incredible — subtle, warm, and masculine." },
               { name: "Omar S.", location: "Sydney, NSW", product: "Qawwam", rating: 5, text: "Qawwam transformed my beard within 3 weeks. Noticeably thicker and stronger. I've tried every premium brand out there. Nothing compares to Fitrah's quality." },
               { name: "Bilal R.", location: "Melbourne, VIC", product: "Ad'Dawa", rating: 5, text: "I had chronic beard itch and beardruff for years. Ad'Dawa cleared it completely in 10 days. The fact that it's all-natural made it even better. A customer for life." },
             ].map((t, i) => (

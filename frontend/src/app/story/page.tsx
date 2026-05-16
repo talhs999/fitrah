@@ -112,7 +112,7 @@ export default function StoryPage() {
               We grew up understanding the beard as more than a trend. It is a sign of dignity, a prophetic tradition, and for 1,400 years — a mark of the believing man. The problem we faced was simple: every beard oil on the market was generic, chemical-laden, or dishonest about its ingredients.
             </p>
             <p className="font-sans text-[15px] text-brand-muted font-light leading-relaxed">
-              So in Perth, Australia, we set out to fix that. We spent two years researching ancient remedies, consulting herbalists, and sourcing the purest cold-pressed oils on earth. Fitrah is the result.
+              So in Lahore, Pakistan, we set out to fix that. We spent two years researching ancient remedies, consulting herbalists, and sourcing the purest cold-pressed oils on earth. Fitrah is the result.
             </p>
           </div>
         </div>
@@ -132,7 +132,7 @@ export default function StoryPage() {
               { title: "Zero Compromise Ingredients", desc: "Every oil we use is cold-pressed, unrefined, and sourced from certified organic farms. We will never use mineral oil, synthetic fragrance, or silicones." },
               { title: "Purpose-Driven Formulas", desc: "Each Fitrah blend is engineered for one specific beard need. We don't believe in one-size-fits-all — we believe in targeted, effective solutions." },
               { title: "Traceable Sourcing", desc: "We know exactly where every ingredient comes from. Argan oil from Morocco. Jojoba from Arizona. Black seed from Egypt. Transparency is non-negotiable." },
-              { title: "Made in Perth, Australia", desc: "Every bottle of Fitrah is formulated and bottled in Perth, WA. We are proud to be an Australian-owned, Muslim-founded business." },
+              { title: "Made in Lahore, Pakistan", desc: "Every bottle of Fitrah is formulated and bottled in Lahore, Pakistan. We are proud to be a Muslim-founded business." },
             ].map((item) => (
               <div key={item.title} className="space-y-3 p-6 bg-white border border-black/8">
                 <h3 className="font-serif text-xl text-brand-black">{item.title}</h3>

@@ -32,8 +32,8 @@ export default function TermsPage() {
           <p>We reserve the right to cancel or refuse any order for any reason, including suspected fraud or pricing errors.</p>
         </Section>
         <Section title="4. Shipping & Delivery">
-          <p>We ship Australia-wide. Standard delivery takes 3–7 business days. Express delivery takes 1–2 business days. Shipping fees are calculated at checkout. Free shipping applies to orders over 80 in your selected currency.</p>
-          <p>We are not responsible for delays caused by Australia Post or other courier services beyond our control.</p>
+          <p>We ship Pakistan-wide. Standard delivery takes 3–7 business days. Express delivery takes 1–2 business days. Shipping fees are calculated at checkout. Free shipping applies to orders over 80 in your selected currency.</p>
+          <p>We are not responsible for delays caused by TCS or Pakistan Post or other courier services beyond our control.</p>
         </Section>
         <Section title="5. Returns & Refunds">
           <p>We accept returns within 30 days of purchase if the product is unused and in its original condition. To initiate a return, contact us at returns@fitrahbeardoil.com.au.</p>
@@ -46,10 +46,10 @@ export default function TermsPage() {
           <p>Fitrah Beard Oil Pty Ltd is not liable for any indirect, incidental, or consequential damages arising from the use of our products or website. Our liability is limited to the purchase price of the product in question.</p>
         </Section>
         <Section title="8. Governing Law">
-          <p>These Terms are governed by the laws of Western Australia, Australia. Any disputes will be subject to the exclusive jurisdiction of the courts of Western Australia.</p>
+          <p>These Terms are governed by the laws of Punjab, Pakistan. Any disputes will be subject to the exclusive jurisdiction of the courts of Lahore, Pakistan.</p>
         </Section>
         <Section title="9. Contact">
-          <p>For any questions regarding these Terms, please contact us at legal@fitrahbeardoil.com.au or write to us at: Fitrah Beard Oil Pty Ltd, Perth, WA 6000, Australia.</p>
+          <p>For any questions regarding these Terms, please contact us at legal@fitrahbeardoil.com.au or write to us at: Fitrah Beard Oil, Lahore, Pakistan.</p>
         </Section>
       </div>
     </main>

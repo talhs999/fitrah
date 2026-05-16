@@ -49,7 +49,8 @@ export default function CheckoutPage() {
         setShippingSettings({
           local_shipping_rate: (data as any).local_shipping_rate ?? 0,
           standard_shipping_rate: (data as any).standard_shipping_rate ?? 9.95,
-          free_shipping_threshold: (data as any).free_shipping_threshold ?? 80
+          free_shipping_threshold: (data as any).free_shipping_threshold ?? 80,
+          local_shipping_city: (data as any).local_shipping_city || "Lahore"
         });
       }
     };
@@ -99,7 +100,7 @@ export default function CheckoutPage() {
     setCouponError("");
   };
 
-  let baseShipping = city.trim().toLowerCase() === "lahore" ? shippingSettings.local_shipping_rate : shippingSettings.standard_shipping_rate;
+  let baseShipping = city.trim().toLowerCase() === (shippingSettings as any).local_shipping_city.toLowerCase() ? shippingSettings.local_shipping_rate : shippingSettings.standard_shipping_rate;
   let shipping = totalPrice >= shippingSettings.free_shipping_threshold ? 0 : baseShipping;
   let discountAmount = 0;
 
@@ -398,19 +399,19 @@ export default function CheckoutPage() {
               <div className="col-span-2">
                 <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Street Address</label>
                 <input type="text" value={address} onChange={e => setAddress(e.target.value)}
-                  placeholder="123 King Street" required
+                  placeholder="123 Main Street" required
                   className="w-full bg-white border border-black/10 px-4 py-3 font-sans text-sm text-brand-black placeholder:text-brand-muted/40 focus:outline-none focus:border-brand-black transition-colors" />
               </div>
               <div>
                 <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">City</label>
                 <input type="text" value={city} onChange={e => setCity(e.target.value)}
-                  placeholder="Perth" required
+                  placeholder={shippingSettings.local_shipping_city || "Lahore"} required
                   className="w-full bg-white border border-black/10 px-4 py-3 font-sans text-sm text-brand-black placeholder:text-brand-muted/40 focus:outline-none focus:border-brand-black transition-colors" />
               </div>
               <div>
                 <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Postcode</label>
                 <input type="text" value={postcode} onChange={e => setPostcode(e.target.value)}
-                  placeholder="6000" required
+                  placeholder="54000" required
                   className="w-full bg-white border border-black/10 px-4 py-3 font-sans text-sm text-brand-black placeholder:text-brand-muted/40 focus:outline-none focus:border-brand-black transition-colors" />
               </div>
             </div>

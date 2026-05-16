@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 
 export default function WhatsAppButton() {
   // Demo WhatsApp number. 
-  // Make sure to include country code without the '+' symbol (e.g. 61 for Australia)
-  const phoneNumber = "61400000000"; 
+  // Make sure to include country code without the '+' symbol (e.g. 92 for Pakistan)
+  const phoneNumber = "92300000000"; 
   const message = "As-salamu alaykum! I have a question about Fitrah products.";
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 

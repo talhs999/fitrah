@@ -75,7 +75,7 @@ export default function RegisterPage() {
             Create your Fitrah account to track orders, save favourites, and unlock exclusive member benefits.
           </p>
           <p className="font-sans text-[11px] text-white/25 tracking-widest uppercase pt-6 border-t border-white/10">
-            Reviving the Sunnah — Perth, AU
+            Reviving the Sunnah — Lahore, PK
           </p>
         </div>
       </div>

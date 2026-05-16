@@ -63,7 +63,7 @@ export default function Footer() {
             />
           </div>
           <p className="text-white/50 font-sans text-sm leading-relaxed font-light">
-            Premium beard oils inspired by 1,400 years of prophetic tradition. Formulated for the modern man in Perth, Australia.
+            Premium beard oils inspired by 1,400 years of prophetic tradition. Formulated for the modern man in Lahore, Pakistan.
           </p>
           <div className="flex items-center gap-5">
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors" aria-label="Instagram">
@@ -138,7 +138,7 @@ export default function Footer() {
           <ul className="space-y-5">
             <li className="flex gap-4 text-white/60">
               <MapPin className="w-4 h-4 mt-0.5 shrink-0" strokeWidth={1.5} />
-              <span className="font-sans text-sm font-light">Perth, WA 6000, Australia</span>
+              <span className="font-sans text-sm font-light">Lahore, 54000, Pakistan</span>
             </li>
             <li className="flex gap-4 text-white/60">
               <Phone className="w-4 h-4 mt-0.5 shrink-0" strokeWidth={1.5} />
@@ -169,7 +169,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Fitrah Beard Oil Pty Ltd. ABN 00 000 000 000.
           </p>
           <p className="font-sans text-[11px] text-white/20 tracking-[0.2em] uppercase">
-            Reviving the Sunnah — Perth, Australia
+            Reviving the Sunnah — Lahore, Pakistan
           </p>
         </div>
       </div>

@@ -113,11 +113,11 @@ export default function OrderConfirmationPage() {
   <div class="header">
     <div>
       <div class="brand-name">FITRAH</div>
-      <div class="brand-sub">Beard Oil — Perth, AU</div>
+      <div class="brand-sub">Beard Oil — Lahore, PK</div>
       <div class="brand-details">
         <p>ABN: 00 000 000 000</p>
         <p>info@fitrahbeardoil.com.au</p>
-        <p>Perth, WA 6000, Australia</p>
+        <p>Lahore, 54000, Pakistan</p>
       </div>
     </div>
     <div class="invoice-meta">
@@ -183,7 +183,7 @@ export default function OrderConfirmationPage() {
   <!-- Footer -->
   <div class="footer">
     <div class="footer-note">Thank you for your order. For questions or returns, contact us at info@fitrahbeardoil.com.au within 30 days of delivery.</div>
-    <div class="footer-brand">Reviving the Sunnah<br/>Perth, Australia</div>
+    <div class="footer-brand">Reviving the Sunnah<br/>Lahore, Pakistan</div>
   </div>
 </body>
 </html>`;
@@ -235,11 +235,11 @@ export default function OrderConfirmationPage() {
             <div className="flex items-start justify-between mb-6 pb-6 border-b border-black/8">
               <div>
                 <p className="font-serif text-3xl text-brand-black tracking-tight">FITRAH</p>
-                <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-brand-muted mt-1">Beard Oil — Perth, AU</p>
+                <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-brand-muted mt-1">Beard Oil — Lahore, PK</p>
                 <div className="mt-4 space-y-0.5">
                   <p className="font-sans text-xs text-brand-muted">ABN: 00 000 000 000</p>
                   <p className="font-sans text-xs text-brand-muted">info@fitrahbeardoil.com.au</p>
-                  <p className="font-sans text-xs text-brand-muted">Perth, WA 6000, Australia</p>
+                  <p className="font-sans text-xs text-brand-muted">Lahore, 54000, Pakistan</p>
                 </div>
               </div>
               <div className="text-right">
@@ -333,7 +333,7 @@ export default function OrderConfirmationPage() {
                 Thank you for your order. For questions or returns, contact us at info@fitrahbeardoil.com.au within 30 days.
               </p>
               <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-brand-muted/40 text-right shrink-0">
-                Reviving the Sunnah<br />Perth, Australia
+                Reviving the Sunnah<br />Lahore, Pakistan
               </p>
             </div>
           </div>

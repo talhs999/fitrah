@@ -33,22 +33,22 @@ export default function PrivacyPage() {
           <p>We will never sell your personal information to third parties.</p>
         </Section>
         <Section title="4. Data Storage & Security">
-          <p>Your data is stored securely on Australian and international servers. We use industry-standard encryption and security protocols. Payment information is processed by our PCI-compliant payment provider and is never stored on our servers.</p>
+          <p>Your data is stored securely on Pakistani and international servers. We use industry-standard encryption and security protocols. Payment information is processed by our PCI-compliant payment provider and is never stored on our servers.</p>
         </Section>
         <Section title="5. Cookies">
           <p>We use cookies to improve your browsing experience, remember your preferences, and analyse website traffic. You can disable cookies in your browser settings, though some features may not function correctly as a result.</p>
         </Section>
         <Section title="6. Third Party Services">
-          <p>We use the following third-party services: Shopify/Stripe (payment processing), Australia Post (shipping), Klaviyo (email marketing), and Google Analytics (website analytics). Each has their own privacy policy.</p>
+          <p>We use the following third-party services: Shopify/Stripe (payment processing), TCS or Pakistan Post (shipping), Klaviyo (email marketing), and Google Analytics (website analytics). Each has their own privacy policy.</p>
         </Section>
         <Section title="7. Your Rights">
-          <p>Under the Australian Privacy Act 1988, you have the right to access, correct, or delete your personal information. To exercise these rights, contact us at privacy@fitrahbeardoil.com.au. We will respond within 30 days.</p>
+          <p>Under the Prevention of Electronic Crimes Act 2016, you have the right to access, correct, or delete your personal information. To exercise these rights, contact us at privacy@fitrahbeardoil.com.au. We will respond within 30 days.</p>
         </Section>
         <Section title="8. Changes to This Policy">
           <p>We may update this Privacy Policy from time to time. We will notify you of significant changes by posting a notice on our website. Continued use of our website after changes are posted constitutes acceptance of the updated policy.</p>
         </Section>
         <Section title="9. Contact Us">
-          <p>For any privacy-related questions or requests, contact us at: privacy@fitrahbeardoil.com.au or Fitrah Beard Oil Pty Ltd, Perth, WA 6000, Australia.</p>
+          <p>For any privacy-related questions or requests, contact us at: privacy@fitrahbeardoil.com.au or Fitrah Beard Oil, Lahore, Pakistan.</p>
         </Section>
       </div>
     </main>

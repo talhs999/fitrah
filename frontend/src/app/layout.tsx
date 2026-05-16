@@ -18,10 +18,10 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Fitrah Beard Oil — Perth, Australia", template: "%s — Fitrah Beard Oil" },
+  title: { default: "Fitrah Beard Oil — Lahore, Pakistan", template: "%s — Fitrah Beard Oil" },
   description:
-    "Premium beard oils inspired by 1,400 years of prophetic tradition. Crafted with 100% natural cold-pressed oils. Free delivery over $80 across Australia.",
-  keywords: ["beard oil", "natural beard oil", "Perth", "Australia", "Islamic beard care", "organic beard oil"],
+    "Premium beard oils inspired by 1,400 years of prophetic tradition. Crafted with 100% natural cold-pressed oils. Free delivery over $80 across Pakistan.",
+  keywords: ["beard oil", "natural beard oil", "Lahore", "Pakistan", "Islamic beard care", "organic beard oil"],
 };
 
 import WhatsAppButton from "@/components/WhatsAppButton";
