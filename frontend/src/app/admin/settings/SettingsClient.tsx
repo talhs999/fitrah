@@ -139,12 +139,17 @@ export default function SettingsClient() {
     } else if (activeTab === "shipping") {
       const supabase = createClient();
       if (paymentSettingsId) {
-        await supabase.from("payment_settings").update({
+        const { error } = await supabase.from("payment_settings").update({
           local_shipping_city: localShippingCity,
           local_shipping_rate: Number(localShippingRate),
           standard_shipping_rate: Number(standardShippingRate),
           free_shipping_threshold: Number(freeShippingThreshold)
         }).eq("id", paymentSettingsId);
+        if (error) {
+          alert("Error saving: " + error.message);
+          setIsSaving(false);
+          return;
+        }
       } else {
         const { data } = await supabase.from("payment_settings").insert({
           local_shipping_city: localShippingCity,
