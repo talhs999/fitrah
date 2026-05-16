@@ -347,7 +347,7 @@ export default function CheckoutPage() {
                 total_amount: orderTotal,
                 items: items.map(item => {
                   const p = PRODUCTS.find(x => x.id === item.id)!;
-                  return { id: item.id, qty: item.qty, price: p.price };
+                  return { id: item.id, name: p.name, qty: item.qty, price: p.price };
                 })
               });
 

@@ -3,6 +3,7 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 import Stripe from "stripe";
+import { sendOrderConfirmationEmail } from "@/utils/mailer";
 
 export async function createOrder(orderData: {
   customer_name: string;
@@ -13,7 +14,7 @@ export async function createOrder(orderData: {
   country?: string;
   postal_code?: string;
   total_amount: number;
-  items: { id: string; qty: number; price: number }[];
+  items: { id: string; name: string; qty: number; price: number }[];
 }) {
   // Use service role key to bypass RLS in server actions
   const supabase = createSupabaseClient(
@@ -61,6 +62,15 @@ export async function createOrder(orderData: {
   if (itemsError) {
     return { success: false, error: itemsError.message };
   }
+
+  // Send Order Confirmation Email (Non-blocking)
+  sendOrderConfirmationEmail(
+    orderData.customer_email,
+    orderData.customer_name,
+    order.id,
+    orderData.total_amount,
+    orderData.items
+  );
 
   return { success: true, orderId: order.id };
 }
