@@ -4,15 +4,12 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const GALLERY_IMAGES = [
-  "/assets/lifestyle-barber.jpg",
-  "/assets/lifestyle-older-man.jpg",
-  "/assets/beard-hero.jpg",
-  "/assets/hero-beard-man.jpg",
-  "/assets/hero-sitting-sunset.jpg",
-  "/assets/hero-sunset-man.jpg",
-  "/assets/bw-man-back.jpg",
-  "/assets/gen-lifestyle.png",
-  "/assets/about-bg.png",
+  "/gallery/1.jpg",
+  "/gallery/2.jpg",
+  "/gallery/3.jpg",
+  "/gallery/4.jpg",
+  "/gallery/5.jpg",
+  "/gallery/6.jpg",
 ];
 
 const LOOP_IMAGES = [...GALLERY_IMAGES, ...GALLERY_IMAGES, ...GALLERY_IMAGES];
