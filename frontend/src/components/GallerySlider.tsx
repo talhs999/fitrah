@@ -3,18 +3,7 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-const GALLERY_IMAGES = [
-  "/gallery/1.jpg",
-  "/gallery/2.jpg",
-  "/gallery/3.jpg",
-  "/gallery/4.jpg",
-  "/gallery/5.jpg",
-  "/gallery/6.jpg",
-];
-
-// Duplicate images for seamless infinite loop
-const LOOP_IMAGES = [...GALLERY_IMAGES, ...GALLERY_IMAGES, ...GALLERY_IMAGES];
+import { createClient } from "@/utils/supabase/client";
 
 const CARD_WIDTH = 420; // px, desktop
 const GAP = 16; // px
@@ -25,39 +14,68 @@ export default function GallerySlider() {
   const [isPaused, setIsPaused] = useState(false);
   const animRef = useRef<number | null>(null);
   const posRef = useRef(0);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [loopImages, setLoopImages] = useState<string[]>([]);
+
+  // Fetch product images from Supabase
+  useEffect(() => {
+    const fetchImages = async () => {
+      const supabase = createClient();
+      const { data: products } = await supabase
+        .from("products")
+        .select("image, gallery_images")
+        .order("name");
+
+      if (products && products.length > 0) {
+        const imgs: string[] = [];
+        products.forEach((p) => {
+          if (p.image) imgs.push(p.image);
+          if (Array.isArray(p.gallery_images)) {
+            p.gallery_images.forEach((g: string) => imgs.push(g));
+          }
+        });
+        // Shuffle and limit for variety
+        const shuffled = imgs.sort(() => Math.random() - 0.5).slice(0, 12);
+        setGalleryImages(shuffled);
+        setLoopImages([...shuffled, ...shuffled, ...shuffled]);
+      }
+    };
+    fetchImages();
+  }, []);
 
   // Start auto-scroll from the middle set so loop is invisible
   useEffect(() => {
+    if (loopImages.length === 0) return;
     const el = scrollRef.current;
     if (!el) return;
-    const startX = GALLERY_IMAGES.length * STEP;
+    const startX = galleryImages.length * STEP;
     el.scrollLeft = startX;
     posRef.current = startX;
-  }, []);
+  }, [loopImages, galleryImages.length]);
 
   const animate = useCallback(() => {
     if (isPaused) return;
     const el = scrollRef.current;
     if (!el) return;
 
-    posRef.current += 0.6; // speed — pixels per frame
+    posRef.current += 0.6;
 
-    // Seamless loop: if we've scrolled past the 2nd set, jump back to 1st set
-    const singleSetWidth = GALLERY_IMAGES.length * STEP;
-    if (posRef.current >= singleSetWidth * 2) {
+    const singleSetWidth = galleryImages.length * STEP;
+    if (singleSetWidth > 0 && posRef.current >= singleSetWidth * 2) {
       posRef.current = singleSetWidth;
     }
 
     el.scrollLeft = posRef.current;
     animRef.current = requestAnimationFrame(animate);
-  }, [isPaused]);
+  }, [isPaused, galleryImages.length]);
 
   useEffect(() => {
+    if (loopImages.length === 0) return;
     animRef.current = requestAnimationFrame(animate);
     return () => {
       if (animRef.current) cancelAnimationFrame(animRef.current);
     };
-  }, [animate]);
+  }, [animate, loopImages.length]);
 
   const scrollManual = (dir: "left" | "right") => {
     const el = scrollRef.current;
@@ -65,13 +83,15 @@ export default function GallerySlider() {
     const amount = dir === "left" ? -STEP : STEP;
     posRef.current += amount;
 
-    // Clamp inside loop bounds
-    const singleSetWidth = GALLERY_IMAGES.length * STEP;
+    const singleSetWidth = galleryImages.length * STEP;
     if (posRef.current < singleSetWidth) posRef.current = singleSetWidth;
     if (posRef.current >= singleSetWidth * 2) posRef.current = singleSetWidth;
 
     el.scrollTo({ left: posRef.current, behavior: "smooth" });
   };
+
+  // Don't render section if no images
+  if (loopImages.length === 0) return null;
 
   return (
     <section className="py-20 bg-white border-b border-black/8">
@@ -81,13 +101,13 @@ export default function GallerySlider() {
         <h2 className="font-serif text-3xl md:text-4xl text-brand-black">The Fitrah Lifestyle</h2>
       </div>
 
-      {/* Slider wrapper — relative for overlay buttons */}
+      {/* Slider wrapper */}
       <div
         className="relative"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
-        {/* Left Button — overlaid on slider */}
+        {/* Left Button */}
         <button
           onClick={() => scrollManual("left")}
           aria-label="Scroll left"
@@ -96,7 +116,7 @@ export default function GallerySlider() {
           <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
         </button>
 
-        {/* Right Button — overlaid on slider */}
+        {/* Right Button */}
         <button
           onClick={() => scrollManual("right")}
           aria-label="Scroll right"
@@ -105,7 +125,7 @@ export default function GallerySlider() {
           <ChevronRight className="w-5 h-5" strokeWidth={1.5} />
         </button>
 
-        {/* Scrollable track — no scrollbar visible */}
+        {/* Scrollable track */}
         <div
           ref={scrollRef}
           className="flex gap-4 px-6 md:px-10 overflow-x-scroll pb-4"
@@ -115,20 +135,19 @@ export default function GallerySlider() {
             userSelect: "none",
           } as React.CSSProperties}
         >
-          {LOOP_IMAGES.map((src, i) => (
+          {loopImages.map((src, i) => (
             <div
               key={i}
-              className="shrink-0 w-[280px] md:w-[420px] h-[360px] md:h-[540px] relative group overflow-hidden"
+              className="shrink-0 w-[280px] md:w-[420px] h-[360px] md:h-[540px] relative group overflow-hidden bg-[#f5f5f0]"
             >
               <Image
                 src={src}
-                alt={`Fitrah lifestyle ${(i % GALLERY_IMAGES.length) + 1}`}
+                alt={`Fitrah lifestyle ${(i % galleryImages.length) + 1}`}
                 fill
                 sizes="(max-width:768px) 280px, 420px"
                 unoptimized
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              {/* Subtle gradient overlay on hover */}
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-all duration-500" />
             </div>
           ))}
