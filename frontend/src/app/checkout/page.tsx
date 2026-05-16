@@ -28,7 +28,8 @@ export default function CheckoutPage() {
   const [shippingSettings, setShippingSettings] = useState({
     local_shipping_rate: 0,
     standard_shipping_rate: 9.95,
-    free_shipping_threshold: 80
+    free_shipping_threshold: 80,
+    local_shipping_city: "Lahore"
   });
 
   useEffect(() => {
