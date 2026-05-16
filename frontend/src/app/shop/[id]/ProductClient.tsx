@@ -257,7 +257,7 @@ export default function ProductClient({ product, related, initialReviews }: { pr
             </div>
             <div className="text-center">
               <RotateCcw className="w-5 h-5 mx-auto mb-2 text-brand-muted" strokeWidth={1.5} />
-              <p className="font-sans text-[10px] uppercase tracking-widest text-brand-muted">30-Day<br/>Returns</p>
+              <p className="font-sans text-[10px] uppercase tracking-widest text-brand-muted">7-Day<br/>Returns</p>
             </div>
           </div>
 

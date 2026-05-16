@@ -324,7 +324,7 @@ export default function Home() {
               We source only the purest cold-pressed oils. We handpick organic botanicals. We craft every blend to serve a specific purpose. Not because it is easy — but because your beard and your heritage deserve nothing less than perfection.
             </p>
             <div className="grid grid-cols-3 gap-6 py-6 border-y border-black/8">
-              {[["5", "Products"], ["100%", "Natural"], ["AU", "Made"]].map(([n, l]) => (
+              {[["5", "Products"], ["100%", "Natural"], ["PK", "Made"]].map(([n, l]) => (
                 <div key={l} className="space-y-1">
                   <p className="font-serif text-3xl text-brand-black">{n}</p>
                   <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-brand-muted font-semibold">{l}</p>
