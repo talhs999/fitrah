@@ -4,10 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Trash2, Plus, Minus } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useCurrency } from "@/context/CurrencyContext";
 import { PRODUCTS } from "@/lib/products";
 
 export default function CartPage() {
   const { items, removeFromCart, setQty, totalPrice } = useCart();
+  const { currencySymbol } = useCurrency();
 
   const cartProducts = items.map((item) => {
     const product = PRODUCTS.find((p) => p.id === item.id);
@@ -64,7 +66,7 @@ export default function CartPage() {
                         <Plus className="w-3 h-3" />
                       </button>
                     </div>
-                    <p className="font-sans text-base font-semibold text-brand-black">${(product!.price * qty).toFixed(2)}</p>
+                    <p className="font-sans text-base font-semibold text-brand-black">{currencySymbol}{(product!.price * qty).toFixed(2)}</p>
                   </div>
                 </div>
               </div>
@@ -76,7 +78,7 @@ export default function CartPage() {
             <div className="space-y-4 mb-8">
               <div className="flex justify-between font-sans text-[15px] text-brand-muted">
                 <span>Subtotal</span>
-                <span>${totalPrice.toFixed(2)}</span>
+                <span>{currencySymbol}{totalPrice.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-sans text-[15px] text-brand-muted">
                 <span>Shipping</span>
@@ -84,7 +86,7 @@ export default function CartPage() {
               </div>
               <div className="pt-4 border-t border-black/10 flex justify-between font-sans text-lg font-semibold text-brand-black">
                 <span>Total</span>
-                <span>${totalPrice.toFixed(2)} {totalPrice > 150 ? '' : '+'}</span>
+                <span>{currencySymbol}{totalPrice.toFixed(2)} {totalPrice > 150 ? '' : '+'}</span>
               </div>
             </div>
             <Link href="/checkout" className="w-full group flex items-center justify-center gap-3 bg-brand-black text-white px-8 py-4 font-sans text-xs uppercase tracking-[0.18em] font-bold hover:bg-black transition-colors">

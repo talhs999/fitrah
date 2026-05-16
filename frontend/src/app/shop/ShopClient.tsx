@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowRight, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { useCurrency } from "@/context/CurrencyContext";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -19,6 +20,7 @@ const fadeUp = {
 function ShopContent({ products, categories }: { products: any[], categories: any[] }) {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("q")?.toLowerCase() || "";
+  const { currencySymbol } = useCurrency();
 
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [sortOrder, setSortOrder] = useState<string>("featured");
@@ -165,11 +167,11 @@ function ShopContent({ products, categories }: { products: any[], categories: an
                     <div className="flex items-center gap-3 mt-1">
                       {p.sale_price ? (
                         <>
-                          <span className="font-serif text-lg text-brand-muted line-through">${p.price}</span>
-                          <span className="font-serif text-xl text-brand-black">${p.sale_price}</span>
+                          <span className="font-serif text-lg text-brand-muted line-through">{currencySymbol}{p.price}</span>
+                          <span className="font-serif text-xl text-brand-black">{currencySymbol}{p.sale_price}</span>
                         </>
                       ) : (
-                        <span className="font-serif text-xl text-brand-black">${p.price}</span>
+                        <span className="font-serif text-xl text-brand-black">{currencySymbol}{p.price}</span>
                       )}
                     </div>
                   </div>

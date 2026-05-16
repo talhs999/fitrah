@@ -44,7 +44,8 @@ export default function SettingsClient() {
   const [currency, setCurrency] = useState("AUD");
   
   // Shipping State
-  const [shippingRate, setShippingRate] = useState("9.95");
+  const [localShippingRate, setLocalShippingRate] = useState("0");
+  const [standardShippingRate, setStandardShippingRate] = useState("9.95");
   const [freeShippingThreshold, setFreeShippingThreshold] = useState("80");
 
   // Notification State
@@ -78,6 +79,9 @@ export default function SettingsClient() {
         setCodEnabled(data.cod_enabled);
         setPaymentSettingsId(data.id);
         if (data.currency) setCurrency(data.currency);
+        if (data.local_shipping_rate !== undefined) setLocalShippingRate(data.local_shipping_rate.toString());
+        if (data.standard_shipping_rate !== undefined) setStandardShippingRate(data.standard_shipping_rate.toString());
+        if (data.free_shipping_threshold !== undefined) setFreeShippingThreshold(data.free_shipping_threshold.toString());
       }
     };
     loadSettings();
@@ -127,6 +131,22 @@ export default function SettingsClient() {
       } else {
         const { data } = await supabase.from("payment_settings").insert({
           currency: currency
+        }).select().single();
+        if (data) setPaymentSettingsId(data.id);
+      }
+    } else if (activeTab === "shipping") {
+      const supabase = createClient();
+      if (paymentSettingsId) {
+        await supabase.from("payment_settings").update({
+          local_shipping_rate: Number(localShippingRate),
+          standard_shipping_rate: Number(standardShippingRate),
+          free_shipping_threshold: Number(freeShippingThreshold)
+        }).eq("id", paymentSettingsId);
+      } else {
+        const { data } = await supabase.from("payment_settings").insert({
+          local_shipping_rate: Number(localShippingRate),
+          standard_shipping_rate: Number(standardShippingRate),
+          free_shipping_threshold: Number(freeShippingThreshold)
         }).select().single();
         if (data) setPaymentSettingsId(data.id);
       }
@@ -262,11 +282,16 @@ export default function SettingsClient() {
                   <h2 className="font-serif text-xl text-brand-black mb-4">Shipping Rates</h2>
                   <div className="space-y-5">
                     <div>
-                      <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Standard Shipping Rate ($)</label>
-                      <input type="number" step="0.01" value={shippingRate} onChange={e => setShippingRate(e.target.value)} className="w-full max-w-md p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                      <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Local Shipping Rate (Lahore)</label>
+                      <input type="number" step="0.01" value={localShippingRate} onChange={e => setLocalShippingRate(e.target.value)} className="w-full max-w-md p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                      <p className="mt-2 font-sans text-[11px] text-brand-muted">Applied when city is entered as "Lahore".</p>
                     </div>
                     <div>
-                      <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Free Shipping Threshold ($)</label>
+                      <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Standard Shipping Rate (Other Cities)</label>
+                      <input type="number" step="0.01" value={standardShippingRate} onChange={e => setStandardShippingRate(e.target.value)} className="w-full max-w-md p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                    </div>
+                    <div>
+                      <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Free Shipping Threshold</label>
                       <input type="number" value={freeShippingThreshold} onChange={e => setFreeShippingThreshold(e.target.value)} className="w-full max-w-md p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
                       <p className="mt-2 font-sans text-[11px] text-brand-muted">Orders above this amount will automatically receive free shipping.</p>
                     </div>

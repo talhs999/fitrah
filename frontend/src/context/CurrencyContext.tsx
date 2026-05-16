@@ -5,9 +5,10 @@ import { createClient } from "@/utils/supabase/client";
 
 type CurrencyContextType = {
   currency: string;
+  currencySymbol: string;
 };
 
-const CurrencyContext = createContext<CurrencyContextType>({ currency: "AUD" });
+const CurrencyContext = createContext<CurrencyContextType>({ currency: "AUD", currencySymbol: "$" });
 
 export function CurrencyProvider({ children }: { children: React.ReactNode }) {
   const [currency, setCurrency] = useState("AUD");
@@ -24,8 +25,13 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
     loadCurrency();
   }, []);
 
+  let currencySymbol = "$";
+  if (currency === "PKR") currencySymbol = "Rs ";
+  else if (currency === "GBP") currencySymbol = "£";
+  else if (currency === "EUR") currencySymbol = "€";
+
   return (
-    <CurrencyContext.Provider value={{ currency }}>
+    <CurrencyContext.Provider value={{ currency, currencySymbol }}>
       {children}
     </CurrencyContext.Provider>
   );

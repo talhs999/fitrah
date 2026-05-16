@@ -33,7 +33,7 @@ interface OrderData {
 export default function OrderConfirmationPage() {
   const [order, setOrder] = useState<OrderData | null>(null);
   const invoiceRef = useRef<HTMLDivElement>(null);
-  const { currency } = useCurrency();
+  const { currency, currencySymbol } = useCurrency();
 
   useEffect(() => {
     try {
@@ -164,8 +164,8 @@ export default function OrderConfirmationPage() {
           <div class="product-sub">${item.subtitle} · 30ml</div>
         </td>
         <td>${item.qty}</td>
-        <td>$${item.price.toFixed(2)}</td>
-        <td class="amount">$${(item.price * item.qty).toFixed(2)}</td>
+        <td>${currencySymbol}${item.price.toFixed(2)}</td>
+        <td class="amount">${currencySymbol}${(item.price * item.qty).toFixed(2)}</td>
       </tr>`).join("")}
     </tbody>
   </table>
@@ -173,10 +173,10 @@ export default function OrderConfirmationPage() {
   <!-- Totals -->
   <div class="totals">
     <div class="totals-box">
-      <div class="totals-row"><span>Subtotal</span><span>$${order.subtotal.toFixed(2)}</span></div>
-      <div class="totals-row"><span>Shipping</span><span class="${order.shipping === 0 ? "free" : ""}">${order.shipping === 0 ? "FREE" : "$" + order.shipping.toFixed(2)}</span></div>
-      <div class="totals-row"><span>GST (included)</span><span>$${(order.total / 11).toFixed(2)}</span></div>
-      <div class="totals-final"><span>Total (${currency})</span><span>$${order.total.toFixed(2)}</span></div>
+      <div class="totals-row"><span>Subtotal</span><span>${currencySymbol}${order.subtotal.toFixed(2)}</span></div>
+      <div class="totals-row"><span>Shipping</span><span class="${order.shipping === 0 ? "free" : ""}">${order.shipping === 0 ? "FREE" : currencySymbol + order.shipping.toFixed(2)}</span></div>
+      <div class="totals-row"><span>GST (included)</span><span>${currencySymbol}${(order.total / 11).toFixed(2)}</span></div>
+      <div class="totals-final"><span>Total (${currency})</span><span>${currencySymbol}${order.total.toFixed(2)}</span></div>
     </div>
   </div>
 
@@ -296,8 +296,8 @@ export default function OrderConfirmationPage() {
                       </div>
                     </td>
                     <td className="py-3 text-center font-sans text-sm text-brand-black">{item.qty}</td>
-                    <td className="py-3 text-right font-sans text-sm text-brand-muted">${item.price.toFixed(2)}</td>
-                    <td className="py-3 text-right font-sans text-sm font-semibold text-brand-black">${(item.price * item.qty).toFixed(2)}</td>
+                    <td className="py-3 text-right font-sans text-sm text-brand-muted">{currencySymbol}{item.price.toFixed(2)}</td>
+                    <td className="py-3 text-right font-sans text-sm font-semibold text-brand-black">{currencySymbol}{(item.price * item.qty).toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -308,21 +308,21 @@ export default function OrderConfirmationPage() {
               <div className="w-64 space-y-2">
                 <div className="flex justify-between font-sans text-sm text-brand-muted">
                   <span>Subtotal</span>
-                  <span>${order.subtotal.toFixed(2)}</span>
+                  <span>{currencySymbol}{order.subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between font-sans text-sm text-brand-muted">
                   <span>Shipping</span>
                   <span className={order.shipping === 0 ? "text-green-600 font-semibold" : ""}>
-                    {order.shipping === 0 ? "FREE" : `$${order.shipping.toFixed(2)}`}
+                    {order.shipping === 0 ? "FREE" : `${currencySymbol}${order.shipping.toFixed(2)}`}
                   </span>
                 </div>
                 <div className="flex justify-between font-sans text-sm text-brand-muted">
                   <span>GST (included)</span>
-                  <span>${(order.total / 11).toFixed(2)}</span>
+                  <span>{currencySymbol}{(order.total / 11).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between font-serif text-xl text-brand-black border-t border-black/8 pt-3">
                   <span>Total ({currency})</span>
-                  <span>${order.total.toFixed(2)}</span>
+                  <span>{currencySymbol}{order.total.toFixed(2)}</span>
                 </div>
               </div>
             </div>

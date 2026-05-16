@@ -23,7 +23,13 @@ export default function CheckoutPage() {
   const [codEnabled, setCodEnabled] = useState(true);
   const [selectedPayment, setSelectedPayment] = useState<"stripe" | "cod">("cod");
   const [isProcessing, setIsProcessing] = useState(false);
-  const { currency } = useCurrency();
+  const { currency, currencySymbol } = useCurrency();
+
+  const [shippingSettings, setShippingSettings] = useState({
+    local_shipping_rate: 0,
+    standard_shipping_rate: 9.95,
+    free_shipping_threshold: 80
+  });
 
   useEffect(() => {
     const fetchPaymentSettings = async () => {
@@ -39,6 +45,12 @@ export default function CheckoutPage() {
         } else if (data.stripe_enabled && data.cod_enabled) {
           setSelectedPayment("stripe"); // Default to stripe if both available
         }
+        
+        setShippingSettings({
+          local_shipping_rate: data.local_shipping_rate ?? 0,
+          standard_shipping_rate: data.standard_shipping_rate ?? 9.95,
+          free_shipping_threshold: data.free_shipping_threshold ?? 80
+        });
       }
     };
     fetchPaymentSettings();
@@ -87,7 +99,8 @@ export default function CheckoutPage() {
     setCouponError("");
   };
 
-  let shipping = totalPrice >= 80 ? 0 : 9.95;
+  let baseShipping = city.trim().toLowerCase() === "lahore" ? shippingSettings.local_shipping_rate : shippingSettings.standard_shipping_rate;
+  let shipping = totalPrice >= shippingSettings.free_shipping_threshold ? 0 : baseShipping;
   let discountAmount = 0;
 
   if (appliedCoupon) {
@@ -449,7 +462,7 @@ export default function CheckoutPage() {
               disabled={isProcessing || (!stripeEnabled && !codEnabled)}
               className="w-full group inline-flex items-center justify-center gap-3 bg-brand-black text-white px-8 py-5 font-sans text-xs uppercase tracking-widest font-bold hover:bg-black transition-colors disabled:opacity-50"
             >
-              {isProcessing ? "Processing..." : `Place Order — $${total.toFixed(2)} ${currency}`}
+              {isProcessing ? "Processing..." : `Place Order — ${currencySymbol}${total.toFixed(2)} ${currency}`}
               {!isProcessing && <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
             </button>
           </form>
@@ -478,7 +491,7 @@ export default function CheckoutPage() {
                       <p className="font-serif text-base text-brand-black">{product.name}</p>
                       <p className="font-sans text-xs text-brand-muted">Qty: {item.qty}</p>
                     </div>
-                    <span className="font-sans text-sm font-semibold text-brand-black">${(product.price * item.qty).toFixed(2)}</span>
+                    <span className="font-sans text-sm font-semibold text-brand-black">{currencySymbol}{(product.price * item.qty).toFixed(2)}</span>
                   </div>
                 );
               })}
@@ -523,28 +536,28 @@ export default function CheckoutPage() {
             <div className="border-t border-black/8 pt-5 space-y-3">
               <div className="flex justify-between font-sans text-sm text-brand-muted">
                 <span>Subtotal</span>
-                <span>${totalPrice.toFixed(2)}</span>
+                <span>{currencySymbol}{totalPrice.toFixed(2)}</span>
               </div>
               
               {appliedCoupon && appliedCoupon.type === "percentage" && (
                 <div className="flex justify-between font-sans text-sm text-green-600 font-medium">
                   <span>Discount ({appliedCoupon.value}%)</span>
-                  <span>-${discountAmount.toFixed(2)}</span>
+                  <span>-{currencySymbol}{discountAmount.toFixed(2)}</span>
                 </div>
               )}
 
               <div className="flex justify-between font-sans text-sm text-brand-muted">
                 <span>Shipping</span>
                 <span className={freeShipping ? "text-green-600 font-semibold" : ""}>
-                  {freeShipping ? "FREE" : `$${shipping.toFixed(2)}`}
+                  {freeShipping ? "FREE" : `${currencySymbol}${shipping.toFixed(2)}`}
                 </span>
               </div>
               {!freeShipping && (
-                <p className="font-sans text-[10px] text-brand-muted/60">Free shipping on orders over $80</p>
+                <p className="font-sans text-[10px] text-brand-muted/60">Free shipping on orders over {currencySymbol}{shippingSettings.free_shipping_threshold}</p>
               )}
               <div className="flex justify-between font-serif text-xl text-brand-black border-t border-black/8 pt-4 mt-2">
                 <span>Total</span>
-                <span>${total.toFixed(2)} {currency}</span>
+                <span>{currencySymbol}{total.toFixed(2)} {currency}</span>
               </div>
             </div>
           </div>
