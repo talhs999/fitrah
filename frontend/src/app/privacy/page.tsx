@@ -42,13 +42,13 @@ export default function PrivacyPage() {
           <p>We use the following third-party services: Shopify/Stripe (payment processing), TCS or Pakistan Post (shipping), Klaviyo (email marketing), and Google Analytics (website analytics). Each has their own privacy policy.</p>
         </Section>
         <Section title="7. Your Rights">
-          <p>Under the Prevention of Electronic Crimes Act 2016, you have the right to access, correct, or delete your personal information. To exercise these rights, contact us at privacy@fitrahbeardoil.com.au. We will respond within 30 days.</p>
+          <p>Under the Prevention of Electronic Crimes Act 2016, you have the right to access, correct, or delete your personal information. To exercise these rights, contact us at fitrahpk@gmail.com. We will respond within 30 days.</p>
         </Section>
         <Section title="8. Changes to This Policy">
           <p>We may update this Privacy Policy from time to time. We will notify you of significant changes by posting a notice on our website. Continued use of our website after changes are posted constitutes acceptance of the updated policy.</p>
         </Section>
         <Section title="9. Contact Us">
-          <p>For any privacy-related questions or requests, contact us at: privacy@fitrahbeardoil.com.au or Fitrah Beard Oil, Lahore, Pakistan.</p>
+          <p>For any privacy-related questions or requests, contact us at: fitrahpk@gmail.com or Fitrah Beard Oil, Lahore, Pakistan.</p>
         </Section>
       </div>
     </main>

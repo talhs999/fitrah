@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 
 const InstagramIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px]">
@@ -63,7 +63,7 @@ export default function Footer() {
             />
           </div>
           <p className="text-white/50 font-sans text-sm leading-relaxed font-light">
-            Premium beard oils inspired by 1,400 years of prophetic tradition. Formulated for the modern man in Lahore, Pakistan.
+            Premium beard oils inspired by 1,400 years of prophetic tradition. Formulated for the modern Muslim man.
           </p>
           <div className="flex items-center gap-5">
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors" aria-label="Instagram">
@@ -72,7 +72,7 @@ export default function Footer() {
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors" aria-label="Facebook">
               <FacebookIcon />
             </a>
-            <a href="mailto:info@fitrahbeardoil.com.au" className="text-white/40 hover:text-white transition-colors" aria-label="Email">
+            <a href="mailto:fitrahpk@gmail.com" className="text-white/40 hover:text-white transition-colors" aria-label="Email">
               <Mail className="w-[18px] h-[18px]" strokeWidth={1.5} />
             </a>
           </div>
@@ -137,16 +137,16 @@ export default function Footer() {
           <h4 className="font-sans text-[10px] uppercase tracking-[0.25em] font-bold text-white/40">Contact</h4>
           <ul className="space-y-5">
             <li className="flex gap-4 text-white/60">
-              <MapPin className="w-4 h-4 mt-0.5 shrink-0" strokeWidth={1.5} />
-              <span className="font-sans text-sm font-light">Lahore, 54000, Pakistan</span>
-            </li>
-            <li className="flex gap-4 text-white/60">
               <Phone className="w-4 h-4 mt-0.5 shrink-0" strokeWidth={1.5} />
-              <span className="font-sans text-sm font-light">+61 400 123 456</span>
+              <span className="font-sans text-sm font-light">+92 319 2801199</span>
             </li>
             <li className="flex gap-4 text-white/60">
               <Mail className="w-4 h-4 mt-0.5 shrink-0" strokeWidth={1.5} />
-              <span className="font-sans text-sm font-light">info@fitrahbeardoil.com.au</span>
+              <span className="font-sans text-sm font-light">fitrahpk@gmail.com</span>
+            </li>
+            <li className="flex gap-4 text-white/60">
+              <Clock className="w-4 h-4 mt-0.5 shrink-0" strokeWidth={1.5} />
+              <span className="font-sans text-sm font-light">Sat–Thu: 7am–3pm &nbsp;|&nbsp; Fri: Off</span>
             </li>
           </ul>
           {/* Newsletter mini */}

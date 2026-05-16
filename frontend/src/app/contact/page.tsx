@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import { Phone, Mail, Clock, Send } from "lucide-react";
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
@@ -19,14 +19,13 @@ export default function ContactPage() {
         {/* Contact Info */}
         <div className="space-y-12">
           <p className="font-sans text-[15px] text-brand-muted font-light leading-relaxed max-w-md">
-            Have a question about your order, our products, or want to wholesale Fitrah? We'd love to hear from you. Our team in Lahore typically responds within 24 hours.
+            Have a question about your order, our products, or want to wholesale Fitrah? We’d love to hear from you. Our team typically responds within 24 hours.
           </p>
           <div className="space-y-8">
             {[
-              { icon: MapPin, label: "Location", value: "Lahore, 54000, Pakistan" },
-              { icon: Phone, label: "Phone", value: "+61 400 123 456" },
-              { icon: Mail, label: "Email", value: "info@fitrahbeardoil.com.au" },
-              { icon: Clock, label: "Hours", value: "Mon–Fri: 9am–5pm AWST" },
+              { icon: Phone, label: "Phone", value: "+92 319 2801199" },
+              { icon: Mail, label: "Email", value: "fitrahpk@gmail.com" },
+              { icon: Clock, label: "Hours", value: "Sat–Thu: 7am–3pm  |  Fri: Off" },
             ].map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex items-start gap-5">
                 <div className="w-10 h-10 border border-black/10 flex items-center justify-center shrink-0">

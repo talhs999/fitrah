@@ -254,7 +254,7 @@ export default function Navbar() {
                   </Link>
                 </div>
                 <p className="font-sans text-xs text-white/30 tracking-widest uppercase">Lahore, Pakistan</p>
-                <p className="font-sans text-xs text-white/20 tracking-widest uppercase">info@fitrahbeardoil.com.au</p>
+                <p className="font-sans text-xs text-white/20 tracking-widest uppercase">fitrahpk@gmail.com</p>
               </div>
             </motion.aside>
           </>

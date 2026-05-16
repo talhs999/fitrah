@@ -26,8 +26,8 @@ const FAQS = [
   {
     category: "Returns & Refunds",
     items: [
-      { q: "What is your return policy?", a: "We accept returns within 30 days of purchase. The product must be unused and in its original condition. Simply contact us at returns@fitrahbeardoil.com.au and we'll arrange a return." },
-      { q: "What if I receive a damaged or incorrect item?", a: "We sincerely apologise if this happens. Please email us at support@fitrahbeardoil.com.au with your order number and a photo of the item, and we will send a replacement at no cost within 24 hours." },
+      { q: "What is your return policy?", a: "We accept returns within 30 days of purchase. The product must be unused and in its original condition. Simply contact us at fitrahpk@gmail.com and we'll arrange a return." },
+      { q: "What if I receive a damaged or incorrect item?", a: "We sincerely apologise if this happens. Please email us at fitrahpk@gmail.com with your order number and a photo of the item, and we will send a replacement at no cost within 24 hours." },
       { q: "Can I exchange a product?", a: "Yes. If you'd like to exchange one oil for another, please contact us within 30 days. We'll arrange the exchange once the original product is returned." },
     ],
   },

@@ -36,7 +36,7 @@ export default function TermsPage() {
           <p>We are not responsible for delays caused by TCS or Pakistan Post or other courier services beyond our control.</p>
         </Section>
         <Section title="5. Returns & Refunds">
-          <p>We accept returns within 30 days of purchase if the product is unused and in its original condition. To initiate a return, contact us at returns@fitrahbeardoil.com.au.</p>
+          <p>We accept returns within 30 days of purchase if the product is unused and in its original condition. To initiate a return, contact us at fitrahpk@gmail.com.</p>
           <p>Refunds are processed within 5–10 business days once we receive the returned product. Shipping costs are non-refundable unless the return is due to our error.</p>
         </Section>
         <Section title="6. Intellectual Property">
@@ -49,7 +49,7 @@ export default function TermsPage() {
           <p>These Terms are governed by the laws of Punjab, Pakistan. Any disputes will be subject to the exclusive jurisdiction of the courts of Lahore, Pakistan.</p>
         </Section>
         <Section title="9. Contact">
-          <p>For any questions regarding these Terms, please contact us at legal@fitrahbeardoil.com.au or write to us at: Fitrah Beard Oil, Lahore, Pakistan.</p>
+          <p>For any questions regarding these Terms, please contact us at fitrahpk@gmail.com or write to us at: Fitrah Beard Oil, Lahore, Pakistan.</p>
         </Section>
       </div>
     </main>

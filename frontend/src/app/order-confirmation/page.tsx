@@ -116,7 +116,7 @@ export default function OrderConfirmationPage() {
       <div class="brand-sub">Beard Oil — Lahore, PK</div>
       <div class="brand-details">
         <p>ABN: 00 000 000 000</p>
-        <p>info@fitrahbeardoil.com.au</p>
+        <p>fitrahpk@gmail.com</p>
         <p>Lahore, 54000, Pakistan</p>
       </div>
     </div>
@@ -182,7 +182,7 @@ export default function OrderConfirmationPage() {
 
   <!-- Footer -->
   <div class="footer">
-    <div class="footer-note">Thank you for your order. For questions or returns, contact us at info@fitrahbeardoil.com.au within 30 days of delivery.</div>
+    <div class="footer-note">Thank you for your order. For questions or returns, contact us at fitrahpk@gmail.com within 30 days of delivery.</div>
     <div class="footer-brand">Reviving the Sunnah<br/>Lahore, Pakistan</div>
   </div>
 </body>
@@ -238,7 +238,7 @@ export default function OrderConfirmationPage() {
                 <p className="font-sans text-[9px] uppercase tracking-[0.3em] text-brand-muted mt-1">Beard Oil — Lahore, PK</p>
                 <div className="mt-4 space-y-0.5">
                   <p className="font-sans text-xs text-brand-muted">ABN: 00 000 000 000</p>
-                  <p className="font-sans text-xs text-brand-muted">info@fitrahbeardoil.com.au</p>
+                  <p className="font-sans text-xs text-brand-muted">fitrahpk@gmail.com</p>
                   <p className="font-sans text-xs text-brand-muted">Lahore, 54000, Pakistan</p>
                 </div>
               </div>
@@ -330,7 +330,7 @@ export default function OrderConfirmationPage() {
             {/* Footer Note */}
             <div className="mt-8 pt-6 border-t border-black/8 flex items-start justify-between gap-6">
               <p className="font-sans text-xs text-brand-muted/60 leading-relaxed max-w-xs">
-                Thank you for your order. For questions or returns, contact us at info@fitrahbeardoil.com.au within 30 days.
+                Thank you for your order. For questions or returns, contact us at fitrahpk@gmail.com within 30 days.
               </p>
               <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-brand-muted/40 text-right shrink-0">
                 Reviving the Sunnah<br />Lahore, Pakistan
