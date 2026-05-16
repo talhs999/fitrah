@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback } from "react";
-import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 
@@ -140,13 +139,11 @@ export default function GallerySlider() {
               key={i}
               className="shrink-0 w-[280px] md:w-[420px] h-[360px] md:h-[540px] relative group overflow-hidden bg-[#f5f5f0]"
             >
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={src}
                 alt={`Fitrah lifestyle ${(i % galleryImages.length) + 1}`}
-                fill
-                sizes="(max-width:768px) 280px, 420px"
-                unoptimized
-                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-all duration-500" />
             </div>
