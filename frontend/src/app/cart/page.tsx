@@ -5,14 +5,13 @@ import Image from "next/image";
 import { ArrowRight, Trash2, Plus, Minus } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useCurrency } from "@/context/CurrencyContext";
-import { PRODUCTS } from "@/lib/products";
 
 export default function CartPage() {
-  const { items, removeFromCart, setQty, totalPrice } = useCart();
+  const { items, removeFromCart, setQty, totalPrice, products } = useCart();
   const { currencySymbol } = useCurrency();
 
   const cartProducts = items.map((item) => {
-    const product = PRODUCTS.find((p) => p.id === item.id);
+    const product = products.find((p) => p.id === item.id);
     return { ...item, product };
   }).filter(item => item.product !== undefined);
 

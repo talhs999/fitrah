@@ -5,9 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ArrowRight, Star, Check, Droplets, Shield, Leaf } from "lucide-react";
-import { PRODUCTS } from "@/lib/products";
 import GallerySlider from "@/components/GallerySlider";
 import { useCurrency } from "@/context/CurrencyContext";
+import { useCart } from "@/context/CartContext";
 
 /* ── HERO SLIDES: Custom Generated Cinematic Images ── */
 const SLIDES = [
@@ -99,6 +99,7 @@ function Section({ children, className = "" }: { children: React.ReactNode; clas
 export default function Home() {
   const { idx, setIdx } = useCarousel(SLIDES.length, 7000);
   const { currency, currencySymbol } = useCurrency();
+  const { products } = useCart();
 
   return (
     <main className="bg-[#faf9f6]">
@@ -207,7 +208,7 @@ export default function Home() {
 
           {/* Category Cards — one per product/purpose, auto-generated, 3 per row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {PRODUCTS.map((p, i) => (
+            {products.map((p, i) => (
               <motion.div key={p.id} variants={fadeUp} custom={i * 0.3}>
                 <Link
                   href={`/shop/${p.id}`}
@@ -419,7 +420,7 @@ export default function Home() {
 
           {/* Product Cards — auto renders all products from products.ts */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-6">
-            {PRODUCTS.map((p, i) => (
+            {products.map((p, i) => (
               <motion.div key={p.id} variants={fadeUp} custom={i * 0.4}>
                 <div className="group block h-full">
                   {/* Image */}

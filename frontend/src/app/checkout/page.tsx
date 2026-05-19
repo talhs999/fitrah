@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
-import { PRODUCTS } from "@/lib/products";
 import { ArrowRight, User, UserCheck, ShoppingBag } from "lucide-react";
 import { createOrder, createStripeCheckout } from "./actions";
 import { createClient } from "@/utils/supabase/client";
@@ -14,7 +13,7 @@ import { useCurrency } from "@/context/CurrencyContext";
 type GateChoice = "none" | "login" | "register" | "guest";
 
 export default function CheckoutPage() {
-  const { items, totalPrice, clearCart } = useCart();
+  const { items, totalPrice, clearCart, products } = useCart();
   const [gate, setGate] = useState<GateChoice>("none");
   const router = useRouter();
 
@@ -337,7 +336,7 @@ export default function CheckoutPage() {
                   shipping_address: `${address}, ${city}, ${postcode}`,
                   total_amount: orderTotal,
                   items: items.map(item => {
-                    const p = PRODUCTS.find(x => x.id === item.id)!;
+                    const p = products.find(x => x.id === item.id)!;
                     return { id: item.id, name: p.name, qty: item.qty, price: p.price, image: p.image };
                   })
                 });
@@ -359,7 +358,7 @@ export default function CheckoutPage() {
                 shipping_address: `${address}, ${city}, ${postcode}`,
                 total_amount: orderTotal,
                 items: items.map(item => {
-                  const p = PRODUCTS.find(x => x.id === item.id)!;
+                  const p = products.find(x => x.id === item.id)!;
                   return { id: item.id, name: p.name, qty: item.qty, price: p.price };
                 })
               });
@@ -379,7 +378,7 @@ export default function CheckoutPage() {
                 city,
                 postcode,
                 items: items.map(item => {
-                  const p = PRODUCTS.find(x => x.id === item.id)!;
+                  const p = products.find(x => x.id === item.id)!;
                   return { id: item.id, name: p.name, subtitle: p.subtitle, price: p.price, qty: item.qty, image: p.image, bg: p.bg };
                 }),
                 subtotal: totalPrice,
@@ -516,7 +515,7 @@ export default function CheckoutPage() {
             <h2 className="font-sans text-[10px] uppercase tracking-widest font-bold text-brand-muted mb-6">Order Summary</h2>
             <div className="space-y-5 mb-6">
               {items.map((item) => {
-                const product = PRODUCTS.find(p => p.id === item.id);
+                const product = products.find(p => p.id === item.id);
                 if (!product) return null;
                 return (
                   <div key={item.id} className="flex items-center gap-4">

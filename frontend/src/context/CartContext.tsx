@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, useContext, useEffect, useReducer, useCallback } from "react";
+import { createContext, useContext, useEffect, useReducer, useCallback, useState } from "react";
 import { PRODUCTS } from "@/lib/products";
+import { createClient } from "@/utils/supabase/client";
 
 export type CartItem = {
   id: string;
@@ -47,12 +48,14 @@ type CartContextType = {
   removeFromCart: (id: string) => void;
   setQty: (id: string, qty: number) => void;
   clearCart: () => void;
+  products: typeof PRODUCTS;
 };
 
 const CartContext = createContext<CartContextType | null>(null);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, { items: [] });
+  const [products, setProducts] = useState(PRODUCTS);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -60,6 +63,26 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const stored = localStorage.getItem("fitrah_cart");
       if (stored) dispatch({ type: "LOAD", items: JSON.parse(stored) });
     } catch {}
+  }, []);
+
+  // Fetch and merge database products
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase.from("products").select("*");
+        if (data && data.length > 0 && !error) {
+          const merged = PRODUCTS.map(staticP => {
+            const dbP = data.find(p => p.id === staticP.id);
+            return dbP ? { ...staticP, ...dbP } : staticP;
+          });
+          setProducts(merged);
+        }
+      } catch (err) {
+        console.error("Failed to load products in CartContext:", err);
+      }
+    }
+    loadProducts();
   }, []);
 
   // Persist to localStorage
@@ -74,12 +97,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const totalCount = state.items.reduce((sum, i) => sum + i.qty, 0);
   const totalPrice = state.items.reduce((sum, i) => {
-    const product = PRODUCTS.find((p) => p.id === i.id);
+    const product = products.find((p) => p.id === i.id);
     return sum + (product ? product.price * i.qty : 0);
   }, 0);
 
   return (
-    <CartContext.Provider value={{ items: state.items, totalCount, totalPrice, addToCart, removeFromCart, setQty, clearCart }}>
+    <CartContext.Provider value={{ items: state.items, totalCount, totalPrice, addToCart, removeFromCart, setQty, clearCart, products }}>
       {children}
     </CartContext.Provider>
   );
