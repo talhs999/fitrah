@@ -58,7 +58,7 @@ export default function ProductClient({ product, related, initialReviews }: { pr
     ? (product.cap_dropper_image || '/assets/cap_dropper.jpg')
     : (product.cap_pump_image || '/assets/cap_pump.jpg');
 
-  const allImages = [activeCapImg, product.image, ...(product.gallery_images || [])];
+  const allImages = [product.image, ...(product.gallery_images || [])];
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
@@ -234,27 +234,37 @@ export default function ProductClient({ product, related, initialReviews }: { pr
             <div className="flex gap-4">
               <button
                 type="button"
-                onClick={() => { setSelectedCap('dropper'); setCurrentImageIndex(0); }}
-                className={`flex-1 flex items-center justify-between border px-5 py-4 font-sans text-xs uppercase tracking-widest transition-all ${
+                onClick={() => { setSelectedCap('dropper'); }}
+                className={`flex-1 flex items-center gap-3 border p-3 font-sans text-xs uppercase tracking-widest transition-all ${
                   selectedCap === 'dropper'
                     ? 'border-brand-black bg-brand-black/5 font-bold text-brand-black'
                     : 'border-black/10 text-brand-muted hover:border-black/30'
                 }`}
               >
-                <span>Dropper Cap</span>
-                <span className="text-[10px] text-brand-muted font-normal lowercase">(default)</span>
+                <div className="w-10 h-10 relative bg-[#ebebeb] shrink-0 border border-black/10">
+                  <Image src={product.cap_dropper_image || '/assets/cap_dropper.jpg'} alt="Dropper Cap" fill className="object-cover mix-blend-multiply" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span>Dropper Cap</span>
+                  <span className="text-[9px] text-brand-muted font-normal lowercase">(default)</span>
+                </div>
               </button>
               <button
                 type="button"
-                onClick={() => { setSelectedCap('pump'); setCurrentImageIndex(0); }}
-                className={`flex-1 flex items-center justify-between border px-5 py-4 font-sans text-xs uppercase tracking-widest transition-all ${
+                onClick={() => { setSelectedCap('pump'); }}
+                className={`flex-1 flex items-center gap-3 border p-3 font-sans text-xs uppercase tracking-widest transition-all ${
                   selectedCap === 'pump'
                     ? 'border-brand-black bg-brand-black/5 font-bold text-brand-black'
                     : 'border-black/10 text-brand-muted hover:border-black/30'
                 }`}
               >
-                <span>Pump Cap</span>
-                <span className="text-[10px] text-brand-muted font-normal lowercase">(premium)</span>
+                <div className="w-10 h-10 relative bg-[#ebebeb] shrink-0 border border-black/10">
+                  <Image src={product.cap_pump_image || '/assets/cap_pump.jpg'} alt="Pump Cap" fill className="object-cover mix-blend-multiply" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span>Pump Cap</span>
+                  <span className="text-[9px] text-brand-muted font-normal lowercase">(premium)</span>
+                </div>
               </button>
             </div>
           </div>
