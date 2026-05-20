@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CheckCircle2, ArrowRight, Package } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useCurrency } from "@/context/CurrencyContext";
 
 export default function CheckoutSuccessPage() {
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { currencySymbol } = useCurrency();
 
   useEffect(() => {
     const savedOrder = localStorage.getItem("fitrah_last_order");
@@ -99,7 +101,7 @@ export default function CheckoutSuccessPage() {
                   <p className="font-sans text-xs text-brand-muted truncate">{item.subtitle} | Cap: {item.selectedCap === 'pump' ? 'Pump' : 'Dropper'}</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="font-sans text-sm text-brand-black font-medium">${(item.price * item.qty).toFixed(2)}</p>
+                  <p className="font-sans text-sm text-brand-black font-medium">{currencySymbol}{(item.price * item.qty).toFixed(2)}</p>
                   <p className="font-sans text-[10px] text-brand-muted uppercase tracking-widest mt-1">Qty: {item.qty}</p>
                 </div>
               </div>
@@ -111,15 +113,15 @@ export default function CheckoutSuccessPage() {
         <div className="border-t border-black/5 pt-6 space-y-3">
           <div className="flex justify-between font-sans text-sm text-brand-muted">
             <span>Subtotal</span>
-            <span>${order.subtotal.toFixed(2)}</span>
+            <span>{currencySymbol}{order.subtotal.toFixed(2)}</span>
           </div>
           <div className="flex justify-between font-sans text-sm text-brand-muted">
             <span>Shipping</span>
-            <span>{order.shipping === 0 ? "Free" : `$${order.shipping.toFixed(2)}`}</span>
+            <span>{order.shipping === 0 ? "Free" : `${currencySymbol}${order.shipping.toFixed(2)}`}</span>
           </div>
           <div className="flex justify-between font-sans text-base text-brand-black font-bold pt-4 border-t border-black/5 mt-4">
             <span>Total</span>
-            <span>${order.total.toFixed(2)}</span>
+            <span>{currencySymbol}{order.total.toFixed(2)}</span>
           </div>
         </div>
 
