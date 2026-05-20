@@ -38,13 +38,10 @@ export default function CartPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           <div className="lg:col-span-2 space-y-8 border-t border-black/10 pt-8">
             {cartProducts.map(({ id, qty, selectedCap, product }) => {
-              const capImg = selectedCap === 'pump' 
-                ? (product!.cap_pump_image || '/assets/cap_pump.jpg')
-                : (product!.cap_dropper_image || '/assets/cap_dropper.jpg');
               return (
               <div key={`${id}-${selectedCap}`} className="flex gap-6 pb-8 border-b border-black/5">
                 <div className="w-24 h-32 md:w-32 md:h-40 relative bg-[#ebebeb] shrink-0">
-                  <Image src={capImg} alt={product!.name} fill className="object-cover mix-blend-multiply" />
+                  <Image src={product!.image} alt={product!.name} fill className="object-cover mix-blend-multiply" />
                 </div>
                 <div className="flex-1 flex flex-col justify-between">
                   <div className="flex justify-between items-start">

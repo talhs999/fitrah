@@ -223,16 +223,12 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-black/10">
-                      {selectedOrder.order_items?.map((item: any) => {
-                        const capImg = item.selected_cap === 'pump' 
-                          ? (item.product?.cap_pump_image || '/assets/cap_pump.jpg')
-                          : (item.selected_cap === 'dropper' ? (item.product?.cap_dropper_image || '/assets/cap_dropper.jpg') : item.product?.image);
-                        return (
+                      {selectedOrder.order_items?.map((item: any) => (
                         <tr key={item.id}>
                           <td className="px-4 py-4 flex items-center gap-4">
                             <div className="w-12 h-16 bg-[#faf9f6] border border-black/10 rounded-sm overflow-hidden shrink-0">
-                              {capImg ? (
-                                <img src={capImg} alt={item.product?.name} className="w-full h-full object-cover mix-blend-multiply" />
+                              {item.product?.image ? (
+                                <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover mix-blend-multiply" />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center text-[8px] text-brand-muted uppercase">No Img</div>
                               )}
@@ -246,7 +242,7 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
                           <td className="px-4 py-4 text-right text-brand-muted">{currencySymbol}{item.price_at_time}</td>
                           <td className="px-4 py-4 text-right font-medium text-brand-black">{currencySymbol}{(item.quantity * item.price_at_time).toFixed(2)}</td>
                         </tr>
-                      )})}
+                      ))}
                     </tbody>
                   </table>
                 </div>

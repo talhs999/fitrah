@@ -379,10 +379,7 @@ export default function CheckoutPage() {
                 postcode,
                 items: items.map(item => {
                   const p = products.find(x => x.id === item.id)!;
-                  const capImg = item.selectedCap === 'pump' 
-                    ? (p.cap_pump_image || '/assets/cap_pump.jpg')
-                    : (p.cap_dropper_image || '/assets/cap_dropper.jpg');
-                  return { id: item.id, name: p.name, subtitle: p.subtitle, price: p.price, qty: item.qty, image: capImg, bg: p.bg, selectedCap: item.selectedCap };
+                  return { id: item.id, name: p.name, subtitle: p.subtitle, price: p.price, qty: item.qty, image: p.image, bg: p.bg, selectedCap: item.selectedCap };
                 }),
                 subtotal: totalPrice,
                 shipping: shippingCost,
@@ -520,14 +517,11 @@ export default function CheckoutPage() {
               {items.map((item) => {
                 const product = products.find(p => p.id === item.id);
                 if (!product) return null;
-                const capImg = item.selectedCap === 'pump' 
-                  ? (product.cap_pump_image || '/assets/cap_pump.jpg')
-                  : (product.cap_dropper_image || '/assets/cap_dropper.jpg');
                 return (
                   <div key={`${item.id}-${item.selectedCap}`} className="flex items-center gap-4">
                     <div className="w-16 h-20 relative shrink-0 overflow-hidden" style={{ backgroundColor: product.bg }}>
                       <Image
-                        src={capImg}
+                        src={product.image}
                         alt={product.name}
                         fill
                         sizes="64px"
