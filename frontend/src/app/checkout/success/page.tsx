@@ -96,7 +96,7 @@ export default function CheckoutSuccessPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="font-serif text-lg text-brand-black truncate">{item.name}</h3>
-                  <p className="font-sans text-xs text-brand-muted truncate">{item.subtitle}</p>
+                  <p className="font-sans text-xs text-brand-muted truncate">{item.subtitle} | Cap: {item.selectedCap === 'pump' ? 'Pump' : 'Dropper'}</p>
                 </div>
                 <div className="text-right shrink-0">
                   <p className="font-sans text-sm text-brand-black font-medium">${(item.price * item.qty).toFixed(2)}</p>

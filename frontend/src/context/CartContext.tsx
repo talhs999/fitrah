@@ -7,30 +7,36 @@ import { createClient } from "@/utils/supabase/client";
 export type CartItem = {
   id: string;
   qty: number;
+  selectedCap: 'dropper' | 'pump';
 };
 
 type State = { items: CartItem[] };
 type Action =
-  | { type: "ADD"; id: string }
-  | { type: "REMOVE"; id: string }
-  | { type: "SET_QTY"; id: string; qty: number }
+  | { type: "ADD"; id: string; selectedCap?: 'dropper' | 'pump' }
+  | { type: "REMOVE"; id: string; selectedCap?: 'dropper' | 'pump' }
+  | { type: "SET_QTY"; id: string; qty: number; selectedCap?: 'dropper' | 'pump' }
   | { type: "CLEAR" }
   | { type: "LOAD"; items: CartItem[] };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case "ADD": {
-      const existing = state.items.find((i) => i.id === action.id);
+      const targetCap = action.selectedCap || 'dropper';
+      const existing = state.items.find((i) => i.id === action.id && i.selectedCap === targetCap);
       if (existing) {
-        return { items: state.items.map((i) => i.id === action.id ? { ...i, qty: i.qty + 1 } : i) };
+        return { items: state.items.map((i) => i.id === action.id && i.selectedCap === targetCap ? { ...i, qty: i.qty + 1 } : i) };
       }
-      return { items: [...state.items, { id: action.id, qty: 1 }] };
+      return { items: [...state.items, { id: action.id, qty: 1, selectedCap: targetCap }] };
     }
-    case "REMOVE":
-      return { items: state.items.filter((i) => i.id !== action.id) };
-    case "SET_QTY":
-      if (action.qty < 1) return { items: state.items.filter((i) => i.id !== action.id) };
-      return { items: state.items.map((i) => i.id === action.id ? { ...i, qty: action.qty } : i) };
+    case "REMOVE": {
+      const targetCap = action.selectedCap || 'dropper';
+      return { items: state.items.filter((i) => !(i.id === action.id && i.selectedCap === targetCap)) };
+    }
+    case "SET_QTY": {
+      const targetCap = action.selectedCap || 'dropper';
+      if (action.qty < 1) return { items: state.items.filter((i) => !(i.id === action.id && i.selectedCap === targetCap)) };
+      return { items: state.items.map((i) => i.id === action.id && i.selectedCap === targetCap ? { ...i, qty: action.qty } : i) };
+    }
     case "CLEAR":
       return { items: [] };
     case "LOAD":
@@ -44,9 +50,9 @@ type CartContextType = {
   items: CartItem[];
   totalCount: number;
   totalPrice: number;
-  addToCart: (id: string) => void;
-  removeFromCart: (id: string) => void;
-  setQty: (id: string, qty: number) => void;
+  addToCart: (id: string, selectedCap?: 'dropper' | 'pump') => void;
+  removeFromCart: (id: string, selectedCap?: 'dropper' | 'pump') => void;
+  setQty: (id: string, qty: number, selectedCap?: 'dropper' | 'pump') => void;
   clearCart: () => void;
   products: typeof PRODUCTS;
 };
@@ -90,9 +96,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("fitrah_cart", JSON.stringify(state.items));
   }, [state.items]);
 
-  const addToCart = useCallback((id: string) => dispatch({ type: "ADD", id }), []);
-  const removeFromCart = useCallback((id: string) => dispatch({ type: "REMOVE", id }), []);
-  const setQty = useCallback((id: string, qty: number) => dispatch({ type: "SET_QTY", id, qty }), []);
+  const addToCart = useCallback((id: string, selectedCap?: 'dropper' | 'pump') => dispatch({ type: "ADD", id, selectedCap }), []);
+  const removeFromCart = useCallback((id: string, selectedCap?: 'dropper' | 'pump') => dispatch({ type: "REMOVE", id, selectedCap }), []);
+  const setQty = useCallback((id: string, qty: number, selectedCap?: 'dropper' | 'pump') => dispatch({ type: "SET_QTY", id, qty, selectedCap }), []);
   const clearCart = useCallback(() => dispatch({ type: "CLEAR" }), []);
 
   const totalCount = state.items.reduce((sum, i) => sum + i.qty, 0);

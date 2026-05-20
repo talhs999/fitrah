@@ -337,7 +337,7 @@ export default function CheckoutPage() {
                   total_amount: orderTotal,
                   items: items.map(item => {
                     const p = products.find(x => x.id === item.id)!;
-                    return { id: item.id, name: p.name, qty: item.qty, price: p.price, image: p.image };
+                    return { id: item.id, name: p.name, qty: item.qty, price: p.price, image: p.image, selectedCap: item.selectedCap };
                   })
                 });
 
@@ -359,7 +359,7 @@ export default function CheckoutPage() {
                 total_amount: orderTotal,
                 items: items.map(item => {
                   const p = products.find(x => x.id === item.id)!;
-                  return { id: item.id, name: p.name, qty: item.qty, price: p.price };
+                  return { id: item.id, name: p.name, qty: item.qty, price: p.price, selectedCap: item.selectedCap };
                 })
               });
 
@@ -379,7 +379,10 @@ export default function CheckoutPage() {
                 postcode,
                 items: items.map(item => {
                   const p = products.find(x => x.id === item.id)!;
-                  return { id: item.id, name: p.name, subtitle: p.subtitle, price: p.price, qty: item.qty, image: p.image, bg: p.bg };
+                  const capImg = item.selectedCap === 'pump' 
+                    ? (p.cap_pump_image || '/assets/cap_pump.jpg')
+                    : (p.cap_dropper_image || '/assets/cap_dropper.jpg');
+                  return { id: item.id, name: p.name, subtitle: p.subtitle, price: p.price, qty: item.qty, image: capImg, bg: p.bg, selectedCap: item.selectedCap };
                 }),
                 subtotal: totalPrice,
                 shipping: shippingCost,
@@ -517,11 +520,14 @@ export default function CheckoutPage() {
               {items.map((item) => {
                 const product = products.find(p => p.id === item.id);
                 if (!product) return null;
+                const capImg = item.selectedCap === 'pump' 
+                  ? (product.cap_pump_image || '/assets/cap_pump.jpg')
+                  : (product.cap_dropper_image || '/assets/cap_dropper.jpg');
                 return (
-                  <div key={item.id} className="flex items-center gap-4">
+                  <div key={`${item.id}-${item.selectedCap}`} className="flex items-center gap-4">
                     <div className="w-16 h-20 relative shrink-0 overflow-hidden" style={{ backgroundColor: product.bg }}>
                       <Image
-                        src={product.image}
+                        src={capImg}
                         alt={product.name}
                         fill
                         sizes="64px"
@@ -530,7 +536,9 @@ export default function CheckoutPage() {
                     </div>
                     <div className="flex-1">
                       <p className="font-serif text-base text-brand-black">{product.name}</p>
-                      <p className="font-sans text-xs text-brand-muted">Qty: {item.qty}</p>
+                      <p className="font-sans text-[10px] text-brand-muted uppercase tracking-widest mt-1">
+                        Qty: {item.qty} | Cap: {item.selectedCap === 'pump' ? 'Pump' : 'Dropper'}
+                      </p>
                     </div>
                     <span className="font-sans text-sm font-semibold text-brand-black">{currencySymbol}{(product.price * item.qty).toFixed(2)}</span>
                   </div>

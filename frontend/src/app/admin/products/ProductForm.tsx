@@ -16,6 +16,10 @@ export default function ProductForm({ product, categories }: { product?: any, ca
   const [existingGallery, setExistingGallery] = useState<string[]>(product?.gallery_images || []);
   const [newGalleryFiles, setNewGalleryFiles] = useState<{file: File, preview: string, base64: string}[]>([]);
   const [mainImageBase64, setMainImageBase64] = useState<{name: string, base64: string} | null>(null);
+  const [capDropperPreview, setCapDropperPreview] = useState(product?.cap_dropper_image || null);
+  const [capDropperBase64, setCapDropperBase64] = useState<{name: string, base64: string} | null>(null);
+  const [capPumpPreview, setCapPumpPreview] = useState(product?.cap_pump_image || null);
+  const [capPumpBase64, setCapPumpBase64] = useState<{name: string, base64: string} | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,6 +42,12 @@ export default function ProductForm({ product, categories }: { product?: any, ca
     if (mainImageBase64) {
       formData.set("main_image_base64", JSON.stringify(mainImageBase64));
     }
+    if (capDropperBase64) {
+      formData.set("cap_dropper_base64", JSON.stringify(capDropperBase64));
+    }
+    if (capPumpBase64) {
+      formData.set("cap_pump_base64", JSON.stringify(capPumpBase64));
+    }
 
     try {
       await saveProduct(formData, product?.id);
@@ -55,6 +65,30 @@ export default function ProductForm({ product, categories }: { product?: any, ca
       const reader = new FileReader();
       reader.onload = (ev) => {
         setMainImageBase64({ name: file.name, base64: ev.target?.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleCapDropperChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setCapDropperPreview(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setCapDropperBase64({ name: file.name, base64: ev.target?.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleCapPumpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setCapPumpPreview(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setCapPumpBase64({ name: file.name, base64: ev.target?.result as string });
       };
       reader.readAsDataURL(file);
     }
@@ -237,6 +271,41 @@ export default function ProductForm({ product, categories }: { product?: any, ca
                 <input type="file" accept="image/*" multiple onChange={handleGalleryChange} className="absolute inset-0 opacity-0 cursor-pointer" />
               </div>
             </div>
+
+            <div className="pt-4 border-t border-black/10">
+              <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Bottle Cap Options</label>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted mb-2">Dropper Cap Image</label>
+                  <div className="aspect-square bg-[#faf9f6] border border-black/10 rounded-sm relative overflow-hidden flex items-center justify-center mb-1">
+                    {capDropperPreview ? (
+                      <img src={capDropperPreview} alt="Dropper Cap" className="w-full h-full object-cover mix-blend-multiply" />
+                    ) : (
+                      <div className="text-center text-brand-muted">
+                        <Upload className="w-6 h-6 mx-auto mb-1 opacity-50" />
+                        <span className="font-sans text-[10px] uppercase tracking-widest">Default</span>
+                      </div>
+                    )}
+                    <input type="file" accept="image/*" onChange={handleCapDropperChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted mb-2">Pump Cap Image</label>
+                  <div className="aspect-square bg-[#faf9f6] border border-black/10 rounded-sm relative overflow-hidden flex items-center justify-center mb-1">
+                    {capPumpPreview ? (
+                      <img src={capPumpPreview} alt="Pump Cap" className="w-full h-full object-cover mix-blend-multiply" />
+                    ) : (
+                      <div className="text-center text-brand-muted">
+                        <Upload className="w-6 h-6 mx-auto mb-1 opacity-50" />
+                        <span className="font-sans text-[10px] uppercase tracking-widest">Default</span>
+                      </div>
+                    )}
+                    <input type="file" accept="image/*" onChange={handleCapPumpChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
 
           <div className="bg-white border border-black/10 p-8 rounded-sm space-y-6">

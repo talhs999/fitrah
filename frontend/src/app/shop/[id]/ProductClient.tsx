@@ -49,10 +49,16 @@ export default function ProductClient({ product, related, initialReviews }: { pr
   const [qty, setQty] = useState(1);
   const [showToast, setShowToast] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [selectedCap, setSelectedCap] = useState<'dropper' | 'pump'>('dropper');
+  
   const { addToCart, setQty: updateCartQty } = useCart();
   const { currency, currencySymbol } = useCurrency();
 
-  const allImages = [product.image, ...(product.gallery_images || [])];
+  const activeCapImg = selectedCap === 'dropper' 
+    ? (product.cap_dropper_image || '/assets/cap_dropper.jpg')
+    : (product.cap_pump_image || '/assets/cap_pump.jpg');
+
+  const allImages = [activeCapImg, product.image, ...(product.gallery_images || [])];
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
@@ -63,9 +69,9 @@ export default function ProductClient({ product, related, initialReviews }: { pr
   };
 
   const handleAddToCart = () => {
-    addToCart(product.id);
+    addToCart(product.id, selectedCap);
     if (qty > 1) {
-      updateCartQty(product.id, qty);
+      updateCartQty(product.id, qty, selectedCap);
     }
     setShowToast(true);
   };
@@ -114,8 +120,8 @@ export default function ProductClient({ product, related, initialReviews }: { pr
     <>
     <CartToast
       show={showToast}
-      productName={product.name}
-      productImage={product.image}
+      productName={`${product.name} (${selectedCap === 'pump' ? 'Pump' : 'Dropper'} Cap)`}
+      productImage={activeCapImg}
       productPrice={product.price * qty}
       onClose={() => setShowToast(false)}
     />
@@ -219,6 +225,39 @@ export default function ProductClient({ product, related, initialReviews }: { pr
           <p className="font-sans text-sm text-brand-muted leading-relaxed">
             {product.description}
           </p>
+
+          {/* Bottle Cap Option */}
+          <div className="space-y-3 pt-4">
+            <label className="block font-sans text-[10px] uppercase tracking-[0.2em] text-brand-muted font-bold">
+              Select Bottle Cap
+            </label>
+            <div className="flex gap-4">
+              <button
+                type="button"
+                onClick={() => { setSelectedCap('dropper'); setCurrentImageIndex(0); }}
+                className={`flex-1 flex items-center justify-between border px-5 py-4 font-sans text-xs uppercase tracking-widest transition-all ${
+                  selectedCap === 'dropper'
+                    ? 'border-brand-black bg-brand-black/5 font-bold text-brand-black'
+                    : 'border-black/10 text-brand-muted hover:border-black/30'
+                }`}
+              >
+                <span>Dropper Cap</span>
+                <span className="text-[10px] text-brand-muted font-normal lowercase">(default)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { setSelectedCap('pump'); setCurrentImageIndex(0); }}
+                className={`flex-1 flex items-center justify-between border px-5 py-4 font-sans text-xs uppercase tracking-widest transition-all ${
+                  selectedCap === 'pump'
+                    ? 'border-brand-black bg-brand-black/5 font-bold text-brand-black'
+                    : 'border-black/10 text-brand-muted hover:border-black/30'
+                }`}
+              >
+                <span>Pump Cap</span>
+                <span className="text-[10px] text-brand-muted font-normal lowercase">(premium)</span>
+              </button>
+            </div>
+          </div>
 
           {/* Actions */}
           <div className="space-y-4 pt-4">

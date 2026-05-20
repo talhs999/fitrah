@@ -37,10 +37,14 @@ export default function CartPage() {
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
           <div className="lg:col-span-2 space-y-8 border-t border-black/10 pt-8">
-            {cartProducts.map(({ id, qty, product }) => (
-              <div key={id} className="flex gap-6 pb-8 border-b border-black/5">
+            {cartProducts.map(({ id, qty, selectedCap, product }) => {
+              const capImg = selectedCap === 'pump' 
+                ? (product!.cap_pump_image || '/assets/cap_pump.jpg')
+                : (product!.cap_dropper_image || '/assets/cap_dropper.jpg');
+              return (
+              <div key={`${id}-${selectedCap}`} className="flex gap-6 pb-8 border-b border-black/5">
                 <div className="w-24 h-32 md:w-32 md:h-40 relative bg-[#ebebeb] shrink-0">
-                  <Image src={product!.image} alt={product!.name} fill className="object-cover mix-blend-multiply" />
+                  <Image src={capImg} alt={product!.name} fill className="object-cover mix-blend-multiply" />
                 </div>
                 <div className="flex-1 flex flex-col justify-between">
                   <div className="flex justify-between items-start">
@@ -48,20 +52,22 @@ export default function CartPage() {
                       <Link href={`/shop/${id}`} className="font-serif text-xl md:text-2xl text-brand-black hover:text-brand-muted transition-colors">
                         {product!.name}
                       </Link>
-                      <p className="font-sans text-xs text-brand-muted uppercase tracking-widest mt-1">{product!.purpose}</p>
+                      <p className="font-sans text-xs text-brand-muted uppercase tracking-widest mt-1">
+                        Purpose: {product!.purpose} | Cap: {selectedCap === 'pump' ? 'Pump' : 'Dropper'}
+                      </p>
                     </div>
-                    <button onClick={() => removeFromCart(id)} className="text-brand-muted hover:text-red-500 transition-colors p-1" aria-label="Remove item">
+                    <button onClick={() => removeFromCart(id, selectedCap)} className="text-brand-muted hover:text-red-500 transition-colors p-1" aria-label="Remove item">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                   
                   <div className="flex items-end justify-between mt-6">
                     <div className="flex items-center border border-black/20">
-                      <button onClick={() => setQty(id, qty - 1)} className="px-3 py-2 text-brand-muted hover:bg-black/5 transition-colors">
+                      <button onClick={() => setQty(id, qty - 1, selectedCap)} className="px-3 py-2 text-brand-muted hover:bg-black/5 transition-colors">
                         <Minus className="w-3 h-3" />
                       </button>
                       <span className="font-sans text-sm font-semibold w-8 text-center">{qty}</span>
-                      <button onClick={() => setQty(id, qty + 1)} className="px-3 py-2 text-brand-muted hover:bg-black/5 transition-colors">
+                      <button onClick={() => setQty(id, qty + 1, selectedCap)} className="px-3 py-2 text-brand-muted hover:bg-black/5 transition-colors">
                         <Plus className="w-3 h-3" />
                       </button>
                     </div>
@@ -69,7 +75,7 @@ export default function CartPage() {
                   </div>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
 
           <div className="bg-white p-8 lg:sticky lg:top-32 h-fit border border-black/5 shadow-sm">

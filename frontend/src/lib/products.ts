@@ -18,6 +18,8 @@ export const PRODUCTS = [
     scent: "Warm Cedar & Sandalwood with earthy undertones.",
     size: "30ml",
     stock: true,
+    cap_dropper_image: "/assets/cap_dropper.jpg",
+    cap_pump_image: "/assets/cap_pump.jpg",
   },
   {
     id: "roab",
@@ -37,6 +39,8 @@ export const PRODUCTS = [
     scent: "Fresh Mint & Herbs with a cool finish.",
     size: "30ml",
     stock: true,
+    cap_dropper_image: "/assets/cap_dropper.jpg",
+    cap_pump_image: "/assets/cap_pump.jpg",
   },
   {
     id: "addawa",
@@ -56,6 +60,8 @@ export const PRODUCTS = [
     scent: "Clean Floral & Herbal with a calming softness.",
     size: "30ml",
     stock: true,
+    cap_dropper_image: "/assets/cap_dropper.jpg",
+    cap_pump_image: "/assets/cap_pump.jpg",
   },
   {
     id: "qawwam",
@@ -75,6 +81,8 @@ export const PRODUCTS = [
     scent: "Dark Oud & Amber, bold and commanding.",
     size: "30ml",
     stock: true,
+    cap_dropper_image: "/assets/cap_dropper.jpg",
+    cap_pump_image: "/assets/cap_pump.jpg",
   },
   {
     id: "muhafiz",
@@ -94,6 +102,8 @@ export const PRODUCTS = [
     scent: "Fresh Ocean Breeze & Citrus.",
     size: "30ml",
     stock: true,
+    cap_dropper_image: "/assets/cap_dropper.jpg",
+    cap_pump_image: "/assets/cap_pump.jpg",
   },
 ];
 

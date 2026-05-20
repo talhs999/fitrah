@@ -14,7 +14,7 @@ export async function createOrder(orderData: {
   country?: string;
   postal_code?: string;
   total_amount: number;
-  items: { id: string; name: string; qty: number; price: number }[];
+  items: { id: string; name: string; qty: number; price: number; selectedCap?: string }[];
 }) {
   // Use service role key to bypass RLS in server actions
   const supabase = createSupabaseClient(
@@ -54,7 +54,8 @@ export async function createOrder(orderData: {
     order_id: order.id,
     product_id: item.id,
     quantity: item.qty,
-    price_at_time: item.price
+    price_at_time: item.price,
+    selected_cap: item.selectedCap || 'dropper'
   }));
 
   const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
@@ -80,7 +81,7 @@ export async function createStripeCheckout(orderData: {
   customer_email: string;
   shipping_address: string;
   total_amount: number;
-  items: { id: string; name: string; qty: number; price: number; image?: string }[];
+  items: { id: string; name: string; qty: number; price: number; image?: string; selectedCap?: string }[];
 }) {
   try {
     const supabase = createSupabaseClient(

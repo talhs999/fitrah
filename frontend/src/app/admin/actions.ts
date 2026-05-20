@@ -122,7 +122,43 @@ export async function saveProduct(formData: FormData, productId?: string) {
     }
   }
 
-  const finalData = { ...productData, image: imageUrl, gallery_images: galleryImages };
+  let capDropperUrl = formData.get("cap_dropper_image") as string || undefined;
+  const capDropperBase64 = formData.get("cap_dropper_base64") as string;
+  if (capDropperBase64) {
+    try {
+      const parsed = JSON.parse(capDropperBase64);
+      const base64Data = parsed.base64;
+      if (base64Data && base64Data.includes(",")) {
+        const [header, data] = base64Data.split(",");
+        const mime = header.match(/:(.*?);/)?.[1] || "image/jpeg";
+        const binary = Buffer.from(data, "base64");
+        const storageName = `${Date.now()}_cap_dropper.${parsed.name.split(".").pop() || "jpg"}`;
+        const { error: upErr } = await supabase.storage.from("product-images").upload(storageName, binary, { contentType: mime, upsert: true });
+        if (!upErr) capDropperUrl = supabase.storage.from("product-images").getPublicUrl(storageName).data.publicUrl;
+      }
+    } catch (e: any) { console.error("Dropper cap upload error", e); }
+  }
+
+  let capPumpUrl = formData.get("cap_pump_image") as string || undefined;
+  const capPumpBase64 = formData.get("cap_pump_base64") as string;
+  if (capPumpBase64) {
+    try {
+      const parsed = JSON.parse(capPumpBase64);
+      const base64Data = parsed.base64;
+      if (base64Data && base64Data.includes(",")) {
+        const [header, data] = base64Data.split(",");
+        const mime = header.match(/:(.*?);/)?.[1] || "image/jpeg";
+        const binary = Buffer.from(data, "base64");
+        const storageName = `${Date.now()}_cap_pump.${parsed.name.split(".").pop() || "jpg"}`;
+        const { error: upErr } = await supabase.storage.from("product-images").upload(storageName, binary, { contentType: mime, upsert: true });
+        if (!upErr) capPumpUrl = supabase.storage.from("product-images").getPublicUrl(storageName).data.publicUrl;
+      }
+    } catch (e: any) { console.error("Pump cap upload error", e); }
+  }
+
+  const finalData: any = { ...productData, image: imageUrl, gallery_images: galleryImages };
+  if (capDropperUrl) finalData.cap_dropper_image = capDropperUrl;
+  if (capPumpUrl) finalData.cap_pump_image = capPumpUrl;
 
   // Insert or Update
   if (productId) {
