@@ -176,12 +176,30 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
                 <h2 className="font-serif text-2xl text-brand-black">Order Slip</h2>
                 <p className="font-sans text-xs text-brand-muted mt-1 uppercase tracking-widest">#{selectedOrder.id}</p>
               </div>
-              <button 
-                onClick={() => setSelectedOrder(null)}
-                className="p-2 hover:bg-black/5 rounded-full transition-colors"
-              >
-                <X className="w-6 h-6 text-brand-black" />
-              </button>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={async () => {
+                    if (confirm("Are you sure you want to permanently delete this order?")) {
+                      try {
+                        const { deleteOrder } = await import("../actions");
+                        await deleteOrder(selectedOrder.id);
+                        setSelectedOrder(null);
+                      } catch (err) {
+                        alert("Failed to delete order.");
+                      }
+                    }
+                  }}
+                  className="font-sans text-[10px] text-red-500 hover:text-red-700 uppercase tracking-widest font-bold transition-colors"
+                >
+                  Delete Order
+                </button>
+                <button 
+                  onClick={() => setSelectedOrder(null)}
+                  className="p-2 hover:bg-black/5 rounded-full transition-colors"
+                >
+                  <X className="w-6 h-6 text-brand-black" />
+                </button>
+              </div>
             </div>
 
             {/* Modal Body */}
