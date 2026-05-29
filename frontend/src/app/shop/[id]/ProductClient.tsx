@@ -54,11 +54,11 @@ export default function ProductClient({ product, related, initialReviews }: { pr
   const { addToCart, setQty: updateCartQty } = useCart();
   const { currency, currencySymbol } = useCurrency();
 
-  const activeCapImg = selectedCap === 'dropper' 
-    ? (product.cap_dropper_image || '/assets/cap_dropper.jpg')
-    : (product.cap_pump_image || '/assets/cap_pump.jpg');
+  const activeMainImg = selectedCap === 'pump'
+    ? (product.cap_pump_image || product.image)
+    : (product.cap_dropper_image || product.image);
 
-  const allImages = [product.image, ...(product.gallery_images || [])];
+  const allImages = [activeMainImg, ...(product.gallery_images || [])];
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
@@ -121,7 +121,7 @@ export default function ProductClient({ product, related, initialReviews }: { pr
     <CartToast
       show={showToast}
       productName={`${product.name} (${selectedCap === 'pump' ? 'Pump' : 'Dropper'} Cap)`}
-      productImage={activeCapImg}
+      productImage={activeMainImg}
       productPrice={product.price * qty}
       onClose={() => setShowToast(false)}
     />
@@ -242,7 +242,7 @@ export default function ProductClient({ product, related, initialReviews }: { pr
                 }`}
               >
                 <div className="w-10 h-10 relative bg-[#ebebeb] shrink-0 border border-black/10">
-                  <Image src={product.cap_dropper_image || '/assets/cap_dropper.jpg'} alt="Dropper Cap" fill className="object-cover mix-blend-multiply" />
+                  <Image src="/assets/cap_dropper.jpg" alt="Dropper Cap" fill className="object-cover mix-blend-multiply" />
                 </div>
                 <div className="flex flex-col text-left">
                   <span>Dropper Cap</span>
@@ -259,7 +259,7 @@ export default function ProductClient({ product, related, initialReviews }: { pr
                 }`}
               >
                 <div className="w-10 h-10 relative bg-[#ebebeb] shrink-0 border border-black/10">
-                  <Image src={product.cap_pump_image || '/assets/cap_pump.jpg'} alt="Pump Cap" fill className="object-cover mix-blend-multiply" />
+                  <Image src="/assets/cap_pump.jpg" alt="Pump Cap" fill className="object-cover mix-blend-multiply" />
                 </div>
                 <div className="flex flex-col text-left">
                   <span>Pump Cap</span>
