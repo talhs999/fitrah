@@ -272,40 +272,68 @@ export default function ProductForm({ product, categories }: { product?: any, ca
               </div>
             </div>
 
-            <div className="pt-4 border-t border-black/10">
-              <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Bottle Cap Options</label>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted mb-2">Dropper Cap Image</label>
-                  <div className="aspect-square bg-[#faf9f6] border border-black/10 rounded-sm relative overflow-hidden flex items-center justify-center mb-1">
-                    {capDropperPreview ? (
-                      <img src={capDropperPreview} alt="Dropper Cap" className="w-full h-full object-cover mix-blend-multiply" />
-                    ) : (
-                      <div className="text-center text-brand-muted">
-                        <Upload className="w-6 h-6 mx-auto mb-1 opacity-50" />
-                        <span className="font-sans text-[10px] uppercase tracking-widest">Default</span>
-                      </div>
-                    )}
-                    <input type="file" accept="image/*" onChange={handleCapDropperChange} className="absolute inset-0 opacity-0 cursor-pointer" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted mb-2">Pump Cap Image</label>
-                  <div className="aspect-square bg-[#faf9f6] border border-black/10 rounded-sm relative overflow-hidden flex items-center justify-center mb-1">
-                    {capPumpPreview ? (
-                      <img src={capPumpPreview} alt="Pump Cap" className="w-full h-full object-cover mix-blend-multiply" />
-                    ) : (
-                      <div className="text-center text-brand-muted">
-                        <Upload className="w-6 h-6 mx-auto mb-1 opacity-50" />
-                        <span className="font-sans text-[10px] uppercase tracking-widest">Default</span>
-                      </div>
-                    )}
-                    <input type="file" accept="image/*" onChange={handleCapPumpChange} className="absolute inset-0 opacity-0 cursor-pointer" />
-                  </div>
-                </div>
-              </div>
+          </div>
+
+          {/* Bottle Cap Images - Standalone Card */}
+          <div className="bg-white border-2 border-brand-black/10 p-8 rounded-sm space-y-5">
+            <div className="border-b border-black/10 pb-4">
+              <h2 className="font-serif text-xl text-brand-black">Bottle Cap Images</h2>
+              <p className="font-sans text-xs text-brand-muted mt-1.5 leading-relaxed">Upload a full bottle photo for each cap type. When a customer selects a cap on the product page, this image will appear as the main product photo.</p>
             </div>
 
+            <div className="grid grid-cols-2 gap-6">
+              {/* Dropper */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-2 h-2 rounded-full bg-brand-black/40" />
+                  <span className="font-sans text-[11px] uppercase tracking-widest font-bold text-brand-black">Dropper Cap Bottle</span>
+                </div>
+                <div className="aspect-[3/4] bg-[#faf9f6] border-2 border-dashed border-black/15 hover:border-brand-black/40 rounded-sm relative overflow-hidden flex flex-col items-center justify-center transition-colors cursor-pointer group">
+                  {capDropperPreview ? (
+                    <>
+                      <img src={capDropperPreview} alt="Dropper Cap Bottle" className="w-full h-full object-cover mix-blend-multiply" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span className="font-sans text-[10px] uppercase tracking-widest text-white font-bold">Change Image</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-center text-brand-muted px-4">
+                      <Upload className="w-8 h-8 mx-auto mb-3 opacity-40" />
+                      <span className="font-sans text-xs uppercase tracking-widest block mb-1">Upload Dropper Bottle</span>
+                      <span className="font-sans text-[10px] text-brand-muted/60">Full bottle with dropper cap</span>
+                    </div>
+                  )}
+                  <input type="file" accept="image/*" onChange={handleCapDropperChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+                </div>
+                <p className="font-sans text-[10px] text-brand-muted text-center mt-2">Shown when customer selects Dropper</p>
+              </div>
+
+              {/* Pump */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-2 h-2 rounded-full bg-brand-black/40" />
+                  <span className="font-sans text-[11px] uppercase tracking-widest font-bold text-brand-black">Pump Cap Bottle</span>
+                </div>
+                <div className="aspect-[3/4] bg-[#faf9f6] border-2 border-dashed border-black/15 hover:border-brand-black/40 rounded-sm relative overflow-hidden flex flex-col items-center justify-center transition-colors cursor-pointer group">
+                  {capPumpPreview ? (
+                    <>
+                      <img src={capPumpPreview} alt="Pump Cap Bottle" className="w-full h-full object-cover mix-blend-multiply" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span className="font-sans text-[10px] uppercase tracking-widest text-white font-bold">Change Image</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-center text-brand-muted px-4">
+                      <Upload className="w-8 h-8 mx-auto mb-3 opacity-40" />
+                      <span className="font-sans text-xs uppercase tracking-widest block mb-1">Upload Pump Bottle</span>
+                      <span className="font-sans text-[10px] text-brand-muted/60">Full bottle with pump cap</span>
+                    </div>
+                  )}
+                  <input type="file" accept="image/*" onChange={handleCapPumpChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+                </div>
+                <p className="font-sans text-[10px] text-brand-muted text-center mt-2">Shown when customer selects Pump</p>
+              </div>
+            </div>
           </div>
 
           <div className="bg-white border border-black/10 p-8 rounded-sm space-y-6">
