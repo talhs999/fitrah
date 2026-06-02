@@ -21,6 +21,7 @@ const SLIDES = [
   },
   {
     image: "/assets/Gemini_Generated_Image_jkg1ffjkg1ffjkg1.png",
+    mobileImage: "/assets/2ndbnr-responcive.png",
     eyebrow: "The Reflection",
     headline: ["Stand Tall.", "Guard Your Legacy."],
     sub: "Five carefully engineered oils. Five powerful purposes. One unbreakable standard of quality.",
@@ -127,14 +128,26 @@ export default function Home() {
                 className="absolute inset-0 w-full h-full object-cover object-center"
               />
             ) : (
-              <Image
-                src={SLIDES[idx].image}
-                alt="Fitrah Hero"
-                fill
-                priority
-                unoptimized={SLIDES[idx].image.startsWith('/api/media')}
-                className="object-cover object-center"
-              />
+              <>
+                <Image
+                  src={SLIDES[idx].image}
+                  alt="Fitrah Hero Desktop"
+                  fill
+                  priority
+                  unoptimized={SLIDES[idx].image.startsWith('/api/media')}
+                  className={`object-cover object-center ${SLIDES[idx].mobileImage ? "hidden md:block" : ""}`}
+                />
+                {SLIDES[idx].mobileImage && (
+                  <Image
+                    src={SLIDES[idx].mobileImage}
+                    alt="Fitrah Hero Mobile"
+                    fill
+                    priority
+                    unoptimized={SLIDES[idx].mobileImage.startsWith('/api/media')}
+                    className="object-cover object-center md:hidden"
+                  />
+                )}
+              </>
             )}
             {/* Gradient overlays — dark at top (for navbar) and bottom (for text) */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/60" />
