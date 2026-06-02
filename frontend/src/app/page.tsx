@@ -30,6 +30,7 @@ const SLIDES = [
   },
   {
     image: "/assets/banner-img 1.png",
+    mobileImage: "/assets/3rd banner responsive.png",
     eyebrow: "The Essence",
     headline: ["Purely", "Natural."],
     sub: "Elevate your grooming routine with ingredients chosen for their purity and effectiveness.",
