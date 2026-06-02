@@ -125,7 +125,7 @@ export default function Home() {
                 muted
                 loop
                 playsInline
-                poster={SLIDES[idx].image}
+                preload="auto"
                 className="absolute inset-0 w-full h-full object-cover object-center"
               />
             ) : (
