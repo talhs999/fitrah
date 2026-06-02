@@ -12,6 +12,15 @@ import { useCart } from "@/context/CartContext";
 /* ── HERO SLIDES: Custom Generated Cinematic Images ── */
 const SLIDES = [
   {
+    image: "/assets/Gemini_Generated_Image_fculq8fculq8fcul.png",
+    video: "/Video Project 1.mp4",
+    eyebrow: "The Ascent",
+    headline: ["Every Drop", "Has a Purpose."],
+    sub: "Where heritage meets luxury. Beard care for the man who knows his worth and honours his Sunnah.",
+    cta: "Our Story",
+    ctaHref: "/story",
+  },
+  {
     image: "/assets/hero_slide_1_beard_oil_1776964963587.png",
     eyebrow: "The Heritage",
     headline: ["Master Your", "Craft."],
@@ -36,15 +45,6 @@ const SLIDES = [
     sub: "Elevate your grooming routine with ingredients chosen for their purity and effectiveness.",
     cta: "Explore Now",
     ctaHref: "/shop",
-  },
-  {
-    image: "/assets/Gemini_Generated_Image_fculq8fculq8fcul.png",
-    video: "/Video Project 1.mp4",
-    eyebrow: "The Ascent",
-    headline: ["Every Drop", "Has a Purpose."],
-    sub: "Where heritage meets luxury. Beard care for the man who knows his worth and honours his Sunnah.",
-    cta: "Our Story",
-    ctaHref: "/story",
   },
 ];
 
