@@ -18,7 +18,7 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
         // @ts-ignore
         const html2pdf = (await import("html2pdf.js")).default;
         const opt = {
-          margin: [10, 10],
+          margin: 10,
           filename: `Order_Slip_${selectedOrder.id}.pdf`,
           image: { type: "jpeg", quality: 0.98 },
           html2canvas: { scale: 2, useCORS: true },
