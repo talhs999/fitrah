@@ -8,6 +8,27 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
   const { currencySymbol } = useCurrency();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
+  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
+
+  const handleDownloadPdf = async () => {
+    setIsDownloadingPdf(true);
+    setTimeout(async () => {
+      const element = document.getElementById("order-slip-content");
+      if (element) {
+        // @ts-ignore
+        const html2pdf = (await import("html2pdf.js")).default;
+        const opt = {
+          margin: [10, 10],
+          filename: `Order_Slip_${selectedOrder.id}.pdf`,
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        };
+        await html2pdf().set(opt).from(element).save();
+      }
+      setIsDownloadingPdf(false);
+    }, 100);
+  };
 
   const filteredOrders = orders.filter((order) => {
     const term = searchTerm.toLowerCase();
@@ -169,37 +190,45 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
       {/* Order Details Modal (Slip) */}
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm">
-          <div className="bg-[#faf9f6] w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl relative rounded-sm flex flex-col">
+          <div id="order-slip-content" className="bg-[#faf9f6] w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl relative rounded-sm flex flex-col">
             {/* Modal Header */}
             <div className="sticky top-0 bg-[#faf9f6] z-10 flex items-center justify-between p-6 border-b border-black/10">
               <div>
                 <h2 className="font-serif text-2xl text-brand-black">Order Slip</h2>
                 <p className="font-sans text-xs text-brand-muted mt-1 uppercase tracking-widest">#{selectedOrder.id}</p>
               </div>
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={async () => {
-                    if (confirm("Are you sure you want to permanently delete this order?")) {
-                      try {
-                        const { deleteOrder } = await import("../actions");
-                        await deleteOrder(selectedOrder.id);
-                        setSelectedOrder(null);
-                      } catch (err) {
-                        alert("Failed to delete order.");
+              {!isDownloadingPdf && (
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={handleDownloadPdf}
+                    className="flex items-center gap-2 bg-brand-black text-white px-4 py-2 rounded-md font-sans text-[10px] uppercase tracking-widest font-bold hover:bg-black transition-colors"
+                  >
+                    <Download className="w-3 h-3" /> Download PDF
+                  </button>
+                  <button
+                    onClick={async () => {
+                      if (confirm("Are you sure you want to permanently delete this order?")) {
+                        try {
+                          const { deleteOrder } = await import("../actions");
+                          await deleteOrder(selectedOrder.id);
+                          setSelectedOrder(null);
+                        } catch (err) {
+                          alert("Failed to delete order.");
+                        }
                       }
-                    }
-                  }}
-                  className="font-sans text-[10px] text-red-500 hover:text-red-700 uppercase tracking-widest font-bold transition-colors"
-                >
-                  Delete Order
-                </button>
-                <button 
-                  onClick={() => setSelectedOrder(null)}
-                  className="p-2 hover:bg-black/5 rounded-full transition-colors"
-                >
-                  <X className="w-6 h-6 text-brand-black" />
-                </button>
-              </div>
+                    }}
+                    className="font-sans text-[10px] text-red-500 hover:text-red-700 uppercase tracking-widest font-bold transition-colors"
+                  >
+                    Delete Order
+                  </button>
+                  <button 
+                    onClick={() => setSelectedOrder(null)}
+                    className="p-2 hover:bg-black/5 rounded-full transition-colors"
+                  >
+                    <X className="w-6 h-6 text-brand-black" />
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Modal Body */}
