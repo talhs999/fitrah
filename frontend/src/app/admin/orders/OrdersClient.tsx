@@ -15,16 +15,21 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
     setTimeout(async () => {
       const element = document.getElementById("order-slip-content");
       if (element) {
-        // @ts-ignore
-        const html2pdf = (await import("html2pdf.js")).default;
-        const opt: any = {
-          margin: 10,
-          filename: `Order_Slip_${selectedOrder.id}.pdf`,
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true },
-          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-        };
-        await html2pdf().set(opt).from(element).save();
+        try {
+          // @ts-ignore
+          const html2pdf = (await import("html2pdf.js")).default;
+          const opt: any = {
+            margin: 10,
+            filename: `Order_Slip_${selectedOrder.id}.pdf`,
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+          };
+          await html2pdf().set(opt).from(element).save();
+        } catch (error) {
+          console.error("PDF Generation Error:", error);
+          alert("PDF generate nahi ho saka. Refresh kar ke dobara try karein.");
+        }
       }
       setIsDownloadingPdf(false);
     }, 100);
