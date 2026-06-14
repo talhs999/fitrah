@@ -176,14 +176,14 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
       {/* Order Details Modal (Slip) */}
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm">
-          <div ref={componentRef} className="bg-[#faf9f6] w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl relative rounded-sm flex flex-col">
+          <div ref={componentRef} className="bg-[#faf9f6] print:bg-white w-full max-w-3xl max-h-[90vh] print:max-h-none overflow-y-auto print:overflow-visible shadow-2xl print:shadow-none relative rounded-sm flex flex-col">
             
             {/* PRINT-ONLY INVOICE LAYOUT */}
             <div className="hidden print:block p-10 bg-white text-black font-sans w-full max-w-4xl mx-auto">
               <div className="flex justify-between items-start border-b border-black/10 pb-8 mb-8">
                 <div>
-                  <h1 className="text-4xl font-serif font-bold text-brand-black tracking-tight">FITRAH</h1>
-                  <p className="text-xs text-brand-muted mt-1 uppercase tracking-widest">Order Slip</p>
+                  <img src="/assets/Black.png" alt="Fitrah" className="h-12 object-contain" />
+                  <p className="text-[10px] font-semibold text-brand-muted mt-2 uppercase tracking-widest">Order Slip</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-semibold text-brand-black uppercase tracking-widest">Order #{selectedOrder.id}</p>
