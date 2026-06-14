@@ -12,7 +12,7 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
 
   const componentRef = useRef(null);
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    contentRef: componentRef,
     documentTitle: selectedOrder ? `Order_Slip_${selectedOrder.id}` : 'Order_Slip',
   });
 
