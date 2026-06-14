@@ -8,6 +8,8 @@ import { ArrowRight, Star, Check, Droplets, Shield, Leaf } from "lucide-react";
 import GallerySlider from "@/components/GallerySlider";
 import { useCurrency } from "@/context/CurrencyContext";
 import { useCart } from "@/context/CartContext";
+import { createClient } from "@/utils/supabase/client";
+import { subscribeNewsletter } from "@/app/api/site/actions";
 
 /* ── HERO SLIDES: Custom Generated Cinematic Images ── */
 const SLIDES = [
@@ -102,6 +104,43 @@ export default function Home() {
   const { idx, setIdx } = useCarousel(SLIDES.length, 7000);
   const { currency, currencySymbol } = useCurrency();
   const { products } = useCart();
+
+  // ─── Newsletter settings from DB ─────────────────────────
+  const [newsletterEnabled, setNewsletterEnabled] = useState(true);
+  const [discountPercent, setDiscountPercent] = useState(10);
+  const [discountCode, setDiscountCode] = useState("WELCOME10");
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "loading" | "success" | "duplicate" | "error">("idle");
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase
+      .from("site_settings")
+      .select("newsletter_enabled, newsletter_discount_percent, newsletter_discount_code")
+      .single()
+      .then(({ data }) => {
+        if (data) {
+          setNewsletterEnabled(data.newsletter_enabled ?? true);
+          setDiscountPercent(data.newsletter_discount_percent ?? 10);
+          setDiscountCode(data.newsletter_discount_code ?? "WELCOME10");
+        }
+      });
+  }, []);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail) return;
+    setNewsletterStatus("loading");
+    const result = await subscribeNewsletter(newsletterEmail);
+    if (result.alreadySubscribed) {
+      setNewsletterStatus("duplicate");
+    } else if (result.success) {
+      setNewsletterStatus("success");
+      setNewsletterEmail("");
+    } else {
+      setNewsletterStatus("error");
+    }
+  };
 
   return (
     <main className="bg-[#faf9f6]">
@@ -571,33 +610,53 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════
-          CTA BANNER
+          CTA BANNER (Dynamic, controlled from Admin)
       ═══════════════════════════════════════════ */}
-      <section className="relative overflow-hidden bg-brand-black py-32 px-6 md:px-10">
-        <div className="max-w-4xl mx-auto text-center space-y-8 relative z-10">
-          <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-white/40 font-semibold block">
-            Limited Time Offer
-          </span>
-          <h2 className="font-serif text-5xl md:text-6xl text-white leading-[1.1]">
-            Get 10% off <br />
-            <em className="not-italic font-light text-white/60">your first order.</em>
-          </h2>
-          <p className="font-sans text-[15px] text-white/60 font-light max-w-lg mx-auto">
-            Subscribe to the Fitrah newsletter and receive an exclusive discount code instantly, plus early access to new product launches.
-          </p>
-          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col sm:flex-row gap-0 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Your email address"
-              className="flex-1 bg-white/8 border border-white/15 px-5 py-4 font-sans text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-white/40 transition-colors"
-              required
-            />
-            <button type="submit" className="bg-white text-black px-8 py-4 font-sans text-xs uppercase tracking-[0.18em] font-bold hover:bg-white/90 transition-colors whitespace-nowrap">
-              Claim Discount
-            </button>
-          </form>
-        </div>
-      </section>
+      {newsletterEnabled && (
+        <section className="relative overflow-hidden bg-brand-black py-32 px-6 md:px-10">
+          <div className="max-w-4xl mx-auto text-center space-y-8 relative z-10">
+            <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-white/40 font-semibold block">
+              Limited Time Offer
+            </span>
+            <h2 className="font-serif text-5xl md:text-6xl text-white leading-[1.1]">
+              Get {discountPercent}% off <br />
+              <em className="not-italic font-light text-white/60">your first order.</em>
+            </h2>
+            <p className="font-sans text-[15px] text-white/60 font-light max-w-lg mx-auto">
+              Subscribe to the Fitrah newsletter and receive an exclusive discount code instantly, plus early access to new product launches.
+            </p>
+            {newsletterStatus === "success" ? (
+              <div className="max-w-md mx-auto bg-white/10 border border-white/20 px-8 py-6 text-center">
+                <p className="font-sans text-[10px] uppercase tracking-widest text-white/60 mb-2">Your Discount Code</p>
+                <p className="font-serif text-3xl text-white tracking-[4px]">{discountCode}</p>
+                <p className="font-sans text-xs text-white/50 mt-3">{discountPercent}% off — check your inbox for the email confirmation.</p>
+              </div>
+            ) : newsletterStatus === "duplicate" ? (
+              <div className="max-w-md mx-auto bg-white/10 border border-white/20 px-8 py-5 text-center">
+                <p className="font-sans text-sm text-white/80">You're already subscribed! Check your inbox for your code.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-0 max-w-md mx-auto">
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  value={newsletterEmail}
+                  onChange={e => setNewsletterEmail(e.target.value)}
+                  className="flex-1 bg-white/8 border border-white/15 px-5 py-4 font-sans text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-white/40 transition-colors"
+                  required
+                />
+                <button
+                  type="submit"
+                  disabled={newsletterStatus === "loading"}
+                  className="bg-white text-black px-8 py-4 font-sans text-xs uppercase tracking-[0.18em] font-bold hover:bg-white/90 transition-colors whitespace-nowrap disabled:opacity-60"
+                >
+                  {newsletterStatus === "loading" ? "Sending..." : "Claim Discount"}
+                </button>
+              </form>
+            )}
+          </div>
+        </section>
+      )}
     </main>
   );
 }

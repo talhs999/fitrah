@@ -3,7 +3,7 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 import Stripe from "stripe";
-import { sendOrderConfirmationEmail } from "@/utils/mailer";
+import { sendOrderConfirmationEmail, sendNewOrderAlertToAdmin } from "@/utils/mailer";
 
 export async function createOrder(orderData: {
   customer_name: string;
@@ -64,14 +64,24 @@ export async function createOrder(orderData: {
     return { success: false, error: itemsError.message };
   }
 
-  // Send Order Confirmation Email (Non-blocking)
+  // Send Order Confirmation Email (to customer) — Non-blocking
   sendOrderConfirmationEmail(
     orderData.customer_email,
     orderData.customer_name,
     order.id,
     orderData.total_amount,
     orderData.items
-  );
+  ).catch(console.error);
+
+  // Send New Order Alert (to admin) — Non-blocking
+  sendNewOrderAlertToAdmin(
+    order.id,
+    orderData.customer_name,
+    orderData.customer_email,
+    orderData.total_amount,
+    orderData.items,
+    orderData.shipping_address
+  ).catch(console.error);
 
   return { success: true, orderId: order.id };
 }

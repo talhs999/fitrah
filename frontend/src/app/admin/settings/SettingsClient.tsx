@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Store, CreditCard, Truck, Bell, Shield, Save, Tag, Plus, Trash2 } from "lucide-react";
+import { Store, CreditCard, Truck, Bell, Shield, Save, Tag, Plus, Trash2, Mail } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 
 export default function SettingsClient() {
@@ -59,6 +59,24 @@ export default function SettingsClient() {
   const [twoFactorAuth, setTwoFactorAuth] = useState(false);
   const [sessionTimeout, setSessionTimeout] = useState("24");
 
+  // Email / SMTP Settings State
+  const [emailSettingsId, setEmailSettingsId] = useState<string | null>(null);
+  const [smtpHost, setSmtpHost] = useState("smtp.gmail.com");
+  const [smtpPort, setSmtpPort] = useState("587");
+  const [smtpSecure, setSmtpSecure] = useState(false);
+  const [smtpUser, setSmtpUser] = useState("");
+  const [smtpPass, setSmtpPass] = useState("");
+  const [fromName, setFromName] = useState("Fitrah Beard Oil");
+  const [adminEmail, setAdminEmail] = useState("");
+  // Newsletter Settings State
+  const [newsletterEnabled, setNewsletterEnabled] = useState(true);
+  const [newsletterPercent, setNewsletterPercent] = useState("10");
+  const [newsletterCode, setNewsletterCode] = useState("WELCOME10");
+  const [newsletterMaxUses, setNewsletterMaxUses] = useState("0");
+  const [newsletterUseCount, setNewsletterUseCount] = useState(0);
+  const [isSendingTestEmail, setIsSendingTestEmail] = useState(false);
+  const [testEmailStatus, setTestEmailStatus] = useState("");
+
   // Payment Settings State (Database)
   const [stripeEnabled, setStripeEnabled] = useState(false);
   const [stripePublicKey, setStripePublicKey] = useState("");
@@ -77,6 +95,26 @@ export default function SettingsClient() {
   useEffect(() => {
     const loadSettings = async () => {
       const supabase = createClient();
+
+      // Load email/newsletter settings from site_settings
+      const { data: siteData } = await supabase.from("site_settings").select("*").single();
+      if (siteData) {
+        setEmailSettingsId(siteData.id);
+        setSmtpHost(siteData.smtp_host || "smtp.gmail.com");
+        setSmtpPort((siteData.smtp_port || 587).toString());
+        setSmtpSecure(siteData.smtp_secure || false);
+        setSmtpUser(siteData.smtp_user || "");
+        setSmtpPass(siteData.smtp_pass || "");
+        setFromName(siteData.from_name || "Fitrah Beard Oil");
+        setAdminEmail(siteData.admin_email || "");
+        setNewsletterEnabled(siteData.newsletter_enabled ?? true);
+        setNewsletterPercent((siteData.newsletter_discount_percent || 10).toString());
+        setNewsletterCode(siteData.newsletter_discount_code || "WELCOME10");
+        setNewsletterMaxUses((siteData.newsletter_max_uses || 0).toString());
+        setNewsletterUseCount(siteData.newsletter_use_count || 0);
+      }
+
+      // Load payment settings
       const { data, error } = await supabase.from("payment_settings").select("*").single();
       if (data) {
         setStripeEnabled(data.stripe_enabled);
@@ -114,8 +152,30 @@ export default function SettingsClient() {
     e.preventDefault();
     setIsSaving(true);
     
-    // Save payment settings if we are on the payments tab
-    if (activeTab === "payments") {
+    // Save email/marketing settings
+    if (activeTab === "email") {
+      const supabase = createClient();
+      const payload = {
+        smtp_host: smtpHost,
+        smtp_port: Number(smtpPort),
+        smtp_secure: smtpSecure,
+        smtp_user: smtpUser,
+        smtp_pass: smtpPass,
+        from_name: fromName,
+        admin_email: adminEmail,
+        newsletter_enabled: newsletterEnabled,
+        newsletter_discount_percent: Number(newsletterPercent),
+        newsletter_discount_code: newsletterCode.toUpperCase(),
+        newsletter_max_uses: Number(newsletterMaxUses),
+        updated_at: new Date().toISOString(),
+      };
+      if (emailSettingsId) {
+        await supabase.from("site_settings").update(payload).eq("id", emailSettingsId);
+      } else {
+        const { data } = await supabase.from("site_settings").insert(payload).select().single();
+        if (data) setEmailSettingsId(data.id);
+      }
+    } else if (activeTab === "payments") {
       const supabase = createClient();
       if (paymentSettingsId) {
         await supabase.from("payment_settings").update({
@@ -241,19 +301,25 @@ export default function SettingsClient() {
             onClick={() => setActiveTab("shipping")}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm transition-colors font-sans text-sm ${activeTab === "shipping" ? "bg-black/5 text-brand-black font-semibold" : "text-brand-muted hover:bg-black/5 hover:text-brand-black"}`}
           >
-            <Truck className="w-4 h-4" /> Shipping & Delivery
+            <Truck className="w-4 h-4" /> Shipping &amp; Delivery
           </button>
           <button 
             onClick={() => setActiveTab("coupons")}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm transition-colors font-sans text-sm ${activeTab === "coupons" ? "bg-black/5 text-brand-black font-semibold" : "text-brand-muted hover:bg-black/5 hover:text-brand-black"}`}
           >
-            <Tag className="w-4 h-4" /> Coupons & Discounts
+            <Tag className="w-4 h-4" /> Coupons &amp; Discounts
           </button>
           <button 
             onClick={() => setActiveTab("payments")}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm transition-colors font-sans text-sm ${activeTab === "payments" ? "bg-black/5 text-brand-black font-semibold" : "text-brand-muted hover:bg-black/5 hover:text-brand-black"}`}
           >
             <CreditCard className="w-4 h-4" /> Payments
+          </button>
+          <button 
+            onClick={() => setActiveTab("email")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm transition-colors font-sans text-sm ${activeTab === "email" ? "bg-black/5 text-brand-black font-semibold" : "text-brand-muted hover:bg-black/5 hover:text-brand-black"}`}
+          >
+            <Mail className="w-4 h-4" /> Emails &amp; Marketing
           </button>
           <button 
             onClick={() => setActiveTab("notifications")}
@@ -520,6 +586,145 @@ export default function SettingsClient() {
                       </div>
                     </div>
                     <button type="button" disabled className="text-[10px] font-sans uppercase tracking-widest text-brand-muted font-bold border border-black/10 px-3 py-1 rounded">Coming Soon</button>
+                  </div>
+                </div>
+              )}
+
+              {/* Email & Marketing Tab */}
+              {activeTab === "email" && (
+                <div className="space-y-8 animate-fade-in">
+                  <div>
+                    <h2 className="font-serif text-xl text-brand-black mb-1">Email Server (SMTP)</h2>
+                    <p className="font-sans text-xs text-brand-muted mb-6">Configure the Gmail or SMTP account that will send all emails from this website.</p>
+
+                    {/* SMTP Provider Selector */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                      <button
+                        type="button"
+                        onClick={() => { setSmtpHost("smtp.gmail.com"); setSmtpPort("587"); setSmtpSecure(false); }}
+                        className={`p-4 border rounded-sm text-left transition-colors ${
+                          smtpHost === "smtp.gmail.com" ? "border-brand-black bg-black/[0.02]" : "border-black/10 hover:border-black/30"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="w-8 h-8 bg-[#EA4335] rounded-full flex items-center justify-center text-white font-bold text-xs">G</div>
+                          <span className="font-sans text-sm font-bold text-brand-black">Gmail</span>
+                          {smtpHost === "smtp.gmail.com" && <span className="ml-auto font-sans text-[9px] uppercase tracking-widest bg-brand-black text-white px-2 py-0.5 rounded-sm">Selected</span>}
+                        </div>
+                        <p className="font-sans text-[11px] text-brand-muted">Use your Gmail account with an App Password</p>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => { setSmtpHost(""); setSmtpPort("587"); setSmtpSecure(false); }}
+                        className={`p-4 border rounded-sm text-left transition-colors ${
+                          smtpHost !== "smtp.gmail.com" ? "border-brand-black bg-black/[0.02]" : "border-black/10 hover:border-black/30"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="w-8 h-8 bg-brand-black rounded-full flex items-center justify-center text-white text-xs">@</div>
+                          <span className="font-sans text-sm font-bold text-brand-black">Custom SMTP</span>
+                          {smtpHost !== "smtp.gmail.com" && <span className="ml-auto font-sans text-[9px] uppercase tracking-widest bg-brand-black text-white px-2 py-0.5 rounded-sm">Selected</span>}
+                        </div>
+                        <p className="font-sans text-[11px] text-brand-muted">Use any SMTP provider (Outlook, Yahoo, etc.)</p>
+                      </button>
+                    </div>
+
+                    {/* Gmail Instructions */}
+                    {smtpHost === "smtp.gmail.com" && (
+                      <div className="mb-5 p-4 bg-blue-50 border border-blue-100 rounded-sm">
+                        <p className="font-sans text-[11px] font-bold text-blue-800 uppercase tracking-widest mb-2">How to get Gmail App Password</p>
+                        <ol className="font-sans text-[12px] text-blue-700 space-y-1 list-decimal list-inside">
+                          <li>Go to <a href="https://myaccount.google.com/security" target="_blank" rel="noreferrer" className="underline">myaccount.google.com/security</a></li>
+                          <li>Enable 2-Step Verification</li>
+                          <li>Search for "App Passwords" → Create one for "Mail"</li>
+                          <li>Copy the 16-character password and paste it below</li>
+                        </ol>
+                      </div>
+                    )}
+
+                    <div className="space-y-4">
+                      {smtpHost !== "smtp.gmail.com" && (
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                          <div className="sm:col-span-2">
+                            <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">SMTP Host</label>
+                            <input type="text" value={smtpHost} onChange={e => setSmtpHost(e.target.value)} placeholder="smtp.yourhost.com" className="w-full p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                          </div>
+                          <div>
+                            <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Port</label>
+                            <input type="number" value={smtpPort} onChange={e => setSmtpPort(e.target.value)} placeholder="587" className="w-full p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                          </div>
+                        </div>
+                      )}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">{smtpHost === "smtp.gmail.com" ? "Gmail Address" : "Email (Username)"}</label>
+                          <input type="email" value={smtpUser} onChange={e => setSmtpUser(e.target.value)} placeholder="you@gmail.com" className="w-full p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                        </div>
+                        <div>
+                          <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">{smtpHost === "smtp.gmail.com" ? "Gmail App Password" : "SMTP Password"}</label>
+                          <input type="password" value={smtpPass} onChange={e => setSmtpPass(e.target.value)} placeholder={smtpHost === "smtp.gmail.com" ? "xxxx xxxx xxxx xxxx" : "Your SMTP password"} className="w-full p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Sender Name (From)</label>
+                          <input type="text" value={fromName} onChange={e => setFromName(e.target.value)} placeholder="Fitrah Beard Oil" className="w-full p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                        </div>
+                        <div>
+                          <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Admin Email (receives alerts)</label>
+                          <input type="email" value={adminEmail} onChange={e => setAdminEmail(e.target.value)} placeholder="your@email.com" className="w-full p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                          <p className="mt-1 font-sans text-[11px] text-brand-muted">New order alerts and contact form messages will be delivered here.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr className="border-black/10" />
+
+                  {/* Newsletter / CTA Settings */}
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h2 className="font-serif text-xl text-brand-black">Newsletter &amp; Homepage CTA</h2>
+                        <p className="font-sans text-xs text-brand-muted mt-1">Control the discount offer section on the homepage.</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked={newsletterEnabled} onChange={() => setNewsletterEnabled(!newsletterEnabled)} className="sr-only peer" />
+                        <div className="w-11 h-6 bg-black/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-black"></div>
+                        <span className="ml-3 font-sans text-xs font-semibold text-brand-black">{newsletterEnabled ? "Visible on Homepage" : "Hidden from Homepage"}</span>
+                      </label>
+                    </div>
+
+                    {newsletterEnabled && (
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                          <div>
+                            <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Discount Percentage (%)</label>
+                            <input type="number" min="1" max="99" value={newsletterPercent} onChange={e => setNewsletterPercent(e.target.value)} className="w-full p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                            <p className="mt-1 font-sans text-[11px] text-brand-muted">Shows as "Get {newsletterPercent}% off" on the homepage.</p>
+                          </div>
+                          <div>
+                            <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Discount Code</label>
+                            <input type="text" value={newsletterCode} onChange={e => setNewsletterCode(e.target.value.toUpperCase())} placeholder="WELCOME10" className="w-full p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm uppercase focus:outline-none focus:border-brand-black" />
+                            <p className="mt-1 font-sans text-[11px] text-brand-muted">This code is sent to subscribers via email.</p>
+                          </div>
+                          <div>
+                            <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Max Uses (0 = Unlimited)</label>
+                            <input type="number" min="0" value={newsletterMaxUses} onChange={e => setNewsletterMaxUses(e.target.value)} className="w-full p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
+                            <p className="mt-1 font-sans text-[11px] text-brand-muted">Used so far: <strong>{newsletterUseCount}</strong></p>
+                          </div>
+                        </div>
+                        <div className="p-4 bg-[#faf9f6] border border-black/10 rounded-sm flex items-start gap-3">
+                          <div className="w-8 h-8 bg-brand-black rounded-sm flex items-center justify-center shrink-0">
+                            <Mail className="w-4 h-4 text-white" />
+                          </div>
+                          <div>
+                            <p className="font-sans text-xs font-bold text-brand-black">How it works</p>
+                            <p className="font-sans text-[11px] text-brand-muted mt-0.5">When a user enters their email on the homepage and clicks "Claim Discount", they instantly receive an email containing the <strong>{newsletterCode}</strong> code. The same code works on the checkout page.</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}

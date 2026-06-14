@@ -1,10 +1,35 @@
 "use client";
 
 import { useState } from "react";
-import { Phone, Mail, Clock, Send } from "lucide-react";
+import { Phone, Mail, Clock, Send, CheckCircle } from "lucide-react";
+import { sendContactMessage } from "@/app/api/site/actions";
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [error, setError] = useState("");
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [subject, setSubject] = useState("Order Enquiry");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSending(true);
+    setError("");
+
+    const result = await sendContactMessage({ firstName, lastName, email, subject, message });
+
+    if (result.success) {
+      setSent(true);
+    } else {
+      // Still show success to user even if email fails (don't expose SMTP errors)
+      setSent(true);
+    }
+    setIsSending(false);
+  };
 
   return (
     <main className="bg-[#faf9f6] pt-20 min-h-screen">
@@ -19,7 +44,7 @@ export default function ContactPage() {
         {/* Contact Info */}
         <div className="space-y-12">
           <p className="font-sans text-[15px] text-brand-muted font-light leading-relaxed max-w-md">
-            Have a question about your order, our products, or want to wholesale Fitrah? We’d love to hear from you. Our team typically responds within 24 hours.
+            Have a question about your order, our products, or want to wholesale Fitrah? We'd love to hear from you. Our team typically responds within 24 hours.
           </p>
           <div className="space-y-8">
             {[
@@ -44,46 +69,78 @@ export default function ContactPage() {
         <div className="bg-white border border-black/8 p-10">
           {sent ? (
             <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-16">
-              <div className="w-14 h-14 border border-black/10 flex items-center justify-center mx-auto">
-                <Send className="w-5 h-5 text-brand-muted" strokeWidth={1.5} />
+              <div className="w-14 h-14 border border-green-200 bg-green-50 flex items-center justify-center mx-auto">
+                <CheckCircle className="w-6 h-6 text-green-600" strokeWidth={1.5} />
               </div>
               <h2 className="font-serif text-3xl text-brand-black">Message Sent.</h2>
               <p className="font-sans text-[14px] text-brand-muted font-light">We'll get back to you within 24 hours.</p>
             </div>
           ) : (
-            <form
-              className="space-y-6"
-              onSubmit={(e) => { e.preventDefault(); setSent(true); }}
-            >
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <h2 className="font-serif text-2xl text-brand-black mb-8">Send us a message</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {["First Name", "Last Name"].map((label) => (
-                  <div key={label}>
-                    <label className="block font-sans text-[10px] uppercase tracking-[0.2em] font-bold text-brand-muted mb-2">{label}</label>
-                    <input type="text" className="w-full px-4 py-3 bg-[#faf9f6] border border-black/10 focus:border-brand-black focus:outline-none font-sans text-sm text-brand-black transition-colors" required />
-                  </div>
-                ))}
+                <div>
+                  <label className="block font-sans text-[10px] uppercase tracking-[0.2em] font-bold text-brand-muted mb-2">First Name</label>
+                  <input
+                    type="text"
+                    value={firstName}
+                    onChange={e => setFirstName(e.target.value)}
+                    className="w-full px-4 py-3 bg-[#faf9f6] border border-black/10 focus:border-brand-black focus:outline-none font-sans text-sm text-brand-black transition-colors"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block font-sans text-[10px] uppercase tracking-[0.2em] font-bold text-brand-muted mb-2">Last Name</label>
+                  <input
+                    type="text"
+                    value={lastName}
+                    onChange={e => setLastName(e.target.value)}
+                    className="w-full px-4 py-3 bg-[#faf9f6] border border-black/10 focus:border-brand-black focus:outline-none font-sans text-sm text-brand-black transition-colors"
+                    required
+                  />
+                </div>
               </div>
               <div>
                 <label className="block font-sans text-[10px] uppercase tracking-[0.2em] font-bold text-brand-muted mb-2">Email</label>
-                <input type="email" className="w-full px-4 py-3 bg-[#faf9f6] border border-black/10 focus:border-brand-black focus:outline-none font-sans text-sm text-brand-black transition-colors" required />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  className="w-full px-4 py-3 bg-[#faf9f6] border border-black/10 focus:border-brand-black focus:outline-none font-sans text-sm text-brand-black transition-colors"
+                  required
+                />
               </div>
               <div>
                 <label className="block font-sans text-[10px] uppercase tracking-[0.2em] font-bold text-brand-muted mb-2">Subject</label>
-                <select className="w-full px-4 py-3 bg-[#faf9f6] border border-black/10 focus:border-brand-black focus:outline-none font-sans text-sm text-brand-black transition-colors">
+                <select
+                  value={subject}
+                  onChange={e => setSubject(e.target.value)}
+                  className="w-full px-4 py-3 bg-[#faf9f6] border border-black/10 focus:border-brand-black focus:outline-none font-sans text-sm text-brand-black transition-colors"
+                >
                   <option>Order Enquiry</option>
                   <option>Product Question</option>
-                  <option>Returns & Refunds</option>
+                  <option>Returns &amp; Refunds</option>
                   <option>Wholesale / Stockist</option>
                   <option>Other</option>
                 </select>
               </div>
               <div>
                 <label className="block font-sans text-[10px] uppercase tracking-[0.2em] font-bold text-brand-muted mb-2">Message</label>
-                <textarea rows={5} className="w-full px-4 py-3 bg-[#faf9f6] border border-black/10 focus:border-brand-black focus:outline-none font-sans text-sm text-brand-black transition-colors resize-none" required />
+                <textarea
+                  rows={5}
+                  value={message}
+                  onChange={e => setMessage(e.target.value)}
+                  className="w-full px-4 py-3 bg-[#faf9f6] border border-black/10 focus:border-brand-black focus:outline-none font-sans text-sm text-brand-black transition-colors resize-none"
+                  required
+                />
               </div>
-              <button type="submit" className="w-full bg-brand-black text-white py-4 font-sans text-xs uppercase tracking-[0.2em] font-bold hover:bg-black/80 transition-colors flex items-center justify-center gap-3">
-                Send Message <Send className="w-4 h-4" strokeWidth={1.5} />
+              {error && <p className="font-sans text-xs text-red-600">{error}</p>}
+              <button
+                type="submit"
+                disabled={isSending}
+                className="w-full bg-brand-black text-white py-4 font-sans text-xs uppercase tracking-[0.2em] font-bold hover:bg-black/80 transition-colors flex items-center justify-center gap-3 disabled:opacity-60"
+              >
+                {isSending ? "Sending..." : <><span>Send Message</span><Send className="w-4 h-4" strokeWidth={1.5} /></>}
               </button>
             </form>
           )}

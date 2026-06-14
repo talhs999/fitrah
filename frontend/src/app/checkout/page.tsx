@@ -9,6 +9,7 @@ import { ArrowRight, User, UserCheck, ShoppingBag } from "lucide-react";
 import { createOrder, createStripeCheckout } from "./actions";
 import { createClient } from "@/utils/supabase/client";
 import { useCurrency } from "@/context/CurrencyContext";
+import { validateCouponCode } from "@/app/api/site/actions";
 
 type GateChoice = "none" | "login" | "register" | "guest";
 
@@ -89,21 +90,26 @@ export default function CheckoutPage() {
   const [couponInput, setCouponInput] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState<{code: string, type: string, value: number} | null>(null);
   const [couponError, setCouponError] = useState("");
+  const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
 
-  const handleApplyCoupon = (e: React.FormEvent) => {
+  const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
     const code = couponInput.trim().toUpperCase();
-    
-    if (code === "WELCOME10") {
-      setAppliedCoupon({ code, type: "percentage", value: 10 });
-      setCouponError("");
-    } else if (code === "FREESHIP") {
-      setAppliedCoupon({ code, type: "fixed", value: 0 }); // Free shipping
+    if (!code) return;
+
+    setIsValidatingCoupon(true);
+    setCouponError("");
+
+    const result = await validateCouponCode(code);
+
+    if (result.valid && result.type && result.value !== undefined) {
+      setAppliedCoupon({ code, type: result.type, value: result.value });
       setCouponError("");
     } else {
-      setCouponError("Invalid or expired coupon.");
+      setCouponError(result.error || "Invalid or expired coupon.");
       setAppliedCoupon(null);
     }
+    setIsValidatingCoupon(false);
   };
 
   const removeCoupon = () => {
@@ -554,10 +560,10 @@ export default function CheckoutPage() {
                     />
                     <button 
                       type="submit" 
-                      disabled={!couponInput.trim()}
+                      disabled={!couponInput.trim() || isValidatingCoupon}
                       className="w-full sm:w-auto shrink-0 bg-brand-black text-white px-6 py-3 font-sans text-xs uppercase tracking-widest font-bold hover:bg-black transition-colors disabled:opacity-50"
                     >
-                      Apply
+                      {isValidatingCoupon ? "Checking..." : "Apply"}
                     </button>
                   </div>
                   {couponError && <p className="font-sans text-[11px] text-red-600 mt-1">{couponError}</p>}
