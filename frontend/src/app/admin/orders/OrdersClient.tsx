@@ -177,162 +177,238 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm">
           <div ref={componentRef} className="bg-[#faf9f6] w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl relative rounded-sm flex flex-col">
-            {/* Modal Header */}
-            <div className="sticky top-0 bg-[#faf9f6] z-10 flex items-center justify-between p-6 border-b border-black/10">
-              <div>
-                <h2 className="font-serif text-2xl text-brand-black">Order Slip</h2>
-                <p className="font-sans text-xs text-brand-muted mt-1 uppercase tracking-widest">#{selectedOrder.id}</p>
+            
+            {/* PRINT-ONLY INVOICE LAYOUT */}
+            <div className="hidden print:block p-10 bg-white text-black font-sans w-full max-w-4xl mx-auto">
+              <div className="flex justify-between items-start border-b border-black/10 pb-8 mb-8">
+                <div>
+                  <h1 className="text-4xl font-serif font-bold text-brand-black tracking-tight">FITRAH</h1>
+                  <p className="text-xs text-brand-muted mt-1 uppercase tracking-widest">Order Slip</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-semibold text-brand-black uppercase tracking-widest">Order #{selectedOrder.id}</p>
+                  <p className="text-xs text-brand-muted mt-1">{new Date(selectedOrder.created_at).toLocaleDateString()}</p>
+                </div>
               </div>
-              <div className="flex items-center gap-4 print:hidden">
-                <button
-                  onClick={handlePrint}
-                  className="flex items-center gap-2 bg-brand-black text-white px-4 py-2 rounded-md font-sans text-[10px] uppercase tracking-widest font-bold hover:bg-black transition-colors"
-                >
-                  <Download className="w-3 h-3" /> Save as PDF
-                </button>
-                <button
-                  onClick={async () => {
-                    if (confirm("Are you sure you want to permanently delete this order?")) {
-                      try {
-                        const { deleteOrder } = await import("../actions");
-                        await deleteOrder(selectedOrder.id);
-                        setSelectedOrder(null);
-                      } catch (err) {
-                        alert("Failed to delete order.");
-                      }
-                    }
-                  }}
-                  className="font-sans text-[10px] text-red-500 hover:text-red-700 uppercase tracking-widest font-bold transition-colors"
-                >
-                  Delete Order
-                </button>
-                <button 
-                  onClick={() => setSelectedOrder(null)}
-                  className="p-2 hover:bg-black/5 rounded-full transition-colors"
-                >
-                  <X className="w-6 h-6 text-brand-black" />
-                </button>
-              </div>
-            </div>
-
-            {/* Modal Body */}
-            <div className="p-6 md:p-8 space-y-8 flex-1">
               
-              {/* Customer & Shipping Details */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-white p-5 border border-black/10 rounded-sm">
-                  <h3 className="font-sans text-xs uppercase tracking-widest font-semibold text-brand-muted mb-4 border-b border-black/10 pb-2">Customer Details</h3>
-                  <div className="space-y-2 font-sans text-sm text-brand-black">
-                    <p><span className="text-brand-muted w-20 inline-block">Name:</span> {selectedOrder.customer_name}</p>
-                    <p><span className="text-brand-muted w-20 inline-block">Email:</span> {selectedOrder.customer_email}</p>
-                    <p><span className="text-brand-muted w-20 inline-block">Phone:</span> {selectedOrder.customer_phone}</p>
-                    <p><span className="text-brand-muted w-20 inline-block">Date:</span> {new Date(selectedOrder.created_at).toLocaleString()}</p>
-                  </div>
-                </div>
-
-                <div className="bg-white p-5 border border-black/10 rounded-sm">
-                  <h3 className="font-sans text-xs uppercase tracking-widest font-semibold text-brand-muted mb-4 border-b border-black/10 pb-2">Shipping Address</h3>
-                  <div className="space-y-2 font-sans text-sm text-brand-black">
-                    <p>{selectedOrder.shipping_address}</p>
-                    <p>{selectedOrder.city}, {selectedOrder.postal_code}</p>
-                    <p>{selectedOrder.country}</p>
-                  </div>
-                </div>
+              <div className="grid grid-cols-2 gap-12 mb-12">
+                 <div>
+                   <h3 className="text-[10px] uppercase tracking-widest font-semibold text-brand-muted mb-3">Billed To</h3>
+                   <p className="text-sm font-medium text-brand-black">{selectedOrder.customer_name}</p>
+                   <p className="text-sm text-brand-muted mt-1">{selectedOrder.customer_email}</p>
+                   <p className="text-sm text-brand-muted mt-1">{selectedOrder.customer_phone}</p>
+                 </div>
+                 <div>
+                   <h3 className="text-[10px] uppercase tracking-widest font-semibold text-brand-muted mb-3">Shipped To</h3>
+                   <p className="text-sm font-medium text-brand-black">{selectedOrder.shipping_address}</p>
+                   <p className="text-sm text-brand-muted mt-1">{selectedOrder.city}, {selectedOrder.postal_code}</p>
+                   <p className="text-sm text-brand-muted mt-1">{selectedOrder.country}</p>
+                 </div>
               </div>
 
-              {/* Order Items */}
-              <div>
-                <h3 className="font-serif text-xl text-brand-black mb-4">Items Ordered</h3>
-                <div className="bg-white border border-black/10 rounded-sm overflow-hidden">
-                  <table className="w-full text-left font-sans text-sm">
-                    <thead className="bg-black/5 text-brand-muted text-[10px] uppercase tracking-widest">
-                      <tr>
-                        <th className="px-4 py-3 font-semibold">Product</th>
-                        <th className="px-4 py-3 font-semibold text-center">Qty</th>
-                        <th className="px-4 py-3 font-semibold text-right">Price</th>
-                        <th className="px-4 py-3 font-semibold text-right">Total</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-black/10">
-                      {selectedOrder.order_items?.map((item: any) => (
-                        <tr key={item.id}>
-                          <td className="px-4 py-4 flex items-center gap-4">
-                            <div className="w-12 h-16 bg-[#faf9f6] border border-black/10 rounded-sm overflow-hidden shrink-0">
-                              {item.product?.image ? (
-                                <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover mix-blend-multiply" />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center text-[8px] text-brand-muted uppercase">No Img</div>
-                              )}
-                            </div>
-                            <div>
-                              <p className="font-medium text-brand-black">{item.product?.name || "Unknown Product"}</p>
-                              <p className="text-[11px] text-brand-muted mt-0.5">Size: {item.product?.size || "N/A"} | Cap: {item.selected_cap === 'pump' ? 'Pump' : 'Dropper'}</p>
-                            </div>
-                          </td>
-                          <td className="px-4 py-4 text-center text-brand-muted">{item.quantity}</td>
-                          <td className="px-4 py-4 text-right text-brand-muted">{currencySymbol}{item.price_at_time}</td>
-                          <td className="px-4 py-4 text-right font-medium text-brand-black">{currencySymbol}{(item.quantity * item.price_at_time).toFixed(2)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <table className="w-full text-left mb-12">
+                <thead>
+                  <tr className="border-b border-black/10">
+                    <th className="py-3 text-[10px] uppercase tracking-widest text-brand-muted font-semibold">Item</th>
+                    <th className="py-3 text-[10px] uppercase tracking-widest text-brand-muted font-semibold text-center">Qty</th>
+                    <th className="py-3 text-[10px] uppercase tracking-widest text-brand-muted font-semibold text-right">Price</th>
+                    <th className="py-3 text-[10px] uppercase tracking-widest text-brand-muted font-semibold text-right">Total</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-black/5">
+                  {selectedOrder.order_items?.map((item: any) => (
+                    <tr key={item.id}>
+                      <td className="py-5 flex items-center gap-4">
+                        {item.product?.image && <img src={item.product.image} alt={item.product.name} className="w-12 h-16 object-cover rounded-sm border border-black/10" />}
+                        <div>
+                          <p className="text-sm font-medium text-brand-black">{item.product?.name || "Unknown Product"}</p>
+                          <p className="text-[11px] text-brand-muted mt-1">Size: {item.product?.size || "N/A"} | Cap: {item.selected_cap === 'pump' ? 'Pump' : 'Dropper'}</p>
+                        </div>
+                      </td>
+                      <td className="py-5 text-center text-sm text-brand-muted">{item.quantity}</td>
+                      <td className="py-5 text-right text-sm text-brand-muted">{currencySymbol}{item.price_at_time}</td>
+                      <td className="py-5 text-right text-sm font-medium text-brand-black">{currencySymbol}{(item.quantity * item.price_at_time).toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
-              {/* Order Summary & Status Update */}
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 bg-white p-6 border border-black/10 rounded-sm">
-                <div className="w-full md:w-64 space-y-4">
-                  <div>
-                    <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Update Order Status</label>
-                    <select 
-                      defaultValue={selectedOrder.status}
-                      onChange={async (e) => {
-                        const newStatus = e.target.value;
-                        try {
-                          const { updateOrderStatus } = await import("../actions");
-                          await updateOrderStatus(selectedOrder.id, newStatus);
-                          setSelectedOrder({...selectedOrder, status: newStatus});
-                        } catch (error) {
-                          alert("Failed to update status.");
-                        }
-                      }}
-                      className="w-full bg-[#faf9f6] border border-black/10 p-3 font-sans text-sm text-brand-black focus:outline-none focus:border-brand-black transition-colors rounded-sm"
-                    >
-                      <option value="Processing">Processing</option>
-                      <option value="Shipped">Shipped</option>
-                      <option value="Delivered">Delivered</option>
-                      <option value="Cancelled">Cancelled</option>
-                    </select>
-                  </div>
-
-                  {selectedOrder.status === "Cancelled" && selectedOrder.cancellation_reason && (
-                    <div className="p-3 bg-red-50 border border-red-100 rounded-sm">
-                      <p className="font-sans text-[10px] uppercase tracking-widest font-bold text-red-800 mb-1">
-                        Cancellation Reason:
-                      </p>
-                      <p className="font-sans text-sm text-red-700">
-                        {selectedOrder.cancellation_reason}
-                      </p>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="w-full md:w-auto text-right space-y-2 font-sans">
-                  <div className="flex justify-between md:justify-end gap-8 text-sm text-brand-muted">
+              <div className="flex justify-end border-t border-black/10 pt-6">
+                <div className="w-64 space-y-4">
+                  <div className="flex justify-between text-sm text-brand-muted">
                     <span>Subtotal:</span>
                     <span>{currencySymbol}{selectedOrder.total_amount}</span>
                   </div>
-                  <div className="flex justify-between md:justify-end gap-8 text-sm text-brand-muted">
+                  <div className="flex justify-between text-sm text-brand-muted">
                     <span>Shipping:</span>
                     <span>Free</span>
                   </div>
-                  <div className="flex justify-between md:justify-end gap-8 text-lg font-serif text-brand-black pt-2 border-t border-black/10">
+                  <div className="flex justify-between text-lg font-serif font-bold text-brand-black pt-4 border-t border-black/10">
                     <span>Total:</span>
                     <span>{currencySymbol}{selectedOrder.total_amount}</span>
                   </div>
                 </div>
               </div>
+            </div>
 
+            {/* SCREEN VIEW (HIDDEN DURING PRINT) */}
+            <div className="print:hidden flex flex-col flex-1">
+              {/* Modal Header */}
+              <div className="sticky top-0 bg-[#faf9f6] z-10 flex items-center justify-between p-6 border-b border-black/10">
+                <div>
+                  <h2 className="font-serif text-2xl text-brand-black">Order Slip</h2>
+                  <p className="font-sans text-xs text-brand-muted mt-1 uppercase tracking-widest">#{selectedOrder.id}</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={handlePrint}
+                    className="flex items-center gap-2 bg-brand-black text-white px-4 py-2 rounded-md font-sans text-[10px] uppercase tracking-widest font-bold hover:bg-black transition-colors"
+                  >
+                    <Download className="w-3 h-3" /> Save as PDF
+                  </button>
+                  <button
+                    onClick={async () => {
+                      if (confirm("Are you sure you want to permanently delete this order?")) {
+                        try {
+                          const { deleteOrder } = await import("../actions");
+                          await deleteOrder(selectedOrder.id);
+                          setSelectedOrder(null);
+                        } catch (err) {
+                          alert("Failed to delete order.");
+                        }
+                      }
+                    }}
+                    className="font-sans text-[10px] text-red-500 hover:text-red-700 uppercase tracking-widest font-bold transition-colors"
+                  >
+                    Delete Order
+                  </button>
+                  <button 
+                    onClick={() => setSelectedOrder(null)}
+                    className="p-2 hover:bg-black/5 rounded-full transition-colors"
+                  >
+                    <X className="w-6 h-6 text-brand-black" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-6 md:p-8 space-y-8 flex-1">
+                
+                {/* Customer & Shipping Details */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="bg-white p-5 border border-black/10 rounded-sm">
+                    <h3 className="font-sans text-xs uppercase tracking-widest font-semibold text-brand-muted mb-4 border-b border-black/10 pb-2">Customer Details</h3>
+                    <div className="space-y-2 font-sans text-sm text-brand-black">
+                      <p><span className="text-brand-muted w-20 inline-block">Name:</span> {selectedOrder.customer_name}</p>
+                      <p><span className="text-brand-muted w-20 inline-block">Email:</span> {selectedOrder.customer_email}</p>
+                      <p><span className="text-brand-muted w-20 inline-block">Phone:</span> {selectedOrder.customer_phone}</p>
+                      <p><span className="text-brand-muted w-20 inline-block">Date:</span> {new Date(selectedOrder.created_at).toLocaleString()}</p>
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-5 border border-black/10 rounded-sm">
+                    <h3 className="font-sans text-xs uppercase tracking-widest font-semibold text-brand-muted mb-4 border-b border-black/10 pb-2">Shipping Address</h3>
+                    <div className="space-y-2 font-sans text-sm text-brand-black">
+                      <p>{selectedOrder.shipping_address}</p>
+                      <p>{selectedOrder.city}, {selectedOrder.postal_code}</p>
+                      <p>{selectedOrder.country}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Order Items */}
+                <div>
+                  <h3 className="font-serif text-xl text-brand-black mb-4">Items Ordered</h3>
+                  <div className="bg-white border border-black/10 rounded-sm overflow-hidden">
+                    <table className="w-full text-left font-sans text-sm">
+                      <thead className="bg-black/5 text-brand-muted text-[10px] uppercase tracking-widest">
+                        <tr>
+                          <th className="px-4 py-3 font-semibold">Product</th>
+                          <th className="px-4 py-3 font-semibold text-center">Qty</th>
+                          <th className="px-4 py-3 font-semibold text-right">Price</th>
+                          <th className="px-4 py-3 font-semibold text-right">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-black/10">
+                        {selectedOrder.order_items?.map((item: any) => (
+                          <tr key={item.id}>
+                            <td className="px-4 py-4 flex items-center gap-4">
+                              <div className="w-12 h-16 bg-[#faf9f6] border border-black/10 rounded-sm overflow-hidden shrink-0">
+                                {item.product?.image ? (
+                                  <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover mix-blend-multiply" />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center text-[8px] text-brand-muted uppercase">No Img</div>
+                                )}
+                              </div>
+                              <div>
+                                <p className="font-medium text-brand-black">{item.product?.name || "Unknown Product"}</p>
+                                <p className="text-[11px] text-brand-muted mt-0.5">Size: {item.product?.size || "N/A"} | Cap: {item.selected_cap === 'pump' ? 'Pump' : 'Dropper'}</p>
+                              </div>
+                            </td>
+                            <td className="px-4 py-4 text-center text-brand-muted">{item.quantity}</td>
+                            <td className="px-4 py-4 text-right text-brand-muted">{currencySymbol}{item.price_at_time}</td>
+                            <td className="px-4 py-4 text-right font-medium text-brand-black">{currencySymbol}{(item.quantity * item.price_at_time).toFixed(2)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Order Summary & Status Update */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 bg-white p-6 border border-black/10 rounded-sm">
+                  <div className="w-full md:w-64 space-y-4">
+                    <div>
+                      <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Update Order Status</label>
+                      <select 
+                        defaultValue={selectedOrder.status}
+                        onChange={async (e) => {
+                          const newStatus = e.target.value;
+                          try {
+                            const { updateOrderStatus } = await import("../actions");
+                            await updateOrderStatus(selectedOrder.id, newStatus);
+                            setSelectedOrder({...selectedOrder, status: newStatus});
+                          } catch (error) {
+                            alert("Failed to update status.");
+                          }
+                        }}
+                        className="w-full bg-[#faf9f6] border border-black/10 p-3 font-sans text-sm text-brand-black focus:outline-none focus:border-brand-black transition-colors rounded-sm"
+                      >
+                        <option value="Processing">Processing</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Cancelled">Cancelled</option>
+                      </select>
+                    </div>
+
+                    {selectedOrder.status === "Cancelled" && selectedOrder.cancellation_reason && (
+                      <div className="p-3 bg-red-50 border border-red-100 rounded-sm">
+                        <p className="font-sans text-[10px] uppercase tracking-widest font-bold text-red-800 mb-1">
+                          Cancellation Reason:
+                        </p>
+                        <p className="font-sans text-sm text-red-700">
+                          {selectedOrder.cancellation_reason}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="w-full md:w-auto text-right space-y-2 font-sans">
+                    <div className="flex justify-between md:justify-end gap-8 text-sm text-brand-muted">
+                      <span>Subtotal:</span>
+                      <span>{currencySymbol}{selectedOrder.total_amount}</span>
+                    </div>
+                    <div className="flex justify-between md:justify-end gap-8 text-sm text-brand-muted">
+                      <span>Shipping:</span>
+                      <span>Free</span>
+                    </div>
+                    <div className="flex justify-between md:justify-end gap-8 text-lg font-serif text-brand-black pt-2 border-t border-black/10">
+                      <span>Total:</span>
+                      <span>{currencySymbol}{selectedOrder.total_amount}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
