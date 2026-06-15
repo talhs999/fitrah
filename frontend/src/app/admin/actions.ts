@@ -38,6 +38,14 @@ export async function deleteOrder(orderId: string) {
   revalidatePath("/admin");
 }
 
+export async function deleteOrdersBatch(orderIds: string[]) {
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("orders").delete().in("id", orderIds);
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin/orders");
+  revalidatePath("/admin");
+}
+
 // Category Actions
 export async function createCategory(formData: FormData) {
   const name = formData.get("name") as string;

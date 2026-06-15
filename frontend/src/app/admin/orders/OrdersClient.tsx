@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import { Download, Filter, Search, X } from "lucide-react";
+import { Download, Filter, Search, X, Trash2 } from "lucide-react";
 import { useCurrency } from "@/context/CurrencyContext";
 
 export default function OrdersClient({ orders }: { orders: any[] }) {
@@ -150,6 +150,25 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
                 className="flex items-center gap-2 bg-brand-black text-white px-4 py-2 rounded-md font-sans text-xs uppercase tracking-widest font-semibold hover:bg-black/90 transition-colors"
               >
                 <Download className="w-3 h-3" /> Download Slips
+              </button>
+              <button
+                disabled={isUpdatingBulk}
+                onClick={async () => {
+                  if(confirm(`Are you sure you want to permanently delete ${selectedOrderIds.length} orders?`)) {
+                    setIsUpdatingBulk(true);
+                    try {
+                      const { deleteOrdersBatch } = await import("../actions");
+                      await deleteOrdersBatch(selectedOrderIds);
+                      setSelectedOrderIds([]);
+                    } catch(err) {
+                      alert("Failed to delete orders.");
+                    }
+                    setIsUpdatingBulk(false);
+                  }
+                }}
+                className="flex items-center gap-2 bg-red-50 text-red-600 border border-red-200 px-4 py-2 rounded-md font-sans text-xs uppercase tracking-widest font-semibold hover:bg-red-100 transition-colors"
+              >
+                <Trash2 className="w-3 h-3" /> Delete
               </button>
             </div>
           </div>
