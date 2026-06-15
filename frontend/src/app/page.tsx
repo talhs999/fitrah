@@ -538,8 +538,9 @@ export default function Home() {
       <GallerySlider />
 
       {/* ═══════════════════════════════════════════
-          TESTIMONIALS
+          TESTIMONIALS — Hidden temporarily
       ═══════════════════════════════════════════ */}
+      {false && (
       <Section className="py-32 px-6 md:px-10 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div variants={fadeUp} custom={0} className="text-center mb-20">
@@ -570,6 +571,7 @@ export default function Home() {
           </div>
         </div>
       </Section>
+      )}
 
       {/* ═══════════════════════════════════════════
           VIDEO COLLAGE SECTION
