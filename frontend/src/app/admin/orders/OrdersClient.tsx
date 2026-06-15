@@ -9,11 +9,18 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
   const { currencySymbol } = useCurrency();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
+  const [selectedOrderIds, setSelectedOrderIds] = useState<string[]>([]);
+  const [isUpdatingBulk, setIsUpdatingBulk] = useState(false);
 
   const componentRef = useRef(null);
+  const bulkPrintRef = useRef(null);
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
     documentTitle: selectedOrder ? `Order_Slip_${selectedOrder.id}` : 'Order_Slip',
+  });
+  const handleBulkPrint = useReactToPrint({
+    contentRef: bulkPrintRef,
+    documentTitle: 'Bulk_Order_Slips',
   });
 
   const filteredOrders = orders.filter((order) => {
@@ -107,11 +114,66 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
           </button>
         </div>
 
+        {selectedOrderIds.length > 0 && (
+          <div className="bg-[#faf9f6] p-4 border-b border-black/10 flex items-center justify-between">
+            <span className="font-sans text-sm font-semibold text-brand-black">
+              {selectedOrderIds.length} orders selected
+            </span>
+            <div className="flex items-center gap-4">
+              <select
+                disabled={isUpdatingBulk}
+                onChange={async (e) => {
+                  if(!e.target.value) return;
+                  if(confirm(`Update ${selectedOrderIds.length} orders to ${e.target.value}?`)) {
+                    setIsUpdatingBulk(true);
+                    try {
+                      const { updateOrdersStatusBatch } = await import("../actions");
+                      await updateOrdersStatusBatch(selectedOrderIds, e.target.value);
+                      setSelectedOrderIds([]);
+                    } catch(err) {
+                      alert("Failed to update status.");
+                    }
+                    setIsUpdatingBulk(false);
+                  }
+                  e.target.value = "";
+                }}
+                className="bg-white border border-black/20 text-brand-black px-4 py-2 rounded-md font-sans text-xs uppercase tracking-widest font-semibold focus:outline-none focus:border-brand-black"
+              >
+                <option value="">Update Status...</option>
+                <option value="Processing">Processing</option>
+                <option value="Shipped">Shipped</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+              <button
+                onClick={handleBulkPrint}
+                className="flex items-center gap-2 bg-brand-black text-white px-4 py-2 rounded-md font-sans text-xs uppercase tracking-widest font-semibold hover:bg-black/90 transition-colors"
+              >
+                <Download className="w-3 h-3" /> Download Slips
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left font-sans text-sm">
             <thead className="bg-black/5 text-brand-muted text-xs uppercase tracking-widest">
               <tr>
+                <th className="px-6 py-4 font-semibold w-10">
+                  <input 
+                    type="checkbox" 
+                    className="w-4 h-4 rounded border-gray-300 text-brand-black focus:ring-brand-black cursor-pointer"
+                    checked={filteredOrders.length > 0 && selectedOrderIds.length === filteredOrders.length}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedOrderIds(filteredOrders.map(o => o.id));
+                      } else {
+                        setSelectedOrderIds([]);
+                      }
+                    }}
+                  />
+                </th>
                 <th className="px-6 py-4 font-semibold">Order</th>
                 <th className="px-6 py-4 font-semibold">Date</th>
                 <th className="px-6 py-4 font-semibold">Customer</th>
@@ -133,12 +195,25 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
                   return (
                     <tr 
                       key={order.id} 
-                      onClick={() => setSelectedOrder(order)}
-                      className="hover:bg-black/5 transition-colors cursor-pointer"
+                      className={`hover:bg-black/5 transition-colors cursor-pointer ${selectedOrderIds.includes(order.id) ? 'bg-black/5' : ''}`}
                     >
-                      <td className="px-6 py-4 font-medium text-brand-black text-xs uppercase tracking-widest">{order.id.slice(0, 8)}</td>
-                      <td className="px-6 py-4 text-brand-muted">{new Date(order.created_at).toLocaleDateString()}</td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
+                        <input 
+                          type="checkbox" 
+                          className="w-4 h-4 rounded border-gray-300 text-brand-black focus:ring-brand-black cursor-pointer"
+                          checked={selectedOrderIds.includes(order.id)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedOrderIds([...selectedOrderIds, order.id]);
+                            } else {
+                              setSelectedOrderIds(selectedOrderIds.filter(id => id !== order.id));
+                            }
+                          }}
+                        />
+                      </td>
+                      <td className="px-6 py-4 font-medium text-brand-black text-xs uppercase tracking-widest" onClick={() => setSelectedOrder(order)}>{order.id.slice(0, 8)}</td>
+                      <td className="px-6 py-4 text-brand-muted" onClick={() => setSelectedOrder(order)}>{new Date(order.created_at).toLocaleDateString()}</td>
+                      <td className="px-6 py-4" onClick={() => setSelectedOrder(order)}>
                         <div className="flex items-center gap-2 mb-0.5">
                           <div className="text-brand-black font-medium">{order.customer_name}</div>
                           <span className={`text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded-sm font-bold ${order.user_id ? "bg-black text-white" : "bg-black/5 text-brand-muted"}`}>
@@ -147,8 +222,8 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
                         </div>
                         <div className="text-brand-muted text-[11px]">{order.customer_email}</div>
                       </td>
-                      <td className="px-6 py-4 text-center text-brand-muted">{totalItems}</td>
-                      <td className="px-6 py-4 text-center">
+                      <td className="px-6 py-4 text-center text-brand-muted" onClick={() => setSelectedOrder(order)}>{totalItems}</td>
+                      <td className="px-6 py-4 text-center" onClick={() => setSelectedOrder(order)}>
                         <span
                           className={`inline-flex px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-bold ${
                             order.status === "Delivered"
@@ -163,7 +238,7 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
                           {order.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-right font-medium text-brand-black">{currencySymbol}{order.total_amount}</td>
+                      <td className="px-6 py-4 text-right font-medium text-brand-black" onClick={() => setSelectedOrder(order)}>{currencySymbol}{order.total_amount}</td>
                     </tr>
                   );
                 })
@@ -413,6 +488,84 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
           </div>
         </div>
       )}
+      {/* HIDDEN BULK PRINT CONTAINER */}
+      <div className="hidden">
+        <div ref={bulkPrintRef} className="print:bg-white w-full">
+          {orders.filter(o => selectedOrderIds.includes(o.id)).map((ord, idx) => (
+            <div key={ord.id} className="p-10 bg-white text-black font-sans w-full max-w-4xl mx-auto" style={{ pageBreakAfter: "always" }}>
+              <div className="flex justify-between items-start border-b border-black/10 pb-8 mb-8">
+                <div>
+                  <img src="/assets/Black.png" alt="Fitrah" className="h-12 object-contain" />
+                  <p className="text-[10px] font-semibold text-brand-muted mt-2 uppercase tracking-widest">Order Slip</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-semibold text-brand-black uppercase tracking-widest">Order #{ord.id}</p>
+                  <p className="text-xs text-brand-muted mt-1">{new Date(ord.created_at).toLocaleDateString()}</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-12 mb-12">
+                 <div>
+                   <h3 className="text-[10px] uppercase tracking-widest font-semibold text-brand-muted mb-3">Billed To</h3>
+                   <p className="text-sm font-medium text-brand-black">{ord.customer_name}</p>
+                   <p className="text-sm text-brand-muted mt-1">{ord.customer_email}</p>
+                   <p className="text-sm text-brand-muted mt-1">{ord.customer_phone}</p>
+                 </div>
+                 <div>
+                   <h3 className="text-[10px] uppercase tracking-widest font-semibold text-brand-muted mb-3">Shipped To</h3>
+                   <p className="text-sm font-medium text-brand-black">{ord.shipping_address}</p>
+                   <p className="text-sm text-brand-muted mt-1">{ord.city}, {ord.postal_code}</p>
+                   <p className="text-sm text-brand-muted mt-1">{ord.country}</p>
+                 </div>
+              </div>
+
+              <table className="w-full text-left mb-12">
+                <thead>
+                  <tr className="border-b border-black/10">
+                    <th className="py-3 text-[10px] uppercase tracking-widest text-brand-muted font-semibold">Item</th>
+                    <th className="py-3 text-[10px] uppercase tracking-widest text-brand-muted font-semibold text-center">Qty</th>
+                    <th className="py-3 text-[10px] uppercase tracking-widest text-brand-muted font-semibold text-right">Price</th>
+                    <th className="py-3 text-[10px] uppercase tracking-widest text-brand-muted font-semibold text-right">Total</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-black/5">
+                  {ord.order_items?.map((item: any) => (
+                    <tr key={item.id}>
+                      <td className="py-5 flex items-center gap-4">
+                        {item.product?.image && <img src={item.product.image} alt={item.product.name} className="w-12 h-16 object-cover rounded-sm border border-black/10" />}
+                        <div>
+                          <p className="text-sm font-medium text-brand-black">{item.product?.name || "Unknown Product"}</p>
+                          <p className="text-[11px] text-brand-muted mt-1">Size: {item.product?.size || "N/A"} | Cap: {item.selected_cap === 'pump' ? 'Pump' : 'Dropper'}</p>
+                        </div>
+                      </td>
+                      <td className="py-5 text-center text-sm text-brand-muted">{item.quantity}</td>
+                      <td className="py-5 text-right text-sm text-brand-muted">{currencySymbol}{item.price_at_time}</td>
+                      <td className="py-5 text-right text-sm font-medium text-brand-black">{currencySymbol}{(item.quantity * item.price_at_time).toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div className="flex justify-end border-t border-black/10 pt-6">
+                <div className="w-64 space-y-4">
+                  <div className="flex justify-between text-sm text-brand-muted">
+                    <span>Subtotal:</span>
+                    <span>{currencySymbol}{ord.total_amount}</span>
+                  </div>
+                  <div className="flex justify-between text-sm text-brand-muted">
+                    <span>Shipping:</span>
+                    <span>Free</span>
+                  </div>
+                  <div className="flex justify-between text-lg font-serif font-bold text-brand-black pt-4 border-t border-black/10">
+                    <span>Total:</span>
+                    <span>{currencySymbol}{ord.total_amount}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

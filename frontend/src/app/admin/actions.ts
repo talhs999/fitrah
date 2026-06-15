@@ -22,6 +22,14 @@ export async function updateOrderStatus(orderId: string, status: string) {
   revalidatePath("/admin");
 }
 
+export async function updateOrdersStatusBatch(orderIds: string[], status: string) {
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("orders").update({ status }).in("id", orderIds);
+  if (error) throw new Error(error.message);
+  revalidatePath("/admin/orders");
+  revalidatePath("/admin");
+}
+
 export async function deleteOrder(orderId: string) {
   const supabase = createAdminClient();
   const { error } = await supabase.from("orders").delete().eq("id", orderId);
