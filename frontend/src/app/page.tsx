@@ -345,7 +345,7 @@ export default function Home() {
             {/* Bottom: Fitrah product (user image) */}
             <div className="relative overflow-hidden">
               <Image
-                src="/assets/Gemini_Generated_Image_pcsrkppcsrkppcsr.png"
+                src="/assets/fitrah-beard-image.png"
                 alt="Fitrah premium beard oil"
                 fill
                 sizes="(max-width:768px) 100vw, 50vw"
