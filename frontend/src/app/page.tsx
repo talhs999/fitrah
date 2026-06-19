@@ -56,7 +56,7 @@ const MARQUEE_ITEMS = [
   "100% Natural",
   "No Parabens",
   "No Silicones",
-  "Free Shipping Over $80",
+  "Free Shipping Over PKR 5,000",
   "Made in Lahore, PK",
   "Islamic Heritage Formula",
   "No Artificial Fragrances",
@@ -337,7 +337,6 @@ export default function Home() {
                 alt="Fitrah beard oil application"
                 fill
                 sizes="(max-width:768px) 100vw, 50vw"
-                unoptimized
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-black/15" />
@@ -349,7 +348,6 @@ export default function Home() {
                 alt="Fitrah premium beard oil"
                 fill
                 sizes="(max-width:768px) 100vw, 50vw"
-                unoptimized
                 className="object-cover object-center"
               />
               <div className="absolute bottom-4 left-4 right-4">
