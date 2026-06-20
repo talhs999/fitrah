@@ -15,22 +15,14 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   const { id } = await params;
   const supabase = await createClient();
   
-  const { data: product } = await supabase.from("products").select("*").eq("id", id).single();
+  const [productRes, relatedRes, reviewsRes] = await Promise.all([
+    supabase.from("products").select("*").eq("id", id).single(),
+    supabase.from("products").select("*").neq("id", id).limit(3),
+    supabase.from("reviews").select("*").eq("product_id", id).order("created_at", { ascending: false })
+  ]);
+
+  const product = productRes.data;
   if (!product) return notFound();
 
-  // Get related products
-  const { data: related } = await supabase
-    .from("products")
-    .select("*")
-    .neq("id", id)
-    .limit(3);
-
-  // Get reviews
-  const { data: reviews } = await supabase
-    .from("reviews")
-    .select("*")
-    .eq("product_id", id)
-    .order("created_at", { ascending: false });
-
-  return <ProductClient product={product} related={related || []} initialReviews={reviews || []} />;
+  return <ProductClient product={product} related={relatedRes.data || []} initialReviews={reviewsRes.data || []} />;
 }

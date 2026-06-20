@@ -160,6 +160,7 @@ export default function Home() {
             {SLIDES[idx].video ? (
               <video
                 src={SLIDES[idx].video}
+                poster={SLIDES[idx].image}
                 autoPlay
                 muted
                 loop
@@ -265,6 +266,7 @@ export default function Home() {
               <motion.div key={p.id} variants={fadeUp} custom={i * 0.3}>
                 <Link
                   href={`/shop/${p.id}`}
+                  prefetch={true}
                   className="group relative flex flex-col overflow-hidden border border-black/8 hover:border-black/20 transition-all duration-500 hover:shadow-2xl"
                   style={{ backgroundColor: p.bg }}
                 >
