@@ -113,7 +113,16 @@ export default function Navbar() {
               >
                 <Search className="w-[18px] h-[18px]" strokeWidth={1.5} />
               </button>
-              {/* Login / Account icon removed */}
+              {/* Login / Account icon */}
+              <Link
+                href="/account"
+                className={`transition-colors duration-300 ${
+                  isLight ? "text-brand-black/50 hover:text-brand-black" : "text-white/70 hover:text-white"
+                }`}
+                aria-label="Account"
+              >
+                <User className="w-[18px] h-[18px]" strokeWidth={1.5} />
+              </Link>
               <Link
                 href="/cart"
                 className={`relative transition-colors duration-300 ${
