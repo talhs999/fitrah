@@ -67,7 +67,7 @@ export default function Footer() {
             Premium beard oils inspired by 1,400 years of prophetic tradition. Formulated for the modern Muslim man.
           </p>
           <div className="flex items-center gap-5">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors" aria-label="Instagram">
+            <a href="https://www.instagram.com/fitrahpk.co/" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors" aria-label="Instagram">
               <InstagramIcon />
             </a>
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors" aria-label="Facebook">
