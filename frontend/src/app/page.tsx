@@ -160,7 +160,6 @@ export default function Home() {
             {SLIDES[idx].video ? (
               <video
                 src={SLIDES[idx].video}
-                poster={SLIDES[idx].image}
                 autoPlay
                 muted
                 loop
