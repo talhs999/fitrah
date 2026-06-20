@@ -64,24 +64,24 @@ export async function createOrder(orderData: {
     return { success: false, error: itemsError.message };
   }
 
-  // Send Order Confirmation Email (to customer)
-  await sendOrderConfirmationEmail(
-    orderData.customer_email,
-    orderData.customer_name,
-    order.id,
-    orderData.total_amount,
-    orderData.items
-  ).catch(console.error);
-
-  // Send New Order Alert (to admin)
-  await sendNewOrderAlertToAdmin(
-    order.id,
-    orderData.customer_name,
-    orderData.customer_email,
-    orderData.total_amount,
-    orderData.items,
-    orderData.shipping_address
-  ).catch(console.error);
+  // Send emails concurrently to reduce wait time
+  await Promise.all([
+    sendOrderConfirmationEmail(
+      orderData.customer_email,
+      orderData.customer_name,
+      order.id,
+      orderData.total_amount,
+      orderData.items
+    ).catch(console.error),
+    sendNewOrderAlertToAdmin(
+      order.id,
+      orderData.customer_name,
+      orderData.customer_email,
+      orderData.total_amount,
+      orderData.items,
+      orderData.shipping_address
+    ).catch(console.error)
+  ]);
 
   return { success: true, orderId: order.id };
 }

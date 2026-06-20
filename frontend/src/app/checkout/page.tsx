@@ -5,13 +5,44 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
-import { ArrowRight, User, UserCheck, ShoppingBag } from "lucide-react";
+import { ArrowRight, User, UserCheck, ShoppingBag, Truck, Package } from "lucide-react";
 import { createOrder, createStripeCheckout } from "./actions";
 import { createClient } from "@/utils/supabase/client";
 import { useCurrency } from "@/context/CurrencyContext";
 import { validateCouponCode } from "@/app/api/site/actions";
 
 type GateChoice = "none" | "login" | "register" | "guest";
+
+const DeliveryAnimation = () => (
+  <div className="absolute inset-0 flex items-center justify-center w-full h-full overflow-hidden">
+    <style>{`
+      .truck-animate { animation: drive 2.5s infinite ease-in-out; }
+      .box-animate { animation: drop 2.5s infinite ease-in-out; }
+      @keyframes drive {
+        0% { transform: translateX(-150px); opacity: 0; }
+        15% { transform: translateX(-30px); opacity: 1; }
+        45% { transform: translateX(-30px); opacity: 1; }
+        80% { transform: translateX(150px); opacity: 0; }
+        100% { transform: translateX(150px); opacity: 0; }
+      }
+      @keyframes drop {
+        0% { transform: translate(-30px, -25px) scale(0.5); opacity: 0; }
+        15% { transform: translate(-30px, -25px) scale(0.5); opacity: 0; }
+        30% { transform: translate(-30px, -2px) scale(1); opacity: 1; }
+        45% { transform: translate(-30px, -2px) scale(1); opacity: 1; }
+        80% { transform: translate(150px, -2px) scale(1); opacity: 0; }
+        100% { transform: translate(150px, -2px) scale(1); opacity: 0; }
+      }
+    `}</style>
+    <span className="font-sans text-xs uppercase tracking-widest font-bold text-white/40">Processing</span>
+    <div className="absolute box-animate z-0" style={{ marginTop: '-4px', marginLeft: '6px' }}>
+      <Package size={14} strokeWidth={2.5} />
+    </div>
+    <div className="absolute truck-animate z-10 px-1" style={{ backgroundColor: '#111' }}>
+      <Truck size={24} strokeWidth={2} />
+    </div>
+  </div>
+);
 
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart, products } = useCart();
@@ -507,9 +538,9 @@ export default function CheckoutPage() {
             <button 
               type="submit" 
               disabled={isProcessing || (!stripeEnabled && !codEnabled && !bankTransferEnabled)}
-              className="w-full group inline-flex items-center justify-center gap-3 bg-brand-black text-white px-8 py-5 font-sans text-xs uppercase tracking-widest font-bold hover:bg-black transition-colors disabled:opacity-50"
+              className="w-full relative overflow-hidden group inline-flex items-center justify-center gap-3 bg-brand-black text-white px-8 py-5 font-sans text-xs uppercase tracking-widest font-bold hover:bg-black transition-colors disabled:opacity-50"
             >
-              {isProcessing ? "Processing..." : `Place Order — ${currencySymbol}${total.toFixed(2)} ${currency}`}
+              {isProcessing ? <DeliveryAnimation /> : `Place Order — ${currencySymbol}${total.toFixed(2)} ${currency}`}
               {!isProcessing && <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
             </button>
           </form>
