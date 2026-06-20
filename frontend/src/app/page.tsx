@@ -627,9 +627,9 @@ export default function Home() {
             </p>
             {newsletterStatus === "success" ? (
               <div className="max-w-md mx-auto bg-white/10 border border-white/20 px-8 py-6 text-center">
-                <p className="font-sans text-[10px] uppercase tracking-widest text-white/60 mb-2">Your Discount Code</p>
-                <p className="font-serif text-3xl text-white tracking-[4px]">{discountCode}</p>
-                <p className="font-sans text-xs text-white/50 mt-3">{discountPercent}% off — check your inbox for the email confirmation.</p>
+                <p className="font-sans text-[10px] uppercase tracking-widest text-white/60 mb-2">Subscribed Successfully</p>
+                <p className="font-serif text-2xl text-white tracking-wide">Check your email</p>
+                <p className="font-sans text-xs text-white/50 mt-3">We have sent your {discountPercent}% off discount code to your inbox.</p>
               </div>
             ) : newsletterStatus === "duplicate" ? (
               <div className="max-w-md mx-auto bg-white/10 border border-white/20 px-8 py-5 text-center">
