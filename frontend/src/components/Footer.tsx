@@ -107,11 +107,11 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Account */}
+        {/* Legal */}
         <div className="space-y-7">
-          <h4 className="font-sans text-[10px] uppercase tracking-[0.25em] font-bold text-white/40">Account</h4>
+          <h4 className="font-sans text-[10px] uppercase tracking-[0.25em] font-bold text-white/40">Legal</h4>
           <ul className="space-y-3">
-            {LINKS.account.map((l) => (
+            {LINKS.legal.map((l) => (
               <li key={l.label}>
                 <Link href={l.href} className="font-sans text-sm text-white/60 hover:text-white transition-colors font-light">
                   {l.label}
@@ -119,32 +119,6 @@ export default function Footer() {
               </li>
             ))}
           </ul>
-          <div className="pt-2 space-y-3">
-            <Link
-              href="/login"
-              className="block w-full text-center py-3 border border-white/20 font-sans text-xs uppercase tracking-widest text-white/70 hover:text-white hover:border-white/50 transition-colors"
-            >
-              Login
-            </Link>
-            <Link
-              href="/register"
-              className="block w-full text-center py-3 bg-white text-black font-sans text-xs uppercase tracking-widest font-bold hover:bg-white/90 transition-colors"
-            >
-              Sign Up
-            </Link>
-          </div>
-          <div className="pt-2">
-            <h4 className="font-sans text-[10px] uppercase tracking-[0.25em] font-bold text-white/40 mb-4">Legal</h4>
-            <ul className="space-y-3">
-              {LINKS.legal.map((l) => (
-                <li key={l.label}>
-                  <Link href={l.href} className="font-sans text-sm text-white/60 hover:text-white transition-colors font-light">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
 
         {/* Contact */}
@@ -166,7 +140,7 @@ export default function Footer() {
           </ul>
           {/* Newsletter mini */}
           <form onSubmit={(e) => e.preventDefault()} className="pt-2">
-            <p className="font-sans text-xs text-white/40 uppercase tracking-widest mb-3">Get 10% off your first order</p>
+            <p className="font-sans text-xs text-white/40 uppercase tracking-widest mb-3">Subscribe to our newsletter</p>
             <div className="flex">
               <input type="email" placeholder="Email address" className="flex-1 bg-white/5 border border-white/10 px-4 py-3 font-sans text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-white/30 transition-colors" required />
               <button type="submit" className="bg-white text-black px-5 py-3 font-sans text-xs uppercase tracking-widest font-bold hover:bg-white/90 transition-colors">

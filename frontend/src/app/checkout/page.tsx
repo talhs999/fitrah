@@ -15,7 +15,7 @@ type GateChoice = "none" | "login" | "register" | "guest";
 
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart, products } = useCart();
-  const [gate, setGate] = useState<GateChoice>("none");
+  const [gate, setGate] = useState<GateChoice>("guest");
   const router = useRouter();
 
   // ─── Payment Settings State ───────────────────────────────
