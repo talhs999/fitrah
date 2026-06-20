@@ -7,7 +7,8 @@ export async function trackOrder(trackingId: string) {
     return { success: false, error: "Please enter a valid Tracking ID." };
   }
 
-  const shortId = trackingId.trim().toUpperCase();
+  // Remove any leading # or FTR- prefix that the user might paste
+  const shortId = trackingId.trim().toUpperCase().replace(/^#/, '').replace(/^FTR-/, '');
 
   const supabase = createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
