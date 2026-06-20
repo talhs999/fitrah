@@ -316,6 +316,24 @@ export async function sendOrderStatusEmail(
   const shortOrderId = orderId.substring(0, 8).toUpperCase();
   const trackingLink = `https://fitrah-ecommerce.vercel.app/track?id=${shortOrderId}`;
 
+  let trackingButtonHtml = `
+    <div style="text-align:center;margin-top:32px;margin-bottom:32px;">
+      <a href="${trackingLink}" style="display:inline-block;background:#111;color:#fff;padding:14px 40px;font-family:sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;font-weight:600;">Track Your Order</a>
+    </div>
+  `;
+
+  // Customize for Delivered
+  if (newStatus === "Delivered") {
+    trackingButtonHtml = `
+      <div style="text-align:center;margin-top:32px;margin-bottom:32px;border:1px solid #eee;padding:24px;">
+        <p style="font-family:Georgia,serif;font-size:20px;color:#111;margin:0 0 10px;">Jazakallah Khair for shopping with Fitrah!</p>
+        <p style="font-family:sans-serif;font-size:14px;color:#666;line-height:1.6;margin:0;">
+          We would love to hear your feedback. Don't forget to follow us on social media for the latest updates.
+        </p>
+      </div>
+    `;
+  }
+
   const content = `
     <p style="margin:0 0 8px;font-family:sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#999;">Order Update</p>
     <h2 style="margin:0 0 24px;font-family:Georgia,serif;font-size:24px;color:#111;font-weight:400;">Hi ${customerName},</h2>
@@ -327,9 +345,7 @@ export async function sendOrderStatusEmail(
       <p style="margin:8px 0 0;font-family:sans-serif;font-size:13px;color:#666;line-height:1.6;">${statusMessage}</p>
     </div>
     
-    <div style="text-align:center;margin-top:32px;margin-bottom:32px;">
-      <a href="${trackingLink}" style="display:inline-block;background:#111;color:#fff;padding:14px 40px;font-family:sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;font-weight:600;">Track Your Order</a>
-    </div>
+    ${trackingButtonHtml}
 
     <div style="margin-top:32px;padding:20px;background:#f5f4f0;border-left:3px solid #111;">
       <p style="margin:0;font-family:sans-serif;font-size:12px;color:#666;line-height:1.7;">
