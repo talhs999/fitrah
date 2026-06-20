@@ -112,7 +112,7 @@ export async function createStripeCheckout(orderData: {
         currency: "aud",
         product_data: {
           name: item.name,
-          images: item.image ? [`https://fitrah-ecommerce.vercel.app${item.image}`] : [],
+          images: item.image ? [`https://www.fitrahpk.com${item.image}`] : [],
         },
         unit_amount: Math.round(item.price * 100), // Stripe expects cents
       },

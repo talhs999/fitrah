@@ -240,7 +240,7 @@ export async function sendNewsletterDiscountEmail(
       <p style="margin:12px 0 0;font-family:sans-serif;font-size:12px;color:#aaa;">${discountPercent}% off your entire order</p>
     </div>
     <div style="text-align:center;">
-      <a href="https://fitrah-ecommerce.vercel.app/shop" style="display:inline-block;background:#111;color:#fff;padding:14px 40px;font-family:sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;font-weight:600;">Shop Now →</a>
+      <a href="https://www.fitrahpk.com/shop" style="display:inline-block;background:#111;color:#fff;padding:14px 40px;font-family:sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;font-weight:600;">Shop Now →</a>
     </div>
     <p style="margin:32px 0 0;font-family:sans-serif;font-size:11px;color:#aaa;line-height:1.7;text-align:center;">
       This code is valid for one use only. Cannot be combined with other offers.
@@ -317,7 +317,7 @@ export async function sendOrderStatusEmail(
   }
 
   const shortOrderId = orderId.substring(0, 8).toUpperCase();
-  const trackingLink = `https://fitrah-ecommerce.vercel.app/track?id=${shortOrderId}`;
+  const trackingLink = `https://www.fitrahpk.com/track?id=${shortOrderId}`;
 
   let trackingButtonHtml = `
     <div style="text-align:center;margin-top:32px;margin-bottom:32px;">
