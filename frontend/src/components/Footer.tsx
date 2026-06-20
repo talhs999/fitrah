@@ -29,6 +29,7 @@ const LINKS = {
   ],
   info: [
     { label: "Our Story", href: "/story" },
+    { label: "Track Order", href: "/track" },
     { label: "FAQ", href: "/faq" },
     { label: "Shipping & Returns", href: "/shipping" },
     { label: "Contact Us", href: "/contact" },
@@ -83,6 +84,20 @@ export default function Footer() {
           <h4 className="font-sans text-[10px] uppercase tracking-[0.25em] font-bold text-white/40">Products</h4>
           <ul className="space-y-3">
             {LINKS.shop.map((l) => (
+              <li key={l.label}>
+                <Link href={l.href} className="font-sans text-sm text-white/60 hover:text-white transition-colors font-light">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Info */}
+        <div className="space-y-7">
+          <h4 className="font-sans text-[10px] uppercase tracking-[0.25em] font-bold text-white/40">Information</h4>
+          <ul className="space-y-3">
+            {LINKS.info.map((l) => (
               <li key={l.label}>
                 <Link href={l.href} className="font-sans text-sm text-white/60 hover:text-white transition-colors font-light">
                   {l.label}

@@ -64,8 +64,8 @@ export async function createOrder(orderData: {
     return { success: false, error: itemsError.message };
   }
 
-  // Send Order Confirmation Email (to customer) — Non-blocking
-  sendOrderConfirmationEmail(
+  // Send Order Confirmation Email (to customer)
+  await sendOrderConfirmationEmail(
     orderData.customer_email,
     orderData.customer_name,
     order.id,
@@ -73,8 +73,8 @@ export async function createOrder(orderData: {
     orderData.items
   ).catch(console.error);
 
-  // Send New Order Alert (to admin) — Non-blocking
-  sendNewOrderAlertToAdmin(
+  // Send New Order Alert (to admin)
+  await sendNewOrderAlertToAdmin(
     order.id,
     orderData.customer_name,
     orderData.customer_email,

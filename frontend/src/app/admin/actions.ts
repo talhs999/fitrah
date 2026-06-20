@@ -18,6 +18,14 @@ export async function updateOrderStatus(orderId: string, status: string) {
   const supabase = createAdminClient();
   const { error } = await supabase.from("orders").update({ status }).eq("id", orderId);
   if (error) throw new Error(error.message);
+
+  // Send status email
+  const { data: order } = await supabase.from("orders").select("customer_email, customer_name").eq("id", orderId).single();
+  if (order && order.customer_email) {
+    const { sendOrderStatusEmail } = await import("@/utils/mailer");
+    await sendOrderStatusEmail(order.customer_email, order.customer_name || "Customer", orderId, status).catch(console.error);
+  }
+
   revalidatePath("/admin/orders");
   revalidatePath("/admin");
 }
@@ -26,6 +34,18 @@ export async function updateOrdersStatusBatch(orderIds: string[], status: string
   const supabase = createAdminClient();
   const { error } = await supabase.from("orders").update({ status }).in("id", orderIds);
   if (error) throw new Error(error.message);
+
+  // Send status emails
+  const { data: orders } = await supabase.from("orders").select("id, customer_email, customer_name").in("id", orderIds);
+  if (orders && orders.length > 0) {
+    const { sendOrderStatusEmail } = await import("@/utils/mailer");
+    for (const order of orders) {
+      if (order.customer_email) {
+        await sendOrderStatusEmail(order.customer_email, order.customer_name || "Customer", order.id, status).catch(console.error);
+      }
+    }
+  }
+
   revalidatePath("/admin/orders");
   revalidatePath("/admin");
 }

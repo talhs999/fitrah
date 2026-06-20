@@ -376,7 +376,7 @@ export default function CheckoutPage() {
 
               // Create legacy object for the success page
               const orderData = {
-                orderNumber: `FTR-${Date.now().toString().slice(-6)}`,
+                orderNumber: result.orderId ? result.orderId.substring(0, 8).toUpperCase() : `FTR-${Date.now().toString().slice(-6)}`,
                 date: new Date().toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" }),
                 name: guestName,
                 email: guestEmail,

@@ -292,3 +292,56 @@ export async function sendContactFormEmail(
     baseTemplate(content)
   );
 }
+
+// ─── 5. Order Status Update Email (to customer) ──────────────────────────────
+export async function sendOrderStatusEmail(
+  toEmail: string,
+  customerName: string,
+  orderId: string,
+  newStatus: string
+) {
+  let statusMessage = "";
+  if (newStatus === "Processing") {
+    statusMessage = "We are currently processing your order. It will be dispatched soon.";
+  } else if (newStatus === "Shipped") {
+    statusMessage = "Good news! Your order has been shipped and is on its way to you.";
+  } else if (newStatus === "Delivered") {
+    statusMessage = "Your order has been delivered. We hope you love your products!";
+  } else if (newStatus === "Cancelled") {
+    statusMessage = "Your order has been cancelled. If you have any questions, please contact us.";
+  } else {
+    statusMessage = `Your order status has been updated to: **${newStatus}**.`;
+  }
+
+  const shortOrderId = orderId.substring(0, 8).toUpperCase();
+  const trackingLink = `https://fitrah-ecommerce.vercel.app/track?id=${shortOrderId}`;
+
+  const content = `
+    <p style="margin:0 0 8px;font-family:sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#999;">Order Update</p>
+    <h2 style="margin:0 0 24px;font-family:Georgia,serif;font-size:24px;color:#111;font-weight:400;">Hi ${customerName},</h2>
+    <p style="margin:0 0 16px;font-family:sans-serif;font-size:14px;color:#666;line-height:1.7;">
+      There is an update regarding your order <strong style="color:#111;">#${shortOrderId}</strong>.
+    </p>
+    <div style="background:#f5f4f0;padding:16px 20px;margin-bottom:28px;border-left:3px solid #111;">
+      <p style="margin:0;font-family:sans-serif;font-size:15px;color:#111;font-weight:600;">Status: ${newStatus}</p>
+      <p style="margin:8px 0 0;font-family:sans-serif;font-size:13px;color:#666;line-height:1.6;">${statusMessage}</p>
+    </div>
+    
+    <div style="text-align:center;margin-top:32px;margin-bottom:32px;">
+      <a href="${trackingLink}" style="display:inline-block;background:#111;color:#fff;padding:14px 40px;font-family:sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;text-decoration:none;font-weight:600;">Track Your Order</a>
+    </div>
+
+    <div style="margin-top:32px;padding:20px;background:#f5f4f0;border-left:3px solid #111;">
+      <p style="margin:0;font-family:sans-serif;font-size:12px;color:#666;line-height:1.7;">
+        Questions about your order? Contact us at <a href="mailto:fitrahpk@gmail.com" style="color:#111;">fitrahpk@gmail.com</a> or WhatsApp <a href="https://wa.me/923192801199" style="color:#111;">+92 319 2801199</a>
+      </p>
+    </div>
+  `;
+
+  return sendEmail(
+    toEmail,
+    `Order Update: #${shortOrderId} is now ${newStatus}`,
+    baseTemplate(content)
+  );
+}
+
