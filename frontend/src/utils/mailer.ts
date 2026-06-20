@@ -40,7 +40,7 @@ async function createTransporter() {
 }
 
 // ─── Shared email wrapper ─────────────────────────────────────────────────────
-async function sendEmail(to: string, subject: string, html: string) {
+async function sendEmail(to: string, subject: string, html: string, customFromName?: string) {
   try {
     const { transporter, fromName } = await createTransporter();
     if (!transporter) {
@@ -51,8 +51,10 @@ async function sendEmail(to: string, subject: string, html: string) {
     const smtpSettings = await getSmtpSettings();
     const fromEmail = smtpSettings?.smtp_user || process.env.SMTP_USER || "";
 
+    const finalFromName = customFromName || fromName;
+
     const info = await transporter.sendMail({
-      from: `"${fromName}" <${fromEmail}>`,
+      from: `"${finalFromName}" <${fromEmail}>`,
       to,
       subject,
       html,
@@ -215,7 +217,8 @@ export async function sendNewOrderAlertToAdmin(
   return sendEmail(
     adminEmail,
     `🛒 New Order — #${orderId.substring(0, 8).toUpperCase()} (Rs ${totalAmount.toFixed(2)})`,
-    baseTemplate(content)
+    baseTemplate(content),
+    "Fitrah - New Order"
   );
 }
 
