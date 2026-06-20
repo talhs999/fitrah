@@ -333,8 +333,8 @@ export default function CheckoutPage() {
             const shippingCost = shipping;
             
             try {
+              setIsProcessing(true);
               if (selectedPayment === "stripe") {
-                setIsProcessing(true);
                 // Call Stripe Checkout Server Action
                 const result = await createStripeCheckout({
                   customer_name: guestName,
