@@ -397,6 +397,7 @@ export default function CheckoutPage() {
                 customer_phone: guestPhone,
                 shipping_address: `${address}, ${city}, ${postcode}`,
                 total_amount: orderTotal,
+                payment_method: selectedPayment,
                 items: items.map(item => {
                   const p = products.find(x => x.id === item.id)!;
                   return { id: item.id, name: p.name, qty: item.qty, price: p.price, selectedCap: item.selectedCap };
