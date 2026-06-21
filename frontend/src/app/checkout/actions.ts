@@ -29,6 +29,7 @@ export async function createOrder(orderData: {
   const orderPayload: any = {
     customer_name: orderData.customer_name,
     customer_email: orderData.customer_email,
+    customer_phone: orderData.customer_phone,
     shipping_address: orderData.shipping_address,
     total_amount: orderData.total_amount,
     status: "Processing"
@@ -89,6 +90,7 @@ export async function createOrder(orderData: {
 export async function createStripeCheckout(orderData: {
   customer_name: string;
   customer_email: string;
+  customer_phone?: string;
   shipping_address: string;
   total_amount: number;
   items: { id: string; name: string; qty: number; price: number; image?: string; selectedCap?: string }[];
@@ -155,6 +157,7 @@ export async function createStripeCheckout(orderData: {
       line_items: lineItems,
       metadata: {
         customer_name: orderData.customer_name,
+        customer_phone: orderData.customer_phone || "",
         shipping_address: orderData.shipping_address,
       }
     });

@@ -113,6 +113,7 @@ export default function CheckoutPage() {
   // ─── Shipping form (guest + logged-in) ────────────────────
   const [guestName, setGuestName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
+  const [guestPhone, setGuestPhone] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [postcode, setPostcode] = useState("");
@@ -370,6 +371,7 @@ export default function CheckoutPage() {
                 const result = await createStripeCheckout({
                   customer_name: guestName,
                   customer_email: guestEmail,
+                  customer_phone: guestPhone,
                   shipping_address: `${address}, ${city}, ${postcode}`,
                   total_amount: orderTotal,
                   items: items.map(item => {
@@ -392,6 +394,7 @@ export default function CheckoutPage() {
               const result = await createOrder({
                 customer_name: guestName,
                 customer_email: guestEmail,
+                customer_phone: guestPhone,
                 shipping_address: `${address}, ${city}, ${postcode}`,
                 total_amount: orderTotal,
                 items: items.map(item => {
@@ -444,6 +447,12 @@ export default function CheckoutPage() {
                 <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Email Address</label>
                 <input type="email" value={guestEmail} onChange={e => setGuestEmail(e.target.value)}
                   placeholder="you@email.com" required
+                  className="w-full bg-white border border-black/10 px-4 py-3 font-sans text-sm text-brand-black placeholder:text-brand-muted/40 focus:outline-none focus:border-brand-black transition-colors" />
+              </div>
+              <div className="col-span-2">
+                <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Phone Number</label>
+                <input type="tel" value={guestPhone} onChange={e => setGuestPhone(e.target.value)}
+                  placeholder="+92 3XX XXXXXXX" required
                   className="w-full bg-white border border-black/10 px-4 py-3 font-sans text-sm text-brand-black placeholder:text-brand-muted/40 focus:outline-none focus:border-brand-black transition-colors" />
               </div>
               <div className="col-span-2">
