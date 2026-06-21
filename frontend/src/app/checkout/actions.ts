@@ -26,11 +26,11 @@ export async function createOrder(orderData: {
   // Get the current user session (optional, for linking order to account)
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Try to insert with all possible columns based on schema
   const orderPayload: any = {
     customer_name: orderData.customer_name,
     customer_email: orderData.customer_email,
-    shipping_address: orderData.customer_phone ? `${orderData.customer_phone} - ${orderData.shipping_address}` : orderData.shipping_address,
+    customer_phone: orderData.customer_phone,
+    shipping_address: orderData.shipping_address,
     total_amount: orderData.total_amount,
     status: "Processing"
   };
