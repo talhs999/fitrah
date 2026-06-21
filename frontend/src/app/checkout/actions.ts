@@ -15,6 +15,7 @@ export async function createOrder(orderData: {
   postal_code?: string;
   total_amount: number;
   items: { id: string; name: string; qty: number; price: number; selectedCap?: string }[];
+  payment_method?: string;
 }) {
   // Use service role key to bypass RLS in server actions
   const supabase = createSupabaseClient(
@@ -29,8 +30,7 @@ export async function createOrder(orderData: {
   const orderPayload: any = {
     customer_name: orderData.customer_name,
     customer_email: orderData.customer_email,
-    customer_phone: orderData.customer_phone,
-    shipping_address: orderData.shipping_address,
+    shipping_address: orderData.customer_phone ? `${orderData.customer_phone} - ${orderData.shipping_address}` : orderData.shipping_address,
     total_amount: orderData.total_amount,
     status: "Processing"
   };
@@ -72,7 +72,8 @@ export async function createOrder(orderData: {
       orderData.customer_name,
       order.id,
       orderData.total_amount,
-      orderData.items
+      orderData.items,
+      orderData.payment_method
     ).catch(console.error),
     sendNewOrderAlertToAdmin(
       order.id,

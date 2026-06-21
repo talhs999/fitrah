@@ -117,7 +117,8 @@ export async function sendOrderConfirmationEmail(
   customerName: string,
   orderId: string,
   totalAmount: number,
-  items: { name: string; qty: number; price: number }[]
+  items: { name: string; qty: number; price: number }[],
+  paymentMethod?: string
 ) {
   const itemsHtml = items
     .map(
@@ -130,12 +131,21 @@ export async function sendOrderConfirmationEmail(
     )
     .join("");
 
+  const bankMessage = paymentMethod === "bank" 
+    ? `<div style="margin-bottom:24px;padding:16px;background:#fff8e6;border-left:3px solid #f59e0b;">
+         <p style="margin:0;font-family:sans-serif;font-size:13px;color:#92400e;line-height:1.6;">
+           <strong>Note for Bank Transfer:</strong> We will process and confirm your order once we receive the payment in our bank account. If you haven't paid yet, please make the payment at your earliest convenience.
+         </p>
+       </div>`
+    : "";
+
   const content = `
-    <p style="margin:0 0 8px;font-family:sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#999;">Order Confirmed</p>
+    <p style="margin:0 0 8px;font-family:sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#999;">Order Received</p>
     <h2 style="margin:0 0 24px;font-family:Georgia,serif;font-size:24px;color:#111;font-weight:400;">Thank you, ${customerName}.</h2>
     <p style="margin:0 0 24px;font-family:sans-serif;font-size:14px;color:#666;line-height:1.7;">
       Your order <strong style="color:#111;">#${orderId.substring(0, 8).toUpperCase()}</strong> has been placed successfully. We'll dispatch your order within 1–2 business days.
     </p>
+    ${bankMessage}
     <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #f0eeea;margin-bottom:24px;">
       <thead>
         <tr>
