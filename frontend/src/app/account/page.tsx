@@ -6,13 +6,17 @@ import AccountOrdersClient from "./AccountOrdersClient";
 
 export const metadata = { title: "My Account — Fitrah" };
 
-export default async function AccountPage() {
+export default async function AccountPage({ searchParams }: { searchParams: any }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
     redirect("/login");
   }
+
+  // Await searchParams before using in Next.js 15+ (safe for 14 as well if it's a promise in the future, but we'll use standard access)
+  const resolvedParams = await searchParams;
+  const activeTab = resolvedParams?.tab || "profile";
 
   // Fetch orders specific to this logged in user
   const { data: userOrders } = await supabase
@@ -43,13 +47,13 @@ export default async function AccountPage() {
             <p className="font-sans text-xs text-brand-muted truncate mb-8">{user.email}</p>
 
             <nav className="space-y-1">
-              <Link href="/account" className="flex items-center gap-3 px-3 py-2.5 bg-black/5 text-brand-black font-sans text-sm font-semibold rounded-sm">
+              <Link href="/account?tab=profile" className={`flex items-center gap-3 px-3 py-2.5 font-sans text-sm rounded-sm transition-colors ${activeTab === 'profile' ? 'bg-black/5 text-brand-black font-semibold' : 'text-brand-muted hover:text-brand-black hover:bg-black/5'}`}>
                 <User className="w-4 h-4" /> Profile
               </Link>
-              <Link href="#" className="flex items-center gap-3 px-3 py-2.5 text-brand-muted hover:text-brand-black hover:bg-black/5 transition-colors font-sans text-sm rounded-sm">
+              <Link href="/account?tab=orders" className={`flex items-center gap-3 px-3 py-2.5 font-sans text-sm rounded-sm transition-colors ${activeTab === 'orders' ? 'bg-black/5 text-brand-black font-semibold' : 'text-brand-muted hover:text-brand-black hover:bg-black/5'}`}>
                 <Package className="w-4 h-4" /> My Orders
               </Link>
-              <Link href="#" className="flex items-center gap-3 px-3 py-2.5 text-brand-muted hover:text-brand-black hover:bg-black/5 transition-colors font-sans text-sm rounded-sm">
+              <Link href="/account?tab=addresses" className={`flex items-center gap-3 px-3 py-2.5 font-sans text-sm rounded-sm transition-colors ${activeTab === 'addresses' ? 'bg-black/5 text-brand-black font-semibold' : 'text-brand-muted hover:text-brand-black hover:bg-black/5'}`}>
                 <MapPin className="w-4 h-4" /> Addresses
               </Link>
             </nav>
@@ -67,26 +71,40 @@ export default async function AccountPage() {
         {/* Main Content Area */}
         <div className="flex-1 space-y-8">
           
-          <div className="bg-white border border-black/10 p-8 rounded-sm">
-            <h2 className="font-serif text-2xl text-brand-black mb-6">Account Overview</h2>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div>
-                <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Full Name</label>
-                <div className="font-sans text-sm text-brand-black p-3 bg-[#faf9f6] border border-black/10 rounded-sm">
-                  {user.user_metadata?.full_name || "Not provided"}
+          {activeTab === 'profile' && (
+            <div className="bg-white border border-black/10 p-8 rounded-sm">
+              <h2 className="font-serif text-2xl text-brand-black mb-6">Account Overview</h2>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Full Name</label>
+                  <div className="font-sans text-sm text-brand-black p-3 bg-[#faf9f6] border border-black/10 rounded-sm">
+                    {user.user_metadata?.full_name || "Not provided"}
+                  </div>
                 </div>
-              </div>
-              <div>
-                <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Email Address</label>
-                <div className="font-sans text-sm text-brand-black p-3 bg-[#faf9f6] border border-black/10 rounded-sm">
-                  {user.email}
+                <div>
+                  <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Email Address</label>
+                  <div className="font-sans text-sm text-brand-black p-3 bg-[#faf9f6] border border-black/10 rounded-sm">
+                    {user.email}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
-          <AccountOrdersClient orders={orders} />
+          {activeTab === 'orders' && (
+            <div>
+              <AccountOrdersClient orders={orders} />
+            </div>
+          )}
+
+          {activeTab === 'addresses' && (
+            <div className="bg-white border border-black/10 p-8 rounded-sm text-center">
+              <MapPin className="w-8 h-8 mx-auto text-brand-muted mb-4" />
+              <h2 className="font-serif text-2xl text-brand-black mb-2">Saved Addresses</h2>
+              <p className="font-sans text-sm text-brand-muted">You haven't saved any addresses yet. Address management will be available soon.</p>
+            </div>
+          )}
 
         </div>
 
