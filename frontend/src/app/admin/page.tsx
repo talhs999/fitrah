@@ -14,6 +14,7 @@ export default async function AdminDashboard() {
   const { data: orders } = await supabase.from("orders").select("*").order("created_at", { ascending: false });
   const { data: products } = await supabase.from("products").select("id");
   const { data: paymentSettings } = await supabase.from("payment_settings").select("currency").single();
+  const { data: pageViews } = await supabase.from("page_views").select("*").order("created_at", { ascending: false });
   
   // Fetch users for growth metrics
   const { data: { users } } = await supabaseAdmin.auth.admin.listUsers();
@@ -29,6 +30,7 @@ export default async function AdminDashboard() {
         productsCount={products?.length || 0} 
         currencySymbol={currencySymbol} 
         users={users || []}
+        pageViews={pageViews || []}
     />
   );
 }

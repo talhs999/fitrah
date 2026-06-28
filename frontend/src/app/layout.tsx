@@ -29,6 +29,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import { CurrencyProvider } from "@/context/CurrencyContext";
 
 import { Analytics } from "@vercel/analytics/react";
+import PageViewTracker from "@/components/PageViewTracker";
 
 export default function RootLayout({
   children,
@@ -43,6 +44,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-[#faf9f6] text-[#111111] font-sans">
         <CurrencyProvider>
           <CartProvider>
+            <PageViewTracker />
             <Navbar />
             <div className="flex-1">{children}</div>
             <Footer />
