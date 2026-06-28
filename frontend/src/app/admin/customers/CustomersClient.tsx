@@ -20,7 +20,10 @@ export default function CustomersClient({ users }: { users: any[] }) {
     if (confirm(`Are you sure you want to delete ${email}? This action cannot be undone.`)) {
       setIsDeleting(id);
       try {
-        await deleteCustomer(id);
+        const res = await deleteCustomer(id);
+        if (res && res.success === false) {
+          alert(`Failed to delete user: ${res.error}. (Tip: If they have orders, you cannot delete them without deleting their orders first)`);
+        }
       } catch (err: any) {
         alert(`Failed to delete user: ${err.message}`);
       } finally {

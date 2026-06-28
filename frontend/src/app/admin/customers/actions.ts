@@ -10,8 +10,9 @@ export async function deleteCustomer(userId: string) {
   const { error } = await supabase.auth.admin.deleteUser(userId);
   
   if (error) {
-    throw new Error(error.message);
+    return { success: false, error: error.message };
   }
 
   revalidatePath("/admin/customers");
+  return { success: true };
 }
