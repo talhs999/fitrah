@@ -207,9 +207,9 @@ export default function DashboardClient({
             </div>
 
             {/* Chart */}
-            <div className="bg-white p-6 border border-black/10 rounded-sm print:break-inside-avoid">
+            <div className="bg-white p-6 border border-black/10 rounded-sm print:break-inside-avoid print:border-none print:shadow-none print:p-0">
               <h3 className="font-sans text-sm uppercase tracking-widest text-brand-black font-semibold mb-6">Sales Trend</h3>
-              <div className="h-80 w-full">
+              <div className="h-80 w-full print:h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={filteredData.chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                       <defs>
@@ -226,25 +226,25 @@ export default function DashboardClient({
                         itemStyle={{ color: '#111', fontWeight: 600 }}
                         formatter={(value: any) => [`${currencySymbol}${value}`, 'Revenue']}
                       />
-                      <Area type="monotone" dataKey="revenue" stroke="#111" strokeWidth={2} fillOpacity={1} fill="url(#colorRevenue)" />
+                      <Area isAnimationActive={false} type="monotone" dataKey="revenue" stroke="#111" strokeWidth={2} fillOpacity={1} fill="url(#colorRevenue)" />
                     </AreaChart>
                   </ResponsiveContainer>
               </div>
             </div>
 
             {/* Recent Orders */}
-            <div className="bg-white border border-black/10 rounded-sm overflow-hidden print:break-inside-avoid">
-                <div className="px-6 py-5 border-b border-black/10 flex items-center justify-between">
-                  <h2 className="font-serif text-xl text-brand-black">Recent Orders ({dateFilter})</h2>
+            <div className="bg-white border border-black/10 rounded-sm overflow-hidden print:break-inside-avoid print:border-none print:mt-10">
+                <div className="px-6 py-5 border-b border-black/10 flex items-center justify-between print:px-0">
+                  <h2 className="font-serif text-xl text-brand-black">Recent Orders</h2>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left font-sans text-sm">
                     <thead className="bg-black/5 text-brand-muted text-xs uppercase tracking-widest">
                       <tr>
-                        <th className="px-6 py-4 font-semibold">Date</th>
-                        <th className="px-6 py-4 font-semibold">Customer</th>
-                        <th className="px-6 py-4 font-semibold">Status</th>
-                        <th className="px-6 py-4 font-semibold text-right">Amount</th>
+                        <th className="px-6 py-4 font-semibold print:px-2">Date</th>
+                        <th className="px-6 py-4 font-semibold print:px-2">Customer</th>
+                        <th className="px-6 py-4 font-semibold print:px-2">Status</th>
+                        <th className="px-6 py-4 font-semibold text-right print:px-2">Amount</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-black/10">
@@ -319,7 +319,7 @@ export default function DashboardClient({
                         contentStyle={{ backgroundColor: '#fff', border: '1px solid #eee', borderRadius: '4px', fontSize: '12px' }}
                         itemStyle={{ color: '#2563eb', fontWeight: 600 }}
                       />
-                      <Area type="monotone" dataKey="views" name="Page Views" stroke="#2563eb" strokeWidth={2} fillOpacity={1} fill="url(#colorViews)" />
+                      <Area isAnimationActive={false} type="monotone" dataKey="views" name="Page Views" stroke="#2563eb" strokeWidth={2} fillOpacity={1} fill="url(#colorViews)" />
                     </AreaChart>
                   </ResponsiveContainer>
               </div>
