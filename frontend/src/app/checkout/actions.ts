@@ -23,8 +23,10 @@ export async function createOrder(orderData: {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
   
-  // Get the current user session (optional, for linking order to account)
-  const { data: { user } } = await supabase.auth.getUser();
+  // Get the current user session using the correct server client with cookies
+  const { createClient } = await import("@/utils/supabase/server");
+  const serverSupabase = await createClient();
+  const { data: { user } } = await serverSupabase.auth.getUser();
 
   const orderPayload: any = {
     customer_name: orderData.customer_name,
