@@ -72,23 +72,61 @@ export default async function AccountPage({ searchParams }: { searchParams: any 
         <div className="flex-1 space-y-8">
           
           {activeTab === 'profile' && (
-            <div className="bg-white border border-black/10 p-8 rounded-sm">
-              <h2 className="font-serif text-2xl text-brand-black mb-6">Account Overview</h2>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Full Name</label>
-                  <div className="font-sans text-sm text-brand-black p-3 bg-[#faf9f6] border border-black/10 rounded-sm">
-                    {user.user_metadata?.full_name || "Not provided"}
+            <div className="space-y-8">
+              <div className="bg-white border border-black/10 p-8 rounded-sm">
+                <h2 className="font-serif text-2xl text-brand-black mb-6">Account Overview</h2>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Full Name</label>
+                    <div className="font-sans text-sm text-brand-black p-3 bg-[#faf9f6] border border-black/10 rounded-sm">
+                      {user.user_metadata?.full_name || "Not provided"}
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Email Address</label>
-                  <div className="font-sans text-sm text-brand-black p-3 bg-[#faf9f6] border border-black/10 rounded-sm">
-                    {user.email}
+                  <div>
+                    <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Email Address</label>
+                    <div className="font-sans text-sm text-brand-black p-3 bg-[#faf9f6] border border-black/10 rounded-sm">
+                      {user.email}
+                    </div>
                   </div>
                 </div>
               </div>
+
+              {/* Recent Orders Snippet */}
+              {orders.length > 0 && (
+                <div className="bg-white border border-black/10 p-8 rounded-sm">
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="font-serif text-2xl text-brand-black">Recent Order</h2>
+                    <Link href="/account?tab=orders" className="font-sans text-sm text-brand-black underline hover:text-brand-muted transition-colors">
+                      View all orders
+                    </Link>
+                  </div>
+                  
+                  <div className="border border-black/10 rounded-sm p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <div className="font-sans text-[10px] uppercase tracking-widest text-brand-muted mb-1">Order Placed</div>
+                      <div className="font-sans text-sm font-medium text-brand-black">
+                        {new Date(orders[0].created_at).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-sans text-[10px] uppercase tracking-widest text-brand-muted mb-1">Total Amount</div>
+                      <div className="font-sans text-sm font-medium text-brand-black">Rs {orders[0].total_amount}</div>
+                    </div>
+                    <div>
+                      <div className="font-sans text-[10px] uppercase tracking-widest text-brand-muted mb-1">Status</div>
+                      <div className="font-sans text-sm">
+                        <span className="inline-flex px-2 py-1 bg-black/5 text-brand-black rounded-sm text-[10px] uppercase tracking-widest font-semibold">
+                          {orders[0].status}
+                        </span>
+                      </div>
+                    </div>
+                    <Link href="/account?tab=orders" className="px-4 py-2 bg-black text-white font-sans text-xs uppercase tracking-widest font-semibold hover:bg-black/80 transition-colors rounded-sm text-center">
+                      View Details
+                    </Link>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
