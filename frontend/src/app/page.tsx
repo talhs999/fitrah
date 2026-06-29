@@ -100,6 +100,26 @@ function Section({ children, className = "" }: { children: React.ReactNode; clas
   );
 }
 
+/* ── LAZY VIDEO COMPONENT ── */
+function LazyVideo({ src, className }: { src: string, className?: string }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "200px" });
+  return (
+    <div ref={ref} className="w-full h-full bg-[#111]">
+      {inView && (
+        <video
+          src={src}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className={className}
+        />
+      )}
+    </div>
+  );
+}
+
 export default function Home() {
   const { idx, setIdx } = useCarousel(SLIDES.length, 7000);
   const { currency, currencySymbol } = useCurrency();
@@ -594,16 +614,12 @@ export default function Home() {
               "/videos/video-4.mp4",
             ].map((path, i) => (
               <div key={i} className="relative overflow-hidden group">
-                <video
+                <LazyVideo
                   src={path}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 {/* Dark overlay — lifts on hover */}
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all duration-500" />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-all duration-500 pointer-events-none" />
               </div>
             ))}
           </div>
