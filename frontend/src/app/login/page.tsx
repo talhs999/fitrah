@@ -48,7 +48,7 @@ export default function LoginPage() {
         {/* Content over image */}
         <div className="relative z-10 space-y-6">
           <img
-            src="/assets/white.png"
+            src="https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/white"
             alt="Fitrah"
             className="h-28 w-auto object-contain mb-4 -ml-2"
           />
@@ -71,7 +71,7 @@ export default function LoginPage() {
           {/* Mobile logo */}
           <Link href="/" className="lg:hidden flex flex-col items-center mb-10">
             <img
-              src="/assets/Black.png"
+              src="https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/Black"
               alt="Fitrah"
               className="h-20 w-auto object-contain"
             />

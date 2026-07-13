@@ -59,7 +59,7 @@ export default function StoryPage() {
              <div className="relative aspect-[4/5] bg-[#1a1a1a] rounded-sm overflow-hidden flex items-center justify-center p-8 border border-white/10 translate-y-6 md:translate-y-10 group">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
                 <img
-                  src="/assets/white.png"
+                  src="https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/white"
                   alt="Fitrah Logo"
                   className="w-full h-auto object-contain opacity-90 transition-transform duration-700 group-hover:scale-110 relative z-10"
                 />
@@ -102,7 +102,7 @@ export default function StoryPage() {
         {/* Section 1 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="relative aspect-[4/5] max-w-sm mx-auto w-full bg-[#111]/5 overflow-hidden border border-black/10 rounded-sm">
-            <Image src="/gallery/2.jpg" alt="Fitrah Beard Oil Story" fill className="object-cover object-top opacity-95 hover:scale-105 transition-transform duration-700" />
+            <Image src="https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_gallery/2" alt="Fitrah Beard Oil Story" fill className="object-cover object-top opacity-95 hover:scale-105 transition-transform duration-700" />
           </div>
           <div className="space-y-6">
             <h2 className="font-serif text-3xl md:text-4xl text-brand-black leading-tight">

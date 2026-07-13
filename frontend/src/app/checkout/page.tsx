@@ -188,7 +188,7 @@ export default function CheckoutPage() {
           <div className="text-center mb-12">
             <Link href="/">
               <img
-                src="/assets/Black.png"
+                src="https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/Black"
                 alt="Fitrah" className="h-20 w-auto object-contain mx-auto"
               />
             </Link>
@@ -344,7 +344,7 @@ export default function CheckoutPage() {
           <div className="mb-10">
             <Link href="/">
               <img
-                src="/assets/Black.png"
+                src="https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/Black"
                 alt="Fitrah" className="h-20 w-auto object-contain mb-6 -ml-2"
               />
             </Link>

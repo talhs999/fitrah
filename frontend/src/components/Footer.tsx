@@ -58,7 +58,7 @@ export default function Footer() {
         <div className="space-y-7">
           <div>
             <img
-              src="/assets/white.png"
+              src="https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/white"
               alt="Fitrah"
               className="h-28 w-auto object-contain -ml-2 mb-6"
             />

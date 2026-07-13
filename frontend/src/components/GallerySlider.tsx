@@ -4,12 +4,12 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const GALLERY_IMAGES = [
-  "/gallery/1.jpg",
-  "/gallery/2.jpg",
-  "/gallery/3.jpg",
-  "/gallery/4.jpg",
-  "/gallery/5.jpg",
-  "/gallery/6.jpg",
+  "https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_gallery/1",
+  "https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_gallery/2",
+  "https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_gallery/3",
+  "https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_gallery/4",
+  "https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_gallery/5",
+  "https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_gallery/6",
 ];
 
 const LOOP_IMAGES = [...GALLERY_IMAGES, ...GALLERY_IMAGES, ...GALLERY_IMAGES];

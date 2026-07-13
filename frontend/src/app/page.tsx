@@ -354,7 +354,7 @@ export default function Home() {
             {/* Top: barber applying beard oil (user image) */}
             <div className="relative overflow-hidden">
               <Image
-                src="/assets/6c6b8b4f-0302-4c17-babe-bf4c7ed5826a.png"
+                src="https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/6c6b8b4f-0302-4c17-babe-bf4c7ed5826a"
                 alt="Fitrah beard oil application"
                 fill
                 sizes="(max-width:768px) 100vw, 50vw"
@@ -365,7 +365,7 @@ export default function Home() {
             {/* Bottom: Fitrah product (user image) */}
             <div className="relative overflow-hidden">
               <Image
-                src="/assets/fitrah-beard-image.png"
+                src="https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/fitrah-beard-image"
                 alt="Fitrah premium beard oil"
                 fill
                 sizes="(max-width:768px) 100vw, 50vw"

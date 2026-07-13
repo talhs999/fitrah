@@ -276,7 +276,7 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
             <div className="hidden print:block p-10 bg-white text-black font-sans w-full max-w-4xl mx-auto">
               <div className="flex justify-between items-start border-b border-black/10 pb-8 mb-8">
                 <div>
-                  <img src="/assets/Black.png" alt="Fitrah" className="h-12 object-contain" />
+                  <img src="https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/Black" alt="Fitrah" className="h-12 object-contain" />
                   <p className="text-[10px] font-semibold text-brand-muted mt-2 uppercase tracking-widest">Order Slip</p>
                 </div>
                 <div className="text-right">
@@ -514,7 +514,7 @@ export default function OrdersClient({ orders }: { orders: any[] }) {
             <div key={ord.id} className="p-10 bg-white text-black font-sans w-full max-w-4xl mx-auto" style={{ pageBreakAfter: "always" }}>
               <div className="flex justify-between items-start border-b border-black/10 pb-8 mb-8">
                 <div>
-                  <img src="/assets/Black.png" alt="Fitrah" className="h-12 object-contain" />
+                  <img src="https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/Black" alt="Fitrah" className="h-12 object-contain" />
                   <p className="text-[10px] font-semibold text-brand-muted mt-2 uppercase tracking-widest">Order Slip</p>
                 </div>
                 <div className="text-right">

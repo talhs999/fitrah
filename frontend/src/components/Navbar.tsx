@@ -74,8 +74,8 @@ export default function Navbar() {
             <img
               src={
                 isLight
-                  ? "/assets/Black.png"
-                  : "/assets/white.png"
+                  ? "https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/Black"
+                  : "https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/white"
               }
               alt="Fitrah"
               className={`h-20 md:h-24 w-auto object-contain transition-all duration-300 ${

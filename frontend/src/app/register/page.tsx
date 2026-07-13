@@ -51,7 +51,7 @@ export default function RegisterPage() {
       <div className="hidden lg:flex flex-col justify-end w-[45%] relative overflow-hidden px-16 py-20">
         {/* Background image */}
         <Image
-          src="/assets/Gemini_Generated_Image_jkg1ffjkg1ffjkg1.png"
+          src="https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/Gemini_Generated_Image_jkg1ffjkg1ffjkg1"
           alt="Fitrah craftsmanship"
           fill
           priority
@@ -63,7 +63,7 @@ export default function RegisterPage() {
         {/* Content over image */}
         <div className="relative z-10 space-y-6">
           <img
-            src="/assets/white.png"
+            src="https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/white"
             alt="Fitrah"
             className="h-28 w-auto object-contain mb-4 -ml-2"
           />
