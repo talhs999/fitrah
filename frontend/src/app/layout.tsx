@@ -40,8 +40,9 @@ export default function RootLayout({
     <html
       lang="en-AU"
       className={`${playfair.variable} ${inter.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-[#faf9f6] text-[#111111] font-sans">
+      <body className="min-h-full flex flex-col bg-[#faf9f6] text-[#111111] font-sans" suppressHydrationWarning>
         <CurrencyProvider>
           <CartProvider>
             <PageViewTracker />

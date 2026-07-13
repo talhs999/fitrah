@@ -14,8 +14,8 @@ import { subscribeNewsletter } from "@/app/api/site/actions";
 /* ── HERO SLIDES: Custom Generated Cinematic Images ── */
 const SLIDES = [
   {
-    image: "/assets/Gemini_Generated_Image_fculq8fculq8fcul.png",
-    video: "/Video Project 1.mp4",
+    image: "https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/Gemini_Generated_Image_fculq8fculq8fcul",
+    video: "https://res.cloudinary.com/em5hu05n/video/upload/q_auto/v1/fitrah_videos/Video_Project_1",
     eyebrow: "The Ascent",
     headline: ["Every Drop", "Has a Purpose."],
     sub: "Where heritage meets luxury. Beard care for the man who knows his worth and honours his Sunnah.",
@@ -23,7 +23,7 @@ const SLIDES = [
     ctaHref: "/story",
   },
   {
-    image: "/assets/hero_slide_1_beard_oil_1776964963587.png",
+    image: "https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/hero_slide_1_beard_oil_1776964963587",
     eyebrow: "The Heritage",
     headline: ["Master Your", "Craft."],
     sub: "Premium beard oils crafted from prophetic wisdom and the finest organic ingredients. A legacy of purity.",
@@ -31,8 +31,8 @@ const SLIDES = [
     ctaHref: "/shop",
   },
   {
-    image: "/assets/Gemini_Generated_Image_jkg1ffjkg1ffjkg1.png",
-    mobileImage: "/assets/2ndbnr-responcive.png",
+    image: "https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/Gemini_Generated_Image_jkg1ffjkg1ffjkg1",
+    mobileImage: "https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/2ndbnr-responcive",
     eyebrow: "The Reflection",
     headline: ["Stand Tall.", "Guard Your Legacy."],
     sub: "Five carefully engineered oils. Five powerful purposes. One unbreakable standard of quality.",
@@ -40,8 +40,8 @@ const SLIDES = [
     ctaHref: "/shop",
   },
   {
-    image: "/assets/banner-img 1.png",
-    mobileImage: "/assets/3rd banner responsive.png",
+    image: "https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/banner-img_1",
+    mobileImage: "https://res.cloudinary.com/em5hu05n/image/upload/f_auto,q_auto/v1/fitrah_assets/3rd_banner_responsive",
     eyebrow: "The Essence",
     headline: ["Purely", "Natural."],
     sub: "Elevate your grooming routine with ingredients chosen for their purity and effectiveness.",
@@ -608,10 +608,10 @@ export default function Home() {
           {/* 4-video mosaic grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 h-[520px] md:h-[620px]">
             {[
-              "/videos/video-1.mp4",
-              "/videos/video-2.mp4",
-              "/videos/video-3.mp4",
-              "/videos/video-4.mp4",
+              "https://res.cloudinary.com/em5hu05n/video/upload/q_auto/v1/fitrah_videos/video-1",
+              "https://res.cloudinary.com/em5hu05n/video/upload/q_auto/v1/fitrah_videos/video-2",
+              "https://res.cloudinary.com/em5hu05n/video/upload/q_auto/v1/fitrah_videos/video-3",
+              "https://res.cloudinary.com/em5hu05n/video/upload/q_auto/v1/fitrah_videos/video-4",
             ].map((path, i) => (
               <div key={i} className="relative overflow-hidden group">
                 <LazyVideo
