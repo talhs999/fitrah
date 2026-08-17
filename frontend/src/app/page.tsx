@@ -130,19 +130,23 @@ export default function Home() {
   const [discountPercent, setDiscountPercent] = useState(10);
   const [discountCode, setDiscountCode] = useState("WELCOME10");
   const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterHeading, setNewsletterHeading] = useState("Get {discountPercent}% off\nyour first order.");
+  const [newsletterDescription, setNewsletterDescription] = useState("Subscribe to the Fitrah newsletter and receive an exclusive discount code instantly, plus early access to new product launches.");
   const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "loading" | "success" | "duplicate" | "error">("idle");
 
   useEffect(() => {
     const supabase = createClient();
     supabase
       .from("site_settings")
-      .select("newsletter_enabled, newsletter_discount_percent, newsletter_discount_code")
+      .select("newsletter_enabled, newsletter_discount_percent, newsletter_discount_code, newsletter_heading, newsletter_description")
       .single()
       .then(({ data }) => {
         if (data) {
           setNewsletterEnabled(data.newsletter_enabled ?? true);
           setDiscountPercent(data.newsletter_discount_percent ?? 10);
           setDiscountCode(data.newsletter_discount_code ?? "WELCOME10");
+          if (data.newsletter_heading) setNewsletterHeading(data.newsletter_heading);
+          if (data.newsletter_description) setNewsletterDescription(data.newsletter_description);
         }
       });
   }, []);
@@ -636,11 +640,24 @@ export default function Home() {
               Limited Time Offer
             </span>
             <h2 className="font-serif text-5xl md:text-6xl text-white leading-[1.1]">
-              Get {discountPercent}% off <br />
-              <em className="not-italic font-light text-white/60">your first order.</em>
+              {(() => {
+                const text = newsletterHeading.replace("{discountPercent}", discountPercent.toString());
+                const parts = text.split("\n");
+                return (
+                  <>
+                    {parts[0]}
+                    {parts.length > 1 && (
+                      <>
+                        <br />
+                        <em className="not-italic font-light text-white/60">{parts.slice(1).join(" ")}</em>
+                      </>
+                    )}
+                  </>
+                );
+              })()}
             </h2>
-            <p className="font-sans text-[15px] text-white/60 font-light max-w-lg mx-auto">
-              Subscribe to the Fitrah newsletter and receive an exclusive discount code instantly, plus early access to new product launches.
+            <p className="font-sans text-[15px] text-white/60 font-light max-w-lg mx-auto whitespace-pre-line">
+              {newsletterDescription}
             </p>
             {newsletterStatus === "success" ? (
               <div className="max-w-md mx-auto bg-white/10 border border-white/20 px-8 py-6 text-center">

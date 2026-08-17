@@ -74,6 +74,8 @@ export default function SettingsClient() {
   const [newsletterCode, setNewsletterCode] = useState("WELCOME10");
   const [newsletterMaxUses, setNewsletterMaxUses] = useState("0");
   const [newsletterUseCount, setNewsletterUseCount] = useState(0);
+  const [newsletterHeading, setNewsletterHeading] = useState("Get {discountPercent}% off\nyour first order.");
+  const [newsletterDescription, setNewsletterDescription] = useState("Subscribe to the Fitrah newsletter and receive an exclusive discount code instantly, plus early access to new product launches.");
   const [isSendingTestEmail, setIsSendingTestEmail] = useState(false);
   const [testEmailStatus, setTestEmailStatus] = useState("");
 
@@ -112,6 +114,8 @@ export default function SettingsClient() {
         setNewsletterCode(siteData.newsletter_discount_code || "WELCOME10");
         setNewsletterMaxUses((siteData.newsletter_max_uses || 0).toString());
         setNewsletterUseCount(siteData.newsletter_use_count || 0);
+        setNewsletterHeading(siteData.newsletter_heading || "Get {discountPercent}% off\nyour first order.");
+        setNewsletterDescription(siteData.newsletter_description || "Subscribe to the Fitrah newsletter and receive an exclusive discount code instantly, plus early access to new product launches.");
       }
 
       // Load payment settings
@@ -167,6 +171,8 @@ export default function SettingsClient() {
         newsletter_discount_percent: Number(newsletterPercent),
         newsletter_discount_code: newsletterCode.toUpperCase(),
         newsletter_max_uses: Number(newsletterMaxUses),
+        newsletter_heading: newsletterHeading,
+        newsletter_description: newsletterDescription,
         updated_at: new Date().toISOString(),
       };
       if (emailSettingsId) {
@@ -701,7 +707,7 @@ export default function SettingsClient() {
                           <div>
                             <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Discount Percentage (%)</label>
                             <input type="number" min="1" max="99" value={newsletterPercent} onChange={e => setNewsletterPercent(e.target.value)} className="w-full p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black" />
-                            <p className="mt-1 font-sans text-[11px] text-brand-muted">Shows as "Get {newsletterPercent}% off" on the homepage.</p>
+                            <p className="mt-1 font-sans text-[11px] text-brand-muted">Used as {"{discountPercent}"} in the heading.</p>
                           </div>
                           <div>
                             <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Discount Code</label>
@@ -714,7 +720,18 @@ export default function SettingsClient() {
                             <p className="mt-1 font-sans text-[11px] text-brand-muted">Used so far: <strong>{newsletterUseCount}</strong></p>
                           </div>
                         </div>
-                        <div className="p-4 bg-[#faf9f6] border border-black/10 rounded-sm flex items-start gap-3">
+                        <div className="space-y-4 mt-4">
+                          <div>
+                            <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Newsletter Heading</label>
+                            <textarea value={newsletterHeading} onChange={e => setNewsletterHeading(e.target.value)} rows={2} className="w-full p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black resize-none" />
+                            <p className="mt-1 font-sans text-[11px] text-brand-muted">Use {"{discountPercent}"} to insert the discount percentage. Line breaks are supported.</p>
+                          </div>
+                          <div>
+                            <label className="block font-sans text-[10px] uppercase tracking-widest text-brand-muted font-semibold mb-2">Newsletter Description</label>
+                            <textarea value={newsletterDescription} onChange={e => setNewsletterDescription(e.target.value)} rows={2} className="w-full p-3 bg-[#faf9f6] border border-black/10 rounded-sm font-sans text-sm focus:outline-none focus:border-brand-black resize-none" />
+                          </div>
+                        </div>
+                        <div className="p-4 bg-[#faf9f6] border border-black/10 rounded-sm flex items-start gap-3 mt-4">
                           <div className="w-8 h-8 bg-brand-black rounded-sm flex items-center justify-center shrink-0">
                             <Mail className="w-4 h-4 text-white" />
                           </div>
